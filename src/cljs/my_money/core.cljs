@@ -27,7 +27,17 @@
         [:a.navbar-brand {:href "#/"} "my-money"]
         [:ul.nav.navbar-nav
          [nav-link "#/" "Home" :home collapsed?]
+         [nav-link "#/submit" "Submit" :submit collapsed?]
          [nav-link "#/about" "About" :about collapsed?]]]])))
+
+(defn submit-page []
+  [:div.container
+   [:form
+    [:div.form-group
+     [:label {:for "file-input"} "Add your bank csv"]
+     [:input {:class "form-control-file"
+              :id "file-input"
+              :type "file"}]]]])
 
 (defn about-page []
   [:div.container
@@ -44,7 +54,8 @@
 
 (def pages
   {:home #'home-page
-   :about #'about-page})
+   :about #'about-page
+   :submit #'submit-page})
 
 (defn page []
   [(pages (session/get :page))])
@@ -55,6 +66,9 @@
 
 (secretary/defroute "/" []
   (session/put! :page :home))
+
+(secretary/defroute "/submit" []
+  (session/put! :page :submit))
 
 (secretary/defroute "/about" []
   (session/put! :page :about))
