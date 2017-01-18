@@ -6,5 +6,4 @@
 (defroutes upload-routes
   (POST "/upload" [file]
     (let [data (read-csv (slurp (:tempfile file)))]
-      (-> (response/ok data)
-          (response/header "Content-Type" "text/plain; charset=utf-8")))))
+      (-> (response/ok data)))))
