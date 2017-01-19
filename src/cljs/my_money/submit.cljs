@@ -17,11 +17,14 @@
                      :timeout 100})))
 
 (defn bank-event-table [rows]
-    [:div.container
-     [:table
+    [:div.table-responsive
+     [:table.table.table-striped
       [:thead
        [:tr (for [heading (first rows)]
-              [:th (str heading)])]]]])
+              [:th (str heading)])]]
+      [:tbody (for [row (rest rows)]
+                [:tr (for [cell row]
+                       [:td cell])])]]])
 
 (defn submit-page []
   [:div.container
