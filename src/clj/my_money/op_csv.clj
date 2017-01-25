@@ -11,3 +11,9 @@
                         (vec (concat (subvec row 0 column)
                                      (subvec row (inc column))))))]
     (reduce reducer [] csv-vec)))
+
+(defn remove-column-by-name [csv-vec column-name]
+  (let [column-index (.indexOf (first csv-vec) column-name)]
+    (if (= column-index -1)
+      csv-vec
+      (remove-column csv-vec column-index))))
