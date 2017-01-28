@@ -33,3 +33,19 @@
              "Viite" "Viesti" "Arkistointitunnus" ""]
             ["24.01.2017" "24.01.2017" "500,00" "123" "TALLETUSAUTOM." "PERSON EXAMPLE" "" "" "Käteistalletus automaatilla 12345 Setelit yht 500,00 EUR Setelit yht 1 kpl  " "2412231/876567/9412363"]]
            (remove-column-by-name (read-csv test-csv) "VERY IMPORTANT COLUMN")))))
+
+(deftest test-removing-last-column-from-parsed-csv
+  (testing "Removing last column by name"
+    (is (= [["Kirjauspäivä" "Arvopäivä" "Määrä  EUROA" "Laji"
+             "Selitys" "Saaja/Maksaja" "Saajan tilinumero ja pankin BIC"
+             "Viite" "Viesti" ""]
+            ["24.01.2017" "24.01.2017" "500,00" "123" "TALLETUSAUTOM." "PERSON EXAMPLE" "" "" "Käteistalletus automaatilla 12345 Setelit yht 500,00 EUR Setelit yht 1 kpl  "]]
+           (remove-column-by-name (read-csv test-csv) "Arkistointitunnus")))))
+
+(deftest test-removing-last-column-from-parsed-csv-when-it-has-empty-lines
+  (testing "Removing last column by name when there are empty lines present"
+    (is (= [["Kirjauspäivä" "Arvopäivä" "Määrä  EUROA" "Laji"
+             "Selitys" "Saaja/Maksaja" "Saajan tilinumero ja pankin BIC"
+             "Viite" "Viesti" ""]
+            ["24.01.2017" "24.01.2017" "500,00" "123" "TALLETUSAUTOM." "PERSON EXAMPLE" "" "" "Käteistalletus automaatilla 12345 Setelit yht 500,00 EUR Setelit yht 1 kpl  "]]
+           (remove-column-by-name (read-csv (str test-csv "\n\n\n")) "Arkistointitunnus")))))

@@ -7,9 +7,11 @@
 (defn remove-column [csv-vec column]
   "Removes item in given column number from each vector in the vector of vectors"
   (let [reducer (fn [acc row]
-                  (conj acc
-                        (vec (concat (subvec row 0 column)
-                                     (subvec row (inc column))))))]
+                  (if (>= (count row) (inc column))
+                    (conj acc
+                          (vec (concat (subvec row 0 column)
+                                       (subvec row (inc column)))))
+                    acc))]
     (reduce reducer [] csv-vec)))
 
 (defn remove-column-by-name [csv-vec column-name]
