@@ -4,6 +4,8 @@
 
 (def response-data (r/atom nil))
 
+(def username (r/atom nil))
+
 (defn upload-response-handler [response]
     (reset! response-data response))
 
@@ -11,7 +13,9 @@
   (let [file-input (.getElementById js/document "file-input")
         file (aget (.-files file-input) 0)
         file-name (.-name file)
-        form-data (doto (js/FormData.) (.append "file" file file-name))]
+        form-data (doto (js/FormData.)
+                    (.append "file" file file-name)
+                    (.append "username" @username))]
     (POST "/upload" {:body form-data
                      :handler upload-response-handler
                      :timeout 100})))
@@ -34,6 +38,13 @@
      [:input {:class "form-control-file"
               :id "file-input"
               :type "file"}]]
-     [:input {:type "submit"
-              :value "Submit"}]]
+    [:div.form-inline
+     [:label {:for "username"} "Username"]
+     [:input {:class "form-control"
+              :id "username"
+              :type "text"
+              :value @username
+              :on-change #(reset! username (-> % .-target .-value))}]]
+    [:input {:type "submit"
+             :value "Submit"}]]
    [bank-event-table @response-data]])
