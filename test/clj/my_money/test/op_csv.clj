@@ -56,4 +56,4 @@
              "Selitys" "Saaja/Maksaja" "Saajan tilinumero ja pankin BIC"
              "Viite" "Viesti" "Arkistointitunnus" ""]
             ["500,00" "123" "TALLETUSAUTOM." "PERSON EXAMPLE" "" "" "Käteistalletus automaatilla 12345 Setelit yht 500,00 EUR Setelit yht 1 kpl  " "2412231/876567/9412363"]]
-            (remove-columns-by-name (read-csv test-csv) ["Kirjauspäivä" "Arvopäivä"])))))
+           (remove-columns-by-name (read-csv test-csv) ["Kirjauspäivä" "Arvopäivä"])))))
