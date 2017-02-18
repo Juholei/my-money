@@ -49,3 +49,11 @@
              "Viite" "Viesti" ""]
             ["24.01.2017" "24.01.2017" "500,00" "123" "TALLETUSAUTOM." "PERSON EXAMPLE" "" "" "Käteistalletus automaatilla 12345 Setelit yht 500,00 EUR Setelit yht 1 kpl  "]]
            (remove-column-by-name (read-csv (str test-csv "\n\n\n")) "Arkistointitunnus")))))
+
+(deftest test-removing-multiple-columns-from-parsed-csv
+  (testing "Revoming multiple columns"
+    (is (= [["Määrä  EUROA" "Laji"
+             "Selitys" "Saaja/Maksaja" "Saajan tilinumero ja pankin BIC"
+             "Viite" "Viesti" "Arkistointitunnus" ""]
+            ["500,00" "123" "TALLETUSAUTOM." "PERSON EXAMPLE" "" "" "Käteistalletus automaatilla 12345 Setelit yht 500,00 EUR Setelit yht 1 kpl  " "2412231/876567/9412363"]]
+            (remove-columns-by-name (read-csv test-csv) ["Kirjauspäivä" "Arvopäivä"])))))

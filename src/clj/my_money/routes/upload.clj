@@ -10,7 +10,6 @@
       (db/create-user! {:username username}))
 
     (let [data (read-csv (slurp (:tempfile file) :encoding "ISO-8859-1"))]
-      (-> (response/ok (-> data
-                           (remove-column-by-name "Arvopäivä")
-                           (remove-column-by-name "Laji")
-                           (remove-column-by-name "Arkistointitunnus")))))))
+      (-> (response/ok
+            (remove-columns-by-name data
+              ["Arvopäivä" "Laji" "Arkistointitunnus"]))))))
