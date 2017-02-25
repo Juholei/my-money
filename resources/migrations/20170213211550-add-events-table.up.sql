@@ -1,6 +1,7 @@
 CREATE TABLE events
 (id VARCHAR(30) PRIMARY KEY,
- transaction_date DATE,
+ user_id INTEGER REFERENCES users (id),
+ transaction_date VARCHAR(10),
  amount MONEY,
  recipient VARCHAR(50),
  type VARCHAR(30),

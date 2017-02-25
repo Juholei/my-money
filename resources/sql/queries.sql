@@ -18,3 +18,14 @@ WHERE username = :username
 -- :doc delete a user given the id
 DELETE FROM users
 WHERE id = :id
+
+-- :name create-event! :! :n
+-- :doc creates a new user record
+INSERT INTO events
+(id, user_id, transaction_date, amount, recipient, type)
+VALUES (:id, :user-id, :transaction-date, :amount, :recipient, :type)
+
+-- :name get-events :? :*
+-- :doc Get entries with the given user id
+SELECT * FROM events
+WHERE user_id = :user-id
