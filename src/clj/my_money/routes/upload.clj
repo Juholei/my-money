@@ -6,7 +6,7 @@
 
 (defroutes upload-routes
   (POST "/upload" [file username]
-    (when (not (db/get-user-by-username {:username username}))
+    (when-not (db/get-user-by-username {:username username})
       (db/create-user! {:username username}))
 
     (let [data (-> (:tempfile file)
