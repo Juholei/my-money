@@ -10,19 +10,19 @@
       (db/create-user! {:username username}))
 
     (let [data (-> (:tempfile file)
-                 (slurp :encoding "ISO-8859-1")
-                 (read-csv)
-                 (remove-columns-by-name ["Arvopäivä" "Laji"])
-                 (csv-vec->map))]
+                   (slurp :encoding "ISO-8859-1")
+                   (read-csv)
+                   (remove-columns-by-name ["Arvopäivä" "Laji"])
+                   (csv-vec->map))]
       (let [user-id (:id (db/get-user-by-username {:username username}))]
         (loop [events data]
           (when-let [event (first events)]
-           (db/create-event! {:id (:Arkistointitunnus event)
-                                        :user-id user-id
-                                        :transaction-date (:Kirjauspäivä event)
-                                        :amount (bigdec (clojure.string/replace (:MääräEUROA event) "," "."))
-                                        :recipient (:Saaja/Maksaja event)
-                                        :type (:Laji event)})
+            (db/create-event! {:id (:Arkistointitunnus event)
+                               :user-id user-id
+                               :transaction-date (:Kirjauspäivä event)
+                               :amount (bigdec (clojure.string/replace (:MääräEUROA event) "," "."))
+                               :recipient (:Saaja/Maksaja event)
+                               :type (:Laji event)})
             (recur (rest events)))))
       (-> (response/ok data)))))
 
