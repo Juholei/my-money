@@ -9,7 +9,17 @@
     (when (not (db/get-user-by-username {:username username}))
       (db/create-user! {:username username}))
 
-    (let [data (read-csv (slurp (:tempfile file) :encoding "ISO-8859-1"))]
-      (-> (response/ok
-           (remove-columns-by-name data
-                                   ["Arvopäivä" "Laji" "Arkistointitunnus"]))))))
+    (let [data (-> (:tempfile file)
+                 (slurp :encoding "ISO-8859-1")
+                 (read-csv)
+                 (remove-columns-by-name ["Arvopäivä" "Laji" "Arkistointitunnus"]))]
+      (let [user-id (:id (db/get-user-by-username {:username username}))]
+        ; (for [event data]
+        ;   (println "Adding " event " to database")
+        ;   (db/create-event! {:id
+        ;                      :user-id
+        ;                      :transaction-date
+        ;                      :amount
+        ;                      :recipient
+        ;                      :type}))
+      (-> (response/ok data))))))

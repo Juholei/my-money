@@ -22,3 +22,10 @@
 
 (defn remove-columns-by-name [csv-vec column-names]
   (reduce remove-column-by-name csv-vec column-names))
+
+(defn- header->keyword [header]
+  "Removes whitespace from string originating from csv header and turns it into a keyword"
+  (keyword (clojure.string/replace header #"\s+" "")))
+
+(defn csv-vec->map [csv-vec]
+  (mapv #(zipmap (mapv header->keyword (first csv-vec)) %1) (rest csv-vec)))
