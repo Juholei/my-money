@@ -2,9 +2,9 @@
     (:require [reagent.core :as r]
               [ajax.core :refer [GET POST]]))
 
-(def response-data (r/atom nil))
-
 (def username (r/atom nil))
+
+(def response-data (r/atom nil))
 
 (defn upload-response-handler [response]
     (reset! response-data response))
@@ -19,16 +19,6 @@
     (POST "/upload" {:body form-data
                      :handler upload-response-handler
                      :timeout 100})))
-
-(defn bank-event-table [rows]
-    [:div.table-responsive
-     [:table.table.table-striped
-      [:thead
-       [:tr (for [heading (first rows)]
-              [:th (str heading)])]]
-      [:tbody (for [row (rest rows)]
-                [:tr (for [cell row]
-                       [:td cell])])]]])
 
 (defn submit-page []
   [:div.container
@@ -46,5 +36,4 @@
               :value @username
               :on-change #(reset! username (-> % .-target .-value))}]]
     [:input {:type "submit"
-             :value "Submit"}]]
-   [bank-event-table @response-data]])
+             :value "Submit"}]]])

@@ -7,6 +7,7 @@
             [markdown.core :refer [md->html]]
             [my-money.ajax :refer [load-interceptors!]]
             [my-money.submit :refer [submit-page]]
+            [my-money.events :refer [events-page]]
             [ajax.core :refer [GET POST]])
   (:import goog.History))
 
@@ -29,6 +30,7 @@
         [:ul.nav.navbar-nav
          [nav-link "#/" "Home" :home collapsed?]
          [nav-link "#/submit" "Submit" :submit collapsed?]
+         [nav-link "#/events" "Events" :events collapsed?]
          [nav-link "#/about" "About" :about collapsed?]]]])))
 
 (defn about-page []
@@ -47,7 +49,8 @@
 (def pages
   {:home #'home-page
    :about #'about-page
-   :submit #'submit-page})
+   :submit #'submit-page
+   :events #'events-page})
 
 (defn page []
   [(pages (session/get :page))])
@@ -61,6 +64,9 @@
 
 (secretary/defroute "/submit" []
   (session/put! :page :submit))
+
+(secretary/defroute "/events" []
+  (session/put! :page :events))
 
 (secretary/defroute "/about" []
   (session/put! :page :about))

@@ -29,13 +29,14 @@
     (db/create-user!
      t-conn
      {:username "test_person"})
-    (let [user-id (:id (db/get-user-by-username t-conn {:username "test_person"}))]
-      (is (= 1 (db/create-event!
-                t-conn
-                {:id "2412231/876567/9412363"
+    (let [user-id (:id (db/get-user-by-username t-conn {:username "test_person"}))
+          event {:id "2412231/876567/9412363"
                  :user-id user-id
                  :transaction-date "24.01.2017"
                  :amount 500
                  :recipient ""
-                 :type "123"})))
-      (is (= 1 (count (db/get-events t-conn {:user-id user-id})))))))
+                 :type "123"}]
+      (is (= 1 (db/create-event!
+                t-conn
+                event)))
+      (is (= event (first (db/get-events t-conn {:user-id user-id})))))))

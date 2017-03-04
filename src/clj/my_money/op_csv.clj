@@ -25,7 +25,10 @@
 
 (defn- header->keyword [header]
   "Removes whitespace from string originating from csv header and turns it into a keyword"
-  (keyword (clojure.string/replace header #"\s+" "")))
+  (-> header
+      (clojure.string/replace " " "") ; There's some weird space in some column name
+      (clojure.string/replace #"\s+" "")
+      (keyword)))
 
 (defn csv-vec->map [csv-vec]
   (mapv #(zipmap (mapv header->keyword (first csv-vec)) %1) (rest csv-vec)))
