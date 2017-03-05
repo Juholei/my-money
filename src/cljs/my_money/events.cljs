@@ -7,7 +7,6 @@
 (def username (r/atom nil))
 
 (defn handle-response [response]
-  (.log js/console (str response))
   (reset! response-data response))
 
 (defn get-events []
@@ -15,14 +14,18 @@
                   :params {:user @username}}))
 
 (defn bank-event-table [events]
-    [:div.table-responsive
-     [:table.table.table-striped
-      [:thead
-       [:tr (for [heading (keys(first events))]
-              [:th (str heading)])]]
-      [:tbody (for [event (rest events)]
-                [:tr (for [cell (vals event)]
-                       [:td (str cell)])])]]])
+  [:div.table-responsive
+   [:table.table.table-striped
+    [:thead
+     [:tr
+      [:th "Date"]
+      [:th "Amount"]
+      [:th "Recipient"]]]
+    [:tbody (for [event (rest events)]
+              [:tr
+               [:td (str (:transaction_date event))]
+               [:td (str (/ (.-rep (:amount event)) 100) "€")]
+               [:td (str (:recipient event))]])]]])
 
 (defn events-page []
   [:div.container
@@ -36,5 +39,4 @@
               :on-change #(reset! username (-> % .-target .-value))}]]
     [:input {:type "submit"
              :value "Get events"}]]
-   [bank-event-table @response-data]
-   [:p @response-data]])
+   [bank-event-table @response-data]])

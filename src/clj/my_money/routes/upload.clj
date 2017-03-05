@@ -20,7 +20,7 @@
             (db/create-event! {:id (:Arkistointitunnus event)
                                :user-id user-id
                                :transaction-date (:Kirjauspäivä event)
-                               :amount (bigdec (clojure.string/replace (:MääräEUROA event) "," "."))
+                               :amount (Integer/parseInt (clojure.string/replace (:MääräEUROA event) "," ""))
                                :recipient (:Saaja/Maksaja event)
                                :type (:Laji event)})
             (recur (rest events)))))
