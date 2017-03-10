@@ -18,6 +18,12 @@ To start a web server for the application, run:
 
     lein run
 
+
+## Running tests
+
+	lein test
+	lein with-profile test doo phantom test
+ 
 ## License
 
 Copyright © 2017 Juho Leinonen
