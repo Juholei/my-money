@@ -24,6 +24,7 @@ WHERE id = :id
 INSERT INTO events
 (id, user_id, transaction_date, amount, recipient, type)
 VALUES (:id, :user-id, :transaction-date, :amount, :recipient, :type)
+ON CONFLICT DO NOTHING
 
 -- :name get-events :? :*
 -- :doc Get entries with the given user id
