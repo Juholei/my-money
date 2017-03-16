@@ -26,10 +26,10 @@
 
 (defn balance-info [events]
   (when events
-    [:div
-     [:h1 (str "Balance " (balance events) "€")]
-     [:h1 (str "Expenses " (expenses events) "€")]
-     [:h1 (str "Income " (income events) "€")]]))
+    [:div.container
+     [:h1.col-md-4 (str "Balance " (balance events) "€")]
+     [:h1.col-md-4 (str "Expenses " (expenses events) "€")]
+     [:h1.col-md-4 (str "Income " (income events) "€")]]))
 
 (defn bank-event-table [events]
   [:div.table-responsive
