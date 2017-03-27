@@ -1,6 +1,7 @@
 (ns my-money.events
     (:require [reagent.core :as r]
-              [ajax.core :refer [GET]]))
+              [ajax.core :refer [GET]]
+              [my-money.calculations :as calc]))
 
 (def response-data (r/atom nil))
 
@@ -13,23 +14,12 @@
   (GET "/events" {:handler handle-response
                   :params {:user @username}}))
 
-(defn balance [events]
-  (/ (reduce #(+ %1 (int (:amount %2))) 0 events) 100))
-
-(defn expenses [events]
-  (let [expense-events (filter #(< (:amount %) 0) events)]
-    (balance expense-events)))
-
-(defn income [events]
-  (let [income-events (filter #(> (:amount %) 0) events)]
-    (balance income-events)))
-
 (defn balance-info [events]
   (when events
     [:div.container
-     [:h1.col-md-4 (str "Balance " (balance events) "€")]
-     [:h1.col-md-4 (str "Expenses " (expenses events) "€")]
-     [:h1.col-md-4 (str "Income " (income events) "€")]]))
+     [:h1.col-md-4 (str "Balance " (calc/balance events) "€")]
+     [:h1.col-md-4 (str "Expenses " (calc/expenses events) "€")]
+     [:h1.col-md-4 (str "Income " (calc/income events) "€")]]))
 
 (defn bank-event-table [events]
   [:div.table-responsive
