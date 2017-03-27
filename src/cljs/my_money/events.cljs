@@ -30,6 +30,7 @@
       [:th "Amount"]
       [:th "Recipient"]]]
     [:tbody (for [event (rest events)]
+              ^{:key (:id event)}
               [:tr
                [:td (str (:transaction_date event))]
                [:td (str (/ (:amount event) 100) "€")]
