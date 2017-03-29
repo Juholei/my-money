@@ -22,7 +22,7 @@
 
 (defn submit-page []
   [:div.container
-   [:form#formi {:on-submit upload}
+   [:form {:on-submit upload}
     [:div.form-group
      [:label {:for "file-input"} "Add your bank csv"]
      [:input {:class "form-control-file"
