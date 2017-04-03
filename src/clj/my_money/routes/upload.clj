@@ -4,18 +4,17 @@
             [compojure.core :refer [defroutes POST]]
             [ring.util.http-response :as response]))
 
-
 (defn- save-events [user-id events]
   (loop [events events
          total-rows 0]
     (if-let [event (first events)]
       (let [inserted-rows (db/create-event!
-                            {:id (:Arkistointitunnus event)
-                             :user-id user-id
-                             :transaction-date (:Kirjauspäivä event)
-                             :amount (Integer/parseInt (clojure.string/replace (:MääräEUROA event) "," ""))
-                             :recipient (:Saaja/Maksaja event)
-                             :type (:Laji event)})]
+                           {:id (:Arkistointitunnus event)
+                            :user-id user-id
+                            :transaction-date (:Kirjauspäivä event)
+                            :amount (Integer/parseInt (clojure.string/replace (:MääräEUROA event) "," ""))
+                            :recipient (:Saaja/Maksaja event)
+                            :type (:Laji event)})]
         (recur (rest events) (+ total-rows inserted-rows)))
       total-rows)))
 

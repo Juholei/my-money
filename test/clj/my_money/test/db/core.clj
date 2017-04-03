@@ -40,7 +40,6 @@
       (is (= 1 (db/create-event! t-conn (assoc test-event :user-id user-id))))
       (is (= 1 (count (db/get-events t-conn {:user-id user-id})))))))
 
-
 (deftest test-duplicate-events-are-not-added
   (jdbc/with-db-transaction [t-conn *db*]
     (jdbc/db-set-rollback-only! t-conn)
