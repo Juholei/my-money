@@ -1,14 +1,16 @@
 (ns my-money.submit
     (:require [reagent.core :as r]
               [ajax.core :refer [GET POST]]
-              [secretary.core :as secretary]))
+              [secretary.core :as secretary]
+              [my-money.events :refer [get-events]]))
 
-(def username (r/atom nil))
+(defonce username (r/atom nil))
+(defonce alerts (r/atom []))
 
 (defn upload-response-handler [response]
   (js/console.log (str "response handler" response))
-  (secretary/dispatch! "/events"))
-
+  (swap! alerts conj (str "Added " response " events"))
+  (get-events @username))
 
 (defn upload []
   (let [file-input (.getElementById js/document "file-input")
@@ -20,8 +22,14 @@
     (POST "/upload" {:body form-data
                      :handler upload-response-handler})))
 
+(defn alerts-display [alerts]
+  [:div.container
+  (for [alert alerts]
+    [:div {:class "alert alert-success"} alert])])
+
 (defn submit-page []
   [:div.container
+   [alerts-display @alerts]
    [:form {:on-submit upload}
     [:div.form-group
      [:label {:for "file-input"} "Add your bank csv"]

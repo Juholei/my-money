@@ -29,8 +29,6 @@
         [:a.navbar-brand {:href "#/"} "my-money"]
         [:ul.nav.navbar-nav
          [nav-link "#/" "Home" :home collapsed?]
-         [nav-link "#/submit" "Submit" :submit collapsed?]
-         [nav-link "#/events" "Events" :events collapsed?]
          [nav-link "#/about" "About" :about collapsed?]]]])))
 
 (defn about-page []
@@ -41,16 +39,12 @@
 
 (defn home-page []
   [:div.container
-   (when-let [docs (session/get :docs)]
-     [:div.row>div.col-sm-12
-      [:div {:dangerouslySetInnerHTML
-             {:__html (md->html docs)}}]])])
+   [submit-page]
+   [events-page]])
 
 (def pages
   {:home #'home-page
-   :about #'about-page
-   :submit #'submit-page
-   :events #'events-page})
+   :about #'about-page})
 
 (defn page []
   [(pages (session/get :page))])
@@ -61,12 +55,6 @@
 
 (secretary/defroute "/" []
   (session/put! :page :home))
-
-(secretary/defroute "/submit" []
-  (session/put! :page :submit))
-
-(secretary/defroute "/events" []
-  (session/put! :page :events))
 
 (secretary/defroute "/about" []
   (session/put! :page :about))

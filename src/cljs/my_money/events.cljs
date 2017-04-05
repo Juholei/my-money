@@ -4,17 +4,20 @@
               [ajax.core :refer [GET]]
               [my-money.calculations :as calc]))
 
-(def response-data (r/atom nil))
+(defonce response-data (r/atom nil))
 
-(def form-data (r/atom {:username ""
-                        :selected-filter "all"}))
+(defonce form-data (r/atom {:username ""
+                            :selected-filter "all"}))
 
 (defn handle-response [response]
   (reset! response-data response))
 
-(defn get-events []
-  (GET "/events" {:handler handle-response
-                  :params {:user (:username @form-data)}}))
+(defn get-events
+  ([]
+   (get-events (:username @form-data)))
+  ([username]
+   (GET "/events" {:handler handle-response
+                  :params {:user username}})))
 
 (defn balance-info [events]
   (when events
@@ -61,7 +64,7 @@
 
 (defn events-page []
   [:div.container
-   [:form {:on-submit get-events}
+   [:form {:on-submit #(get-events)}
     [:div.form-inline
      [:label {:for "username"} "Username"]
      [:input {:class "form-control"
