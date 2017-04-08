@@ -30,18 +30,18 @@
 (defn submit-page []
   [:div.container
    [alerts-display @alerts]
-   [:form {:on-submit upload}
+   [:form.form-inline {:on-submit upload}
     [:div.form-group
      [:label {:for "file-input"} "Add your bank csv"]
-     [:input {:class "form-control-file"
-              :id "file-input"
+     [:input {:id "file-input"
               :type "file"}]]
-    [:div.form-inline
+    [:div.form-group
      [:label {:for "username"} "Username"]
      [:input {:class "form-control"
               :id "username"
               :type "text"
               :value @username
               :on-change #(reset! username (-> % .-target .-value))}]]
-    [:input {:type "submit"
+    [:input {:class "btn btn-primary"
+             :type "submit"
              :value "Submit"}]]])
