@@ -1,7 +1,6 @@
 (ns my-money.calculations-test
   (:require [cljs.test :refer-macros [is are deftest testing use-fixtures]]
             [pjstadig.humane-test-output]
-            [reagent.core :as reagent :refer [atom]]
             [my-money.calculations :as calc]))
 
 (deftest test-balance
