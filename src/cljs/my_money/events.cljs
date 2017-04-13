@@ -2,7 +2,8 @@
     (:require [clojure.string :as string]
               [reagent.core :as r]
               [ajax.core :refer [GET]]
-              [my-money.calculations :as calc]))
+              [my-money.calculations :as calc]
+              [my-money.event-filters :as filters]))
 
 (defonce response-data (r/atom nil))
 
@@ -35,8 +36,16 @@
             :on-click #(swap! form-data assoc :selected-filter value)}]
    [:label {:for value} (string/capitalize value)]])
 
-(defn filter-selector []
+(defn month-filter [events]
+  [:select
+   [:option "All-time"]
+   (for [month (filters/months events)]
+     ^{:key month}
+     [:option month])])
+
+(defn filter-selector [events]
   [:form
+   [month-filter events]
    [labelled-radio-button "all" "type"]
    [labelled-radio-button "expenses" "type"]
    [labelled-radio-button "incomes" "type"]])
@@ -56,25 +65,18 @@
                [:td (str (/ (:amount event) 100) "€")]
                [:td (str (:recipient event))]])]]])
 
-(defn event-type->filter [event-type]
-  (condp = event-type
-    "all" #(not= % 0)
-    "expenses" neg?
-    "incomes" pos?))
-
 (defn events-page []
   [:div.container
-   [:form {:on-submit #(get-events)}
-    [:div.form-inline
-     [:label {:for "username"} "Username"]
+   [:form.form-inline {:on-submit #(get-events)}
+     [:label {:for "events-username"} "Username"]
      [:input {:class "form-control"
-              :id "username"
+              :id "events-username"
               :type "text"
               :value (:username @form-data)
               :on-change #(swap! form-data assoc :username (-> % .-target .-value))}]
      [:input {:type "submit"
               :class "btn btn-primary"
-              :value "Get events"}]]]
-   [filter-selector]
+              :value "Get events"}]]
+   [filter-selector @response-data]
    [balance-info @response-data]
-   [bank-event-table (filter #((event-type->filter (:selected-filter @form-data)) (:amount %)) @response-data)]])
+   [bank-event-table (filter #((filters/event-type->filter (:selected-filter @form-data)) (:amount %)) @response-data)]])
