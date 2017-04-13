@@ -1,3 +1,7 @@
+services:
+  - postgresql
+
 language: clojure
+
 jdk:
   - oraclejdk8
