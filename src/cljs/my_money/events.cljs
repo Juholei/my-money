@@ -65,6 +65,14 @@
                [:td (str (/ (:amount event) 100) "€")]
                [:td (str (:recipient event))]])]]])
 
+(defn event-filter
+  ([]
+    (event-filter (:selected-filter @form-data)))
+  ([event-type]
+    (fn [event]
+      (let [event-type-filter (filters/event-type->filter event-type)]
+        (event-type-filter (:amount event))))))
+
 (defn events-page []
   [:div.container
    [:form.form-inline {:on-submit #(get-events)}
@@ -79,4 +87,4 @@
               :value "Get events"}]]
    [filter-selector @response-data]
    [balance-info @response-data]
-   [bank-event-table (filter #((filters/event-type->filter (:selected-filter @form-data)) (:amount %)) @response-data)]])
+   [bank-event-table (filter (event-filter) @response-data)]])
