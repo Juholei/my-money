@@ -17,3 +17,8 @@
       (= month month-to-filter) true
       (= "All-time" month-to-filter) true
       :else false)))
+
+(defn event-filter [event-type]
+  (fn [event]
+    (let [event-type-filter (event-type->filter event-type)]
+      (event-type-filter (:amount event)))))

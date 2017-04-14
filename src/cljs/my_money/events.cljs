@@ -8,7 +8,7 @@
 (defonce response-data (r/atom nil))
 
 (defonce form-data (r/atom {:username ""
-                            :selected-filter "all"}))
+                            :selected-event-type "all"}))
 
 (defn handle-response [response]
   (reset! response-data response))
@@ -33,7 +33,7 @@
             :value value
             :id value
             :name type
-            :on-click #(swap! form-data assoc :selected-filter value)}]
+            :on-click #(swap! form-data assoc :selected-event-type value)}]
    [:label {:for value} (string/capitalize value)]])
 
 (defn month-filter [events]
@@ -65,26 +65,24 @@
                [:td (str (/ (:amount event) 100) "€")]
                [:td (str (:recipient event))]])]]])
 
-(defn event-filter
-  ([]
-    (event-filter (:selected-filter @form-data)))
-  ([event-type]
-    (fn [event]
-      (let [event-type-filter (filters/event-type->filter event-type)]
-        (event-type-filter (:amount event))))))
+(defn event-retrieval-form [form-data]
+  [:form.form-inline {:on-submit #(get-events)}
+   [:label {:for "events-username"} "Username"]
+   [:input {:class "form-control"
+            :id "events-username"
+            :type "text"
+            :value (:username @form-data)
+            :on-change #(swap! form-data assoc :username (-> % .-target .-value))}]
+   [:input {:type "submit"
+            :class "btn btn-primary"
+            :value "Get events"}]])
 
 (defn events-page []
-  [:div.container
-   [:form.form-inline {:on-submit #(get-events)}
-     [:label {:for "events-username"} "Username"]
-     [:input {:class "form-control"
-              :id "events-username"
-              :type "text"
-              :value (:username @form-data)
-              :on-change #(swap! form-data assoc :username (-> % .-target .-value))}]
-     [:input {:type "submit"
-              :class "btn btn-primary"
-              :value "Get events"}]]
-   [filter-selector @response-data]
-   [balance-info @response-data]
-   [bank-event-table (filter (event-filter) @response-data)]])
+  (fn []
+    (let [applied-filters (filters/event-filter (:selected-event-type @form-data))
+          filtered-events (filter applied-filters @response-data)]
+      [:div.container
+       [event-retrieval-form form-data]
+       [filter-selector @response-data]
+       [balance-info @response-data]
+       [bank-event-table filtered-events]])))
