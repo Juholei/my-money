@@ -8,7 +8,8 @@
 (defonce response-data (r/atom nil))
 
 (defonce form-data (r/atom {:username ""
-                            :selected-event-type "all"}))
+                            :selected-filters {:type "all"
+                                               :month "All-time"}}))
 
 (defn handle-response [response]
   (reset! response-data response))
@@ -33,11 +34,11 @@
             :value value
             :id value
             :name type
-            :on-click #(swap! form-data assoc :selected-event-type value)}]
+            :on-click #(swap! form-data assoc-in [:selected-filters :type] value)}]
    [:label {:for value} (string/capitalize value)]])
 
 (defn month-filter [events]
-  [:select
+  [:select {:on-change #(swap! form-data assoc-in [:selected-filters :month] (-> % .-target .-value))}
    [:option "All-time"]
    (for [month (filters/months events)]
      ^{:key month}
@@ -79,7 +80,7 @@
 
 (defn events-page []
   (fn []
-    (let [applied-filters (filters/event-type-filter (:selected-event-type @form-data))
+    (let [applied-filters (filters/combined-filter (:selected-filters @form-data))
           filtered-events (filter applied-filters @response-data)]
       [:div.container
        [event-retrieval-form form-data]

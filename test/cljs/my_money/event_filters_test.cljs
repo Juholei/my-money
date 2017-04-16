@@ -20,7 +20,8 @@
                               {:transaction_date "10.02.2017"
                                :amount -150}
                               {:transaction_date "01.02.2017"
-                               :amount 1230}])
+                               :amount 1230}
+                              {:transaction_date "31.12.2016" :amount 5000}])
 
 (deftest test-months-from-events
   (is (= #{"01.2017" "02.2017"}
