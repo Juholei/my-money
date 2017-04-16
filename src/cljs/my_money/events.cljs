@@ -59,7 +59,7 @@
       [:th "Date"]
       [:th "Amount"]
       [:th "Recipient"]]]
-    [:tbody (for [event (rest events)]
+    [:tbody (for [event events]
               ^{:key (:id event)}
               [:tr
                [:td (str (:transaction_date event))]
