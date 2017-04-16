@@ -28,3 +28,9 @@
   (let [wanted-month-filter (month->filter month)]
     (fn [event]
       (wanted-month-filter (event->month event)))))
+
+(defn combined-filter [params]
+  (let [{:keys [month type]} params
+        p1 (month-filter month)
+        p2 (event-type-filter type)]
+    (every-pred p1 p2)))
