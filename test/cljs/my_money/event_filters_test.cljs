@@ -4,31 +4,39 @@
             [reagent.core :as reagent :refer [atom]]
             [my-money.event-filters :as filters]))
 
-(deftest test-months-from-events
-  (is (= #{"01.2017" "02.2017"}
-         (filters/months [{:transaction_date "01.01.2017"}
-                          {:transaction_date "11.01.2017"}
-                          {:transaction_date "10.02.2017"}
-                          {:transaction_date "01.02.2017"}]))))
+(def month-filtering-test-events [{:transaction_date "01.01.2017"}
+                                  {:transaction_date "11.01.2017"}
+                                  {:transaction_date "10.02.2017"}
+                                  {:transaction_date "01.02.2017"}])
 
-(def events [{:amount 100}
+(def type-filtering-test-events [{:amount 100}
              {:amount -100}
              {:amount 200}])
 
+(deftest test-months-from-events
+  (is (= #{"01.2017" "02.2017"}
+         (filters/months month-filtering-test-events))))
+
 (deftest test-only-income-events
-  (let [income-filter (filters/event-filter "incomes")]
+  (let [income-filter (filters/event-type-filter "incomes")]
     (is (= [{:amount 100}
             {:amount 200}]
-           (filter income-filter events)))))
+           (filter income-filter type-filtering-test-events)))))
 
 (deftest test-only-expense-events
-  (let [expense-filter (filters/event-filter "expenses")]
+  (let [expense-filter (filters/event-type-filter "expenses")]
     (is (= [{:amount -100}]
-           (filter expense-filter events)))))
+           (filter expense-filter type-filtering-test-events)))))
 
 (deftest test-all-events
-  (let [all-filter (filters/event-filter "all")]
+  (let [all-filter (filters/event-type-filter "all")]
     (is (= [{:amount 100}
             {:amount -100}
             {:amount 200}]
-           (filter all-filter events)))))
+           (filter all-filter type-filtering-test-events)))))
+
+(deftest test-month-filtering
+  (let [month-filter (filters/month-filter "01.2017")]
+    (is (= [{:transaction_date "01.01.2017"}
+            {:transaction_date "11.01.2017"}]
+           (filter month-filter month-filtering-test-events)))))

@@ -79,7 +79,7 @@
 
 (defn events-page []
   (fn []
-    (let [applied-filters (filters/event-filter (:selected-event-type @form-data))
+    (let [applied-filters (filters/event-type-filter (:selected-event-type @form-data))
           filtered-events (filter applied-filters @response-data)]
       [:div.container
        [event-retrieval-form form-data]

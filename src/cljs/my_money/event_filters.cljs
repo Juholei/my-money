@@ -1,24 +1,30 @@
 (ns my-money.event-filters)
 
-(defn months [events]
-  (let [month-from-event (fn [event]
-                          (subs (:transaction_date event) 3))]
-    (set (map month-from-event events))))
+(defn- event->month [event]
+  (subs (:transaction_date event) 3))
 
-(defn event-type->filter [event-type]
+(defn months [events]
+  (set (map event->month events)))
+
+(defn- event-type->filter [event-type]
   (condp = event-type
     "all" #(not= % 0)
     "expenses" neg?
     "incomes" pos?))
 
-(defn month->filter [month-to-filter]
+(defn- month->filter [month-to-filter]
   (fn [month]
     (cond
       (= month month-to-filter) true
       (= "All-time" month-to-filter) true
       :else false)))
 
-(defn event-filter [event-type]
-  (fn [event]
-    (let [event-type-filter (event-type->filter event-type)]
+(defn event-type-filter [event-type]
+  (let [event-type-filter (event-type->filter event-type)]
+    (fn [event]
       (event-type-filter (:amount event)))))
+
+(defn month-filter [month]
+  (let [wanted-month-filter (month->filter month)]
+    (fn [event]
+      (wanted-month-filter (event->month event)))))
