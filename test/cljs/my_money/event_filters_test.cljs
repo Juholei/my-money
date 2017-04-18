@@ -10,8 +10,8 @@
                                   {:transaction_date "01.02.2017"}])
 
 (def type-filtering-test-events [{:amount 100}
-             {:amount -100}
-             {:amount 200}])
+                                 {:amount -100}
+                                 {:amount 200}])
 
 (def all-filters-test-events [{:transaction_date "01.01.2017"
                                :amount 200}

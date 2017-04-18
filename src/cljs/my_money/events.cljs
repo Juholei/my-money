@@ -78,12 +78,20 @@
             :class "btn btn-primary"
             :value "Get events"}]])
 
+(defn- events-for-month [events month]
+  (let [month-filter (filters/month-filter month)]
+    (filter month-filter events)))
+
 (defn events-page []
   (fn []
     (let [applied-filters (filters/combined-filter (:selected-filters @form-data))
-          filtered-events (filter applied-filters @response-data)]
+          filtered-events (filter applied-filters @response-data)
+          selected-month (get-in @form-data [:selected-filters :month])
+          events-for-balance-info (if (= "All-time" selected-month)
+                                    @response-data
+                                    (events-for-month @response-data selected-month))]
       [:div.container
        [event-retrieval-form form-data]
        [filter-selector @response-data]
-       [balance-info @response-data]
+       [balance-info events-for-balance-info]
        [bank-event-table filtered-events]])))
