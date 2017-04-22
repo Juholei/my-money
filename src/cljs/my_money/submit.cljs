@@ -25,8 +25,8 @@
 
 (defn alerts-display [alerts]
   [:div.container
-  (for [alert alerts]
-    [:div {:class "alert alert-success"} alert])])
+   (for [alert alerts]
+     [:div {:class "alert alert-success"} alert])])
 
 (defn submit-page []
   [:div.container

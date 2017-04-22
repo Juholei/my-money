@@ -9,4 +9,7 @@
       (let [username (get-in req [:params :user])
             user-id (:id (db/get-user-by-username {:username username}))
             events (db/get-events {:user-id user-id})]
-        (-> (response/ok events))))))
+        (response/ok events))))
+  (GET "/events/recurring" []
+    (fn [req]
+      (response/ok (db/get-recurring-events)))))
