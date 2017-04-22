@@ -30,4 +30,3 @@
                    (remove-columns-by-name ["Arvopäivä" "Laji"])
                    (csv-vec->map))]
       (-> (response/ok (save-events user-id data))))))
-
