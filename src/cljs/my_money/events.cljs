@@ -59,6 +59,9 @@
    [labelled-radio-button "expenses" "type"]
    [labelled-radio-button "incomes" "type"]])
 
+(defn amount->pretty-string [amount]
+  (str (/ amount 100) "€"))
+
 (defn bank-event-table [events]
   [:div.table-responsive
    [:table.table.table-striped
@@ -71,7 +74,7 @@
               ^{:key (:id event)}
               [:tr
                [:td (str (:transaction_date event))]
-               [:td (str (/ (:amount event) 100) "€")]
+               [:td (amount->pretty-string (:amount event))]
                [:td (str (:recipient event))]])]]])
 
 (defn- event-retrieval-handler [e]
@@ -94,6 +97,14 @@
   (let [month-filter (filters/month-filter month)]
     (filter month-filter events)))
 
+(defn recurring-expense-info [recurring-expenses]
+  [:div.list-group
+   (for [event recurring-expenses]
+     ^{:key (:id event)}
+     [:p.list-group-item (str (:recipient event)
+                              " "
+                              (amount->pretty-string(:amount event)))])])
+
 (defn events-page []
   (fn []
     (let [applied-filters (filters/combined-filter (:selected-filters @form-data))
@@ -112,4 +123,4 @@
          [bank-event-table filtered-events]]
         [:div.col-md-4
          [:h1 "Recurring expenses"]
-         [bank-event-table @recurring-expenses]]]])))
+         [recurring-expense-info @recurring-expenses]]]])))
