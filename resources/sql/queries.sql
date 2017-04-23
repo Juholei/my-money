@@ -31,12 +31,12 @@ ON CONFLICT DO NOTHING
 SELECT * FROM events
 WHERE user_id = :user-id
 
--- :name get-recurring-events :? :*
+-- :name get-recurring-expenses :? :*
 SELECT A.*
 FROM events A
 INNER JOIN (SELECT recipient, amount
             FROM events
             GROUP BY recipient, amount
-            HAVING COUNT(*) > 1) B
+            HAVING COUNT(*) > 1 AND amount < 0) B
 ON A.recipient = B.recipient AND A.amount = B.amount
 ORDER By recipient

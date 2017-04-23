@@ -6,7 +6,7 @@
               [my-money.event-filters :as filters]))
 
 (defonce response-data (r/atom nil))
-(defonce recurring-events (r/atom nil))
+(defonce recurring-expenses (r/atom nil))
 
 (defonce form-data (r/atom {:username ""
                             :selected-filters {:type "all"
@@ -15,21 +15,19 @@
 (defn handle-response [response]
   (reset! response-data response))
 
-(defn recurring-events-handler [response]
-  (reset! recurring-events response))
+(defn recurring-expenses-handler [response]
+  (reset! recurring-expenses response))
 
-(defn get-recurring-events []
- (GET "/events/recurring" {:handler recurring-events-handler}))
+(defn get-recurring-expenses []
+ (GET "/events/recurring/expenses" {:handler recurring-expenses-handler}))
 
 (defn get-events
   ([]
    (get-events (:username @form-data)))
   ([username]
-   (get-recurring-events)
+   (get-recurring-expenses)
    (GET "/events" {:handler handle-response
                    :params {:user username}})))
-
-
 
 (defn balance-info [events]
   (when events
@@ -113,5 +111,5 @@
          [:h1 "Events"]
          [bank-event-table filtered-events]]
         [:div.col-md-4
-         [:h1 "Recurring events"]
-         [bank-event-table @recurring-events]]]])))
+         [:h1 "Recurring expenses"]
+         [bank-event-table @recurring-expenses]]]])))
