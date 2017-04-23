@@ -10,6 +10,6 @@
             user-id (:id (db/get-user-by-username {:username username}))
             events (db/get-events {:user-id user-id})]
         (response/ok events))))
-  (GET "/events/recurring" []
+  (GET "/events/recurring/expenses" []
     (fn [req]
-      (response/ok (db/get-recurring-events)))))
+      (response/ok (db/get-recurring-expenses)))))
