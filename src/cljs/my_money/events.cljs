@@ -97,13 +97,23 @@
   (let [month-filter (filters/month-filter month)]
     (filter month-filter events)))
 
+(defn recurring-expense-item [expense]
+  (let [expense-state (r/atom {:data expense
+                               :expanded false})]
+    (fn [expense]
+      [:button {:class "list-group-item list-group-item-action"
+                :on-click #(swap! expense-state update :expanded not)}
+       (str (get-in @expense-state [:data :recipient])
+            " "
+            (amount->pretty-string (get-in @expense-state [:data :amount])))
+       (when (:expanded @expense-state)
+         [:div "Last occurrence " (get-in @expense-state [:data :transaction_date])])])))
+
 (defn recurring-expense-info [recurring-expenses]
   [:div.list-group
-   (for [event recurring-expenses]
-     ^{:key (:id event)}
-     [:p.list-group-item (str (:recipient event)
-                              " "
-                              (amount->pretty-string(:amount event)))])])
+   (for [expense recurring-expenses]
+     ^{:key (:id expense)}
+     [recurring-expense-item expense])])
 
 (defn events-page []
   (fn []
