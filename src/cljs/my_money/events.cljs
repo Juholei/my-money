@@ -3,7 +3,8 @@
               [reagent.core :as r]
               [ajax.core :refer [GET]]
               [my-money.calculations :as calc]
-              [my-money.event-filters :as filters]))
+              [my-money.event-filters :as filters]
+              [my-money.recurring-events :as re]))
 
 (defonce response-data (r/atom nil))
 (defonce recurring-expenses (r/atom nil))
@@ -107,11 +108,14 @@
             " "
             (amount->pretty-string (get-in @expense-state [:data :amount])))
        (when (:expanded @expense-state)
-         [:div "Last occurrence " (get-in @expense-state [:data :transaction_date])])])))
+         [:div "Occurrences "
+           [:ul
+            (for [occurrence (get-in @expense-state [:data :events])]
+              [:li (str (:transaction_date occurrence))])]])])))
 
 (defn recurring-expense-info [recurring-expenses]
   [:div.list-group
-   (for [expense recurring-expenses]
+   (for [expense (re/sort-recurring-events recurring-expenses)]
      ^{:key (:id expense)}
      [recurring-expense-item expense])])
 
