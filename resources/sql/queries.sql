@@ -39,4 +39,5 @@ INNER JOIN (SELECT recipient, amount
             GROUP BY recipient, amount
             HAVING COUNT(*) > 1 AND amount < 0) B
 ON A.recipient = B.recipient AND A.amount = B.amount
+WHERE user_id = :user-id
 ORDER By recipient

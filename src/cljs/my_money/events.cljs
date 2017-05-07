@@ -20,7 +20,8 @@
   (reset! recurring-expenses response))
 
 (defn get-recurring-expenses []
- (GET "/events/recurring/expenses" {:handler recurring-expenses-handler}))
+ (GET "/events/recurring/expenses" {:handler recurring-expenses-handler
+                                    :params {:user (:username @form-data)}}))
 
 (defn get-events
   ([]
