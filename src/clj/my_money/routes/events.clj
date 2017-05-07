@@ -12,4 +12,6 @@
         (response/ok events))))
   (GET "/events/recurring/expenses" []
     (fn [req]
-      (response/ok (db/get-recurring-expenses)))))
+      (let [username (get-in req [:params :user])
+            user-id (:id (db/get-user-by-username {:username username}))]
+        (response/ok (db/get-recurring-expenses {:user-id user-id}))))))
