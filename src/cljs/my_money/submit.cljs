@@ -12,7 +12,8 @@
   (swap! alerts conj (str "Added " response " events"))
   (get-events @username))
 
-(defn upload []
+(defn upload [e]
+  (.preventDefault e)
   (let [file-input (.getElementById js/document "file-input")
         file (aget (.-files file-input) 0)
         file-name (.-name file)

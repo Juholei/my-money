@@ -66,8 +66,12 @@
                [:td (str (/ (:amount event) 100) "€")]
                [:td (str (:recipient event))]])]]])
 
+(defn- event-retrieval-handler [e]
+  (.preventDefault e)
+  (get-events))
+
 (defn event-retrieval-form [form-data]
-  [:form.form-inline {:on-submit #(get-events)}
+  [:form.form-inline {:on-submit event-retrieval-handler}
    [:label {:for "events-username"} "Username"]
    [:input {:class "form-control"
             :id "events-username"
