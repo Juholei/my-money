@@ -39,13 +39,15 @@
      [:h1.col-md-4 (str "Income " (calc/income events) "€")]]))
 
 (defn labelled-radio-button [value type]
-  [:div.radio
+  [:label.btn.btn-primary
+   (when (= value (get-in @form-data [:selected-filters :type]))
+     {:class "active"})
+   (string/capitalize value)
    [:input {:type "radio"
             :value value
             :id value
             :name type
-            :on-click #(swap! form-data assoc-in [:selected-filters :type] value)}]
-   [:label {:for value} (string/capitalize value)]])
+            :on-click #(swap! form-data assoc-in [:selected-filters :type] value)}]])
 
 (defn month-filter [events]
   [:select {:on-change #(swap! form-data assoc-in [:selected-filters :month] (-> % .-target .-value))}
@@ -54,12 +56,16 @@
      ^{:key month}
      [:option month])])
 
-(defn filter-selector [events]
-  [:form
-   [month-filter events]
+(defn event-type-selector []
+  [:div.btn-group {:data-toggle "buttons"}
    [labelled-radio-button "all" "type"]
    [labelled-radio-button "expenses" "type"]
    [labelled-radio-button "incomes" "type"]])
+
+(defn filter-selector [events]
+  [:form
+   [month-filter events]
+   [event-type-selector]])
 
 (defn amount->pretty-string [amount]
   (str (/ amount 100) "€"))
