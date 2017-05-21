@@ -49,3 +49,22 @@
     (let [user-id (:id (db/get-user-by-username t-conn {:username "test_person"}))]
       (is (= 1 (db/create-event! t-conn (assoc test-event :user-id user-id))))
       (is (= 0 (db/create-event! t-conn (assoc test-event :user-id user-id)))))))
+
+(deftest test-recurring-events-only-for-correct-user
+    (jdbc/with-db-transaction [t-conn *db*]
+      (jdbc/db-set-rollback-only! t-conn)
+      (db/create-user!
+       t-conn
+       {:username "test_person"})
+      (db/create-user!
+       t-conn
+       {:username "test_person2"})
+      (let [user-id (:id (db/get-user-by-username t-conn {:username "test_person"}))
+            user-id2 (:id (db/get-user-by-username t-conn {:username "test_person2"}))]
+        (is (= 1 (db/create-event! t-conn (assoc test-event :user-id user-id))))
+        (is (= 1 (db/create-event! t-conn (-> test-event
+                                              (assoc :user-id user-id2)
+                                              (assoc :id "ifasijfsaoi")))))
+        (let [recurring-expenses (db/get-recurring-expenses t-conn {:user-id user-id})]
+          (doseq [expense recurring-expenses]
+            (is (= user-id (:user_id expense))))))))
