@@ -1,14 +1,19 @@
 (ns my-money.middleware
   (:require [my-money.env :refer [defaults]]
+            [clj-time.coerce :as coerce]
             [clojure.tools.logging :as log]
+            [cognitect.transit :as transit]
             [my-money.layout :refer [*app-context* error-page]]
             [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
             [ring.middleware.webjars :refer [wrap-webjars]]
+            [muuntaja.core :as m]
+            [muuntaja.format.transit :as formats]
             [muuntaja.middleware :refer [wrap-format wrap-params]]
             [my-money.config :refer [env]]
             [ring.middleware.flash :refer [wrap-flash]]
             [immutant.web.middleware :refer [wrap-session]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults]])
+
   (:import [javax.servlet ServletContext]))
 
 (defn wrap-context [handler]
@@ -44,8 +49,27 @@
        {:status 403
         :title "Invalid anti-forgery token"})}))
 
+(def joda-time-writer
+  (transit/write-handler
+   (constantly "m")
+   #(some-> % coerce/to-date .getTime)
+   #(some-> % coerce/to-date .getTime .toString)))
+
+(def wrap-format-options
+  (update
+   m/default-options
+   :formats
+   merge
+   {"application/transit+json"
+    {:decoder [(partial formats/make-transit-decoder :json)]
+     :encoder [#(formats/make-transit-encoder
+                 :json
+                 (merge
+                  %
+                  {:handlers {org.joda.time.DateTime joda-time-writer}}))]}}))
+
 (defn wrap-formats [handler]
-  (let [wrapped (-> handler wrap-params wrap-format)]
+  (let [wrapped (-> handler wrap-params (wrap-format wrap-format-options))]
     (fn [request]
       ;; disable wrap-formats for websockets
       ;; since they're not compatible with this middleware

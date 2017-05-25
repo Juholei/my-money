@@ -1,6 +1,7 @@
 (ns my-money.routes.upload
   (:require [my-money.db.core :as db]
             [my-money.op-csv :refer :all]
+            [clj-time.jdbc]
             [compojure.core :refer [defroutes POST]]
             [ring.util.http-response :as response]))
 
@@ -11,12 +12,12 @@
       (let [inserted-rows (db/create-event!
                            {:id (:Arkistointitunnus event)
                             :user-id user-id
-                            :transaction-date (:Kirjauspäivä event)
+                            :transaction-date (date-string->date (:Kirjauspäivä event))
                             :amount (Integer/parseInt (clojure.string/replace (:MääräEUROA event) "," ""))
                             :recipient (:Saaja/Maksaja event)
                             :type (:Laji event)})]
         (recur (rest events) (+ total-rows inserted-rows)))
-      total-rows)))
+      (str total-rows))))
 
 (defroutes upload-routes
   (POST "/upload" [file username]

@@ -3,6 +3,8 @@
             [luminus-migrations.core :as migrations]
             [clojure.test :refer :all]
             [clojure.java.jdbc :as jdbc]
+            [clj-time.core :as t]
+            [clj-time.coerce :as c]
             [my-money.config :refer [env]]
             [mount.core :as mount]))
 
@@ -17,7 +19,7 @@
 
 (def test-event {:id "2412231/876567/9412363"
                  :user-id ""
-                 :transaction-date "24.01.2017"
+                 :transaction-date (c/to-date (t/date-time 2017 02 24))
                  :amount 500
                  :recipient ""
                  :type "123"})
