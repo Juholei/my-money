@@ -1,5 +1,6 @@
 (ns my-money.op-csv
-  (:require [clojure.data.csv :as csv]))
+  (:require [clojure.data.csv :as csv]
+            [clj-time.format :as f]))
 
 (defn read-csv [csv-string]
   (csv/read-csv csv-string :separator \;))
@@ -32,3 +33,7 @@
 
 (defn csv-vec->map [csv-vec]
   (mapv #(zipmap (mapv header->keyword (first csv-vec)) %1) (rest csv-vec)))
+
+(defn date-string->date [string]
+  (let [date-parser (partial f/parse (f/formatter "dd.MM.yyyy"))]
+    (date-parser string)))

@@ -1,10 +1,12 @@
 (ns my-money.event-filters)
 
 (defn- event->month [event]
-  (subs (:transaction_date event) 3))
+ (str (inc (.getMonth (:transaction_date event)))
+      "."
+      (.getFullYear (:transaction_date event))))
 
 (defn months [events]
-  (set (map event->month events)))
+  (set (sort (map event->month events))))
 
 (defn- event-type->filter [event-type]
   (condp = event-type

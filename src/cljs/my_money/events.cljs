@@ -64,11 +64,17 @@
 
 (defn filter-selector [events]
   [:form
-   [month-filter events]
-   [event-type-selector]])
+   [month-filter events]])
 
 (defn amount->pretty-string [amount]
   (str (/ amount 100) "€"))
+
+(defn date->pretty-string [date]
+  (str (.getDate date)
+       "."
+       (inc (.getMonth date))
+       "."
+       (.getFullYear date)))
 
 (defn bank-event-table [events]
   [:div.table-responsive
@@ -81,7 +87,7 @@
     [:tbody (for [event events]
               ^{:key (:id event)}
               [:tr
-               [:td (str (:transaction_date event))]
+               [:td (date->pretty-string (:transaction_date event))]
                [:td (amount->pretty-string (:amount event))]
                [:td (str (:recipient event))]])]]])
 
@@ -118,7 +124,7 @@
          [:div "Occurrences "
            [:ul
             (for [occurrence (get-in @expense-state [:data :events])]
-              [:li (str (:transaction_date occurrence))])]])])))
+              [:li (date->pretty-string (:transaction_date occurrence))])]])])))
 
 (defn recurring-expense-info [recurring-expenses]
   [:div.list-group
@@ -141,6 +147,7 @@
        [:div.container-fluid
         [:div.col-md-8
          [:h1 "Events"]
+         [event-type-selector]
          [bank-event-table filtered-events]]
         [:div.col-md-4
          [:h1 "Recurring expenses"]
