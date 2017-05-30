@@ -30,6 +30,7 @@ ON CONFLICT DO NOTHING
 -- :doc Get entries with the given user id
 SELECT * FROM events
 WHERE user_id = :user-id
+ORDER BY transaction_date ASC
 
 -- :name get-recurring-expenses :? :*
 SELECT A.*
@@ -40,4 +41,4 @@ INNER JOIN (SELECT recipient, amount
             HAVING COUNT(*) > 1 AND amount < 0) B
 ON A.recipient = B.recipient AND A.amount = B.amount
 WHERE user_id = :user-id
-ORDER By recipient
+ORDER By transaction_date DESC
