@@ -46,6 +46,10 @@
   {:home #'home-page
    :about #'about-page})
 
+(defn modal []
+  (when-let [session-modal (session/get :modal)]
+    [session-modal]))
+
 (defn page []
   [(pages (session/get :page))])
 
