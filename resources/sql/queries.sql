@@ -22,8 +22,8 @@ WHERE id = :id
 -- :name create-event! :! :n
 -- :doc creates a new user record
 INSERT INTO events
-(id, user_id, transaction_date, amount, recipient, type)
-VALUES (:id, :user-id, :transaction-date, :amount, :recipient, :type)
+(transaction_id, user_id, transaction_date, amount, recipient, type)
+VALUES (:transaction-id, :user-id, :transaction-date, :amount, :recipient, :type)
 ON CONFLICT DO NOTHING
 
 -- :name get-events :? :*

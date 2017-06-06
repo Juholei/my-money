@@ -17,8 +17,7 @@
     (migrations/migrate ["migrate"] (select-keys env [:database-url]))
     (f)))
 
-(def test-event {:id "2412231/876567/9412363"
-                 :user-id ""
+(def test-event {:transaction-id "2412231/876567/9412363"
                  :transaction-date (c/to-date (t/date-time 2017 02 24))
                  :amount 500
                  :recipient ""
@@ -53,20 +52,31 @@
       (is (= 0 (db/create-event! t-conn (assoc test-event :user-id user-id)))))))
 
 (deftest test-recurring-events-only-for-correct-user
-    (jdbc/with-db-transaction [t-conn *db*]
-      (jdbc/db-set-rollback-only! t-conn)
-      (db/create-user!
-       t-conn
-       {:username "test_person"})
-      (db/create-user!
-       t-conn
-       {:username "test_person2"})
-      (let [user-id (:id (db/get-user-by-username t-conn {:username "test_person"}))
-            user-id2 (:id (db/get-user-by-username t-conn {:username "test_person2"}))]
-        (is (= 1 (db/create-event! t-conn (assoc test-event :user-id user-id))))
-        (is (= 1 (db/create-event! t-conn (-> test-event
-                                              (assoc :user-id user-id2)
-                                              (assoc :id "ifasijfsaoi")))))
-        (let [recurring-expenses (db/get-recurring-expenses t-conn {:user-id user-id})]
-          (doseq [expense recurring-expenses]
-            (is (= user-id (:user_id expense))))))))
+  (jdbc/with-db-transaction [t-conn *db*]
+    (jdbc/db-set-rollback-only! t-conn)
+    (db/create-user!
+     t-conn
+     {:username "test_person"})
+    (db/create-user!
+     t-conn
+     {:username "test_person2"})
+    (let [user-id (:id (db/get-user-by-username t-conn {:username "test_person"}))
+          user-id2 (:id (db/get-user-by-username t-conn {:username "test_person2"}))]
+      (is (= 1 (db/create-event! t-conn (assoc test-event :user-id user-id))))
+      (is (= 1 (db/create-event! t-conn (-> test-event
+                                            (assoc :user-id user-id2)))))
+      (let [recurring-expenses (db/get-recurring-expenses t-conn {:user-id user-id})]
+        (doseq [expense recurring-expenses]
+          (is (= user-id (:user_id expense))))))))
+
+(deftest test-recurring-events-with-same-transaction-id-are-all-added
+  (jdbc/with-db-transaction [t-conn *db*]
+    (jdbc/db-set-rollback-only! t-conn)
+    (db/create-user!
+     t-conn
+     {:username "test_person"})
+    (let [user-id (:id (db/get-user-by-username t-conn {:username "test_person"}))]
+      (is (= 1 (db/create-event! t-conn (assoc test-event :user-id user-id))))
+      (is (= 1 (db/create-event! t-conn (-> test-event
+                                            (assoc :user-id user-id)
+                                            (assoc :transaction-date (c/to-date (t/date-time 2017 03 24))))))))))
