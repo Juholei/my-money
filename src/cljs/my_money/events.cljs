@@ -19,15 +19,15 @@
 (defn recurring-expenses-handler [response]
   (reset! recurring-expenses response))
 
-(defn get-recurring-expenses []
+(defn get-recurring-expenses [username]
  (GET "/events/recurring/expenses" {:handler recurring-expenses-handler
-                                    :params {:user (:username @form-data)}}))
+                                    :params {:user username}}))
 
 (defn get-events
   ([]
    (get-events (:username @form-data)))
   ([username]
-   (get-recurring-expenses)
+   (get-recurring-expenses username)
    (GET "/events" {:handler handle-response
                    :params {:user username}})))
 
