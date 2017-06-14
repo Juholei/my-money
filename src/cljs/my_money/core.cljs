@@ -6,7 +6,7 @@
             [goog.history.EventType :as HistoryEventType]
             [markdown.core :refer [md->html]]
             [my-money.ajax :refer [load-interceptors!]]
-            [my-money.submit :refer [submit-page]]
+            [my-money.components.upload :as upload]
             [my-money.events :refer [events-page]]
             [ajax.core :refer [GET POST]])
   (:import goog.History))
@@ -29,7 +29,8 @@
         [:a.navbar-brand {:href "#/"} "my-money"]
         [:ul.nav.navbar-nav
          [nav-link "#/" "Home" :home collapsed?]
-         [nav-link "#/about" "About" :about collapsed?]]]])))
+         [nav-link "#/about" "About" :about collapsed?]
+         [:button.btn.btn-secondary  {:on-click #(session/put! :modal upload/upload-modal)} "Upload"]]]])))
 
 (defn about-page []
   [:div.container
@@ -39,7 +40,6 @@
 
 (defn home-page []
   [:div.container
-   [submit-page]
    [events-page]])
 
 (def pages
@@ -51,7 +51,9 @@
     [session-modal]))
 
 (defn page []
-  [(pages (session/get :page))])
+  [:div
+   [modal]
+   [(pages (session/get :page))]])
 
 ;; -------------------------
 ;; Routes
