@@ -23,7 +23,8 @@
   [:div.form
    [:div.form-group
     [:label "Add your bank csv"
-     [:input.form-control-file {:type "file"}]]]
+     [:input.form-control-file {:type "file"
+                                :id "file-input"}]]]
    [:div.form-group
     [:label "Username"
      [:input {:class "form-control"
