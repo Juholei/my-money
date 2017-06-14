@@ -10,7 +10,7 @@
          total-rows 0]
     (if-let [event (first events)]
       (let [inserted-rows (db/create-event!
-                           {:id (:Arkistointitunnus event)
+                           {:transaction-id (:Arkistointitunnus event)
                             :user-id user-id
                             :transaction-date (date-string->date (:Kirjauspäivä event))
                             :amount (Integer/parseInt (clojure.string/replace (:MääräEUROA event) "," ""))
