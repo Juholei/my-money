@@ -7,6 +7,7 @@
 
 (defn upload-response-handler [response username]
   (events/get-events @username)
+  (session/update! :alerts conj (str "Added " response " events"))
   (session/remove! :modal))
 
 (defn upload [username]
