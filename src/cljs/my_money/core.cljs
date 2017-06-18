@@ -50,9 +50,16 @@
   (when-let [session-modal (session/get :modal)]
     [session-modal]))
 
+(defn alerts []
+  (when-let [session-alerts (session/get :alerts)]
+    [:div.container
+     (for [alert session-alerts]
+       [:div.alert.alert-success alert])]))
+
 (defn page []
   [:div
    [modal]
+   [alerts]
    [(pages (session/get :page))]])
 
 ;; -------------------------
