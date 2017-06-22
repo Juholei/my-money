@@ -6,6 +6,7 @@
             [goog.history.EventType :as HistoryEventType]
             [markdown.core :refer [md->html]]
             [my-money.ajax :refer [load-interceptors!]]
+            [my-money.components.common :as c]
             [my-money.components.upload :as upload]
             [my-money.events :refer [events-page]]
             [ajax.core :refer [GET POST]])
@@ -54,7 +55,7 @@
   (when-let [session-alerts (session/get :alerts)]
     [:div.container
      (for [alert session-alerts]
-       [:div.alert.alert-success alert])]))
+       [c/alert alert #(session/remove! :alerts)])]))
 
 (defn page []
   [:div
