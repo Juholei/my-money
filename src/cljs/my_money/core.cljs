@@ -51,11 +51,18 @@
   (when-let [session-modal (session/get :modal)]
     [session-modal]))
 
+(defn remove-alert [alert]
+  (fn []
+    (let [correct-alert? (fn [another-alert]
+                           (= (:timestamp alert) (:timestamp another-alert)))]
+      (session/update! :alerts (partial remove correct-alert?)))))
+
 (defn alerts []
   (when-let [session-alerts (session/get :alerts)]
     [:div.container
      (for [alert session-alerts]
-       [c/alert alert #(session/remove! :alerts)])]))
+       ^{:key (:timestamp alert)}
+       [c/alert (:string alert) (remove-alert alert)])]))
 
 (defn page []
   [:div
