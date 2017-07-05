@@ -4,6 +4,7 @@
   :url "http://example.com/FIXME"
 
   :dependencies [[bouncer "1.0.0"]
+                 [buddy "1.3.0"]
                  [clj-time "0.13.0"]
                  [cljs-ajax "0.5.8"]
                  [compojure "1.5.1"]
