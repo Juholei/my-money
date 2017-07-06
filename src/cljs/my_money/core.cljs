@@ -7,6 +7,7 @@
             [markdown.core :refer [md->html]]
             [my-money.ajax :refer [load-interceptors!]]
             [my-money.components.common :as c]
+            [my-money.components.registration :as registration]
             [my-money.components.upload :as upload]
             [my-money.events :refer [events-page]]
             [ajax.core :refer [GET POST]])
@@ -65,6 +66,7 @@
        [c/alert (:string alert) (remove-alert alert)])]))
 
 (defn page []
+  (session/put! :modal registration/registration-form)
   [:div
    [modal]
    [alerts]
