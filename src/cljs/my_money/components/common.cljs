@@ -42,5 +42,5 @@
 (defn text-input [label id placeholder fields & [optional?]]
   (form-input :text label id placeholder fields optional?))
 
-(defn password-input [label id placeholder fields]
+(defn password-input [label id placeholder fields & [optional?]]
   (form-input :password label id placeholder fields optional?))
