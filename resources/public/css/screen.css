@@ -79,3 +79,7 @@ body {
 .modal-backdrop {
   z-index: 3;
 }
+
+.btn {
+  margin-left: .25rem;
+}
