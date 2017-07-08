@@ -1,5 +1,6 @@
 (ns my-money.components.registration
   (:require [reagent.core :as r]
+            [reagent.session :as session]
             [my-money.components.common :as c]))
 
 (defn- buttons [data]
@@ -20,3 +21,7 @@
       [c/modal "Register a new account"
                [fields fields-data]
                [buttons fields-data]])))
+
+(defn registration-button []
+  [:a.btn {:on-click #(session/put! :modal registration-form)}
+          "Register"])

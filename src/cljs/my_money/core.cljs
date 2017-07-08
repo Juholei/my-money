@@ -32,7 +32,8 @@
         [:ul.nav.navbar-nav
          [nav-link "#/" "Home" :home collapsed?]
          [nav-link "#/about" "About" :about collapsed?]
-         [:button.btn.btn-secondary  {:on-click #(session/put! :modal upload/upload-modal)} "Upload"]]]])))
+         [:button.btn.btn-secondary  {:on-click #(session/put! :modal upload/upload-modal)} "Upload"]
+         [registration/registration-button]]]])))
 
 (defn about-page []
   [:div.container
@@ -66,7 +67,6 @@
        [c/alert (:string alert) (remove-alert alert)])]))
 
 (defn page []
-  (session/put! :modal registration/registration-form)
   [:div
    [modal]
    [alerts]
