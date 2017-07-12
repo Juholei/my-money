@@ -1,0 +1,6 @@
+DROP TABLE users CASCADE;
+CREATE TABLE users
+(id SERIAL PRIMARY KEY,
+ username VARCHAR(30) UNIQUE,
+ password VARCHAR(200) NOT NULL,
+ created TIMESTAMP DEFAULT current_timestamp NOT NULL);
