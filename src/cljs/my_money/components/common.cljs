@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [reagent.session :as session]))
 
-(defn- close-modal []
+(defn close-modal []
   (session/remove! :modal))
 
 (defn modal [header body footer]

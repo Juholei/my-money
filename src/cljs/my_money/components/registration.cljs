@@ -17,7 +17,8 @@
   [:div
    [:button.btn.btn-primary {:on-click #(register! data)}
                             "Register"]
-   [:button.btn.btn-danger "Cancel"]])
+   [:button.btn.btn-danger {:on-click #(c/close-modal)}
+                           "Cancel"]])
 
 (defn- fields [data]
   [:div

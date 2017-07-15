@@ -12,6 +12,11 @@
       (response/ok)
       (assoc :session (assoc session :identity (:username params)))))
 
+(defn login![req]
+  (println req))
+
 (defroutes auth-routes
   (POST "/register" request
-    (register! request)))
+    (register! request))
+  (POST "/login" request
+    (login! request)))
