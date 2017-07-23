@@ -31,8 +31,15 @@
     (response/unauthorized {:result :unauthorized
                             :message "login failure"})))
 
+(defn logout! []
+  (-> (:result :ok)
+      (response/ok)
+      (assoc :session nil)))
+
 (defroutes auth-routes
   (POST "/register" request
     (register! request))
   (POST "/login" request
-    (login! request)))
+    (login! request))
+  (POST "/logout" request
+    (logout!)))
