@@ -12,7 +12,7 @@
 
 (defn- login-handler [data]
   (session/remove! :modal)
-  (session/put! :identity (:username data))
+  (session/put! :identity (:username @data))
   (reset! data {}))
 
 (defn login! [data]
