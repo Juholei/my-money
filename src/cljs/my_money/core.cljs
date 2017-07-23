@@ -8,6 +8,7 @@
             [my-money.ajax :refer [load-interceptors!]]
             [my-money.components.common :as c]
             [my-money.components.registration :as registration]
+            [my-money.components.login :as login]
             [my-money.components.upload :as upload]
             [my-money.events :refer [events-page]]
             [ajax.core :refer [GET POST]])
@@ -19,6 +20,18 @@
    [:a.nav-link
     {:href uri
      :on-click #(reset! collapsed? true)} title]])
+
+(defn user-menu []
+  (if-let [user (session/get :identity)]
+    [:li.nav-item.float-xs-right
+     [:a.dropdown-item.btn
+      {:on-click #(POST "/logout"
+                        {:handler (fn []
+                                    (session/remove! :identity))})}
+      [:i.fa.fa-user " " user " | log out"]]]
+    [:ul.nav.navbar-nav.float-xs-right
+     [:li.nav-item [login/login-button]]
+     [:li.nav-item [registration/registration-button]]]))
 
 (defn navbar []
   (let [collapsed? (r/atom true)]
@@ -33,7 +46,7 @@
          [nav-link "#/" "Home" :home collapsed?]
          [nav-link "#/about" "About" :about collapsed?]
          [:button.btn.btn-secondary  {:on-click #(session/put! :modal upload/upload-modal)} "Upload"]
-         [registration/registration-button]]]])))
+         [user-menu]]]])))
 
 (defn about-page []
   [:div.container

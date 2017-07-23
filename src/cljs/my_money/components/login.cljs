@@ -39,4 +39,4 @@
 
 (defn login-button []
  [:a.btn {:on-click #(session/put! :modal login-form)}
-         "Register"])
+         "Login"])
