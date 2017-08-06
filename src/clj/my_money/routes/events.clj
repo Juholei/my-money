@@ -5,13 +5,13 @@
 
 (defroutes events-routes
   (GET "/events" []
-    (fn [req]
-      (let [username (get-in req [:params :user])
+    (fn [{:keys [session]}]
+      (let [username (:identity session)
             user-id (:id (db/get-user-by-username {:username username}))
             events (db/get-events {:user-id user-id})]
         (response/ok events))))
   (GET "/events/recurring/expenses" []
-    (fn [req]
-      (let [username (get-in req [:params :user])
+    (fn [{:keys [session]}]
+      (let [username (:identity session)
             user-id (:id (db/get-user-by-username {:username username}))]
         (response/ok (db/get-recurring-expenses {:user-id user-id}))))))
