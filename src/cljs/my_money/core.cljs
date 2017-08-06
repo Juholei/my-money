@@ -10,7 +10,7 @@
             [my-money.components.registration :as registration]
             [my-money.components.login :as login]
             [my-money.components.upload :as upload]
-            [my-money.events :refer [events-page]]
+            [my-money.events :refer [get-events events-page]]
             [ajax.core :refer [GET POST]])
   (:import goog.History))
 
@@ -120,4 +120,5 @@
   (fetch-docs!)
   (hook-browser-navigation!)
   (session/put! :identity js/identity)
+  (get-events)
   (mount-components))

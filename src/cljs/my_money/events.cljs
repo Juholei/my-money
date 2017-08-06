@@ -125,15 +125,14 @@
                                     @response-data
                                     (events-for-month @response-data selected-month))]
       (when (session/get :identity)
-        (get-events))
-      [:div.container
-       [filter-selector @response-data]
-       [balance-info events-for-balance-info]
-       [:div.container-fluid
-        [:div.col-md-8
-         [:h1 "Events"]
-         [event-type-selector]
-         [bank-event-table filtered-events]]
-        [:div.col-md-4
-         [:h1 "Recurring expenses"]
-         [recurring-expense-info @recurring-expenses]]]])))
+        [:div.container
+         [filter-selector @response-data]
+         [balance-info events-for-balance-info]
+         [:div.container-fluid
+          [:div.col-md-8
+           [:h1 "Events"]
+           [event-type-selector]
+           [bank-event-table filtered-events]]
+          [:div.col-md-4
+           [:h1 "Recurring expenses"]
+           [recurring-expense-info @recurring-expenses]]]]))))
