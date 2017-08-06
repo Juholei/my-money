@@ -24,9 +24,11 @@
         (wrap-routes middleware/wrap-formats))
     (-> #'upload-routes
         (wrap-routes middleware/wrap-csrf)
+        (wrap-routes middleware/wrap-restricted)
         (wrap-routes middleware/wrap-formats))
     (-> #'events-routes
         (wrap-routes middleware/wrap-csrf)
+        (wrap-routes middleware/wrap-restricted)
         (wrap-routes middleware/wrap-formats))
     (route/not-found
       (:body
