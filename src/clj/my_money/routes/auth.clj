@@ -25,7 +25,7 @@
 
 (defn login! [{:keys [session headers]}]
   (if-let [user (authenticate (decode-auth (get headers "authorization")))]
-    (-> (:result :ok)
+    (-> {:result :ok}
         (response/ok)
         (assoc :session (assoc session :identity user)))
     (response/unauthorized {:result :unauthorized

@@ -20,7 +20,6 @@
         (wrap-routes middleware/wrap-csrf)
         (wrap-routes middleware/wrap-formats))
     (-> #'auth-routes
-        (wrap-routes middleware/wrap-csrf)
         (wrap-routes middleware/wrap-formats))
     (-> #'upload-routes
         (wrap-routes middleware/wrap-csrf)
