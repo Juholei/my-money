@@ -5,6 +5,10 @@
             [ring.mock.request :refer :all]
             [my-money.handler :refer :all]))
 
+(def events-request (request :get "/events"))
+
+(def recurring-expenses-request (request :get "/events/recurring/expenses"))
+
 (defn encode-auth [user pass]
   (->> (str user ":" pass)
        (.getBytes)
@@ -39,3 +43,13 @@
         (is (= {:result "unauthorized"
                 :message "login failure"}
                (parse-response body)))))))
+
+(deftest test-events-route
+  (testing "Retrieving events is denied without login"
+    (let [{:keys [body status]} ((app) events-request)]
+      (is (= 403 status)))))
+
+(deftest test-recurring-events-route
+  (testing "Retrieving recurring events is denied without login"
+    (let [{:keys [body status]} ((app) recurring-expenses-request)]
+      (is (= 403 status)))))
