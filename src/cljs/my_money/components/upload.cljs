@@ -6,7 +6,7 @@
             [my-money.events :as events]))
 
 (defn upload-response-handler [response username]
-  (events/get-events @username)
+  (events/get-events)
   (session/update! :alerts conj {:string (str "Added " response " events")
                                  :timestamp (.getTime (js/Date.))})
   (session/remove! :modal))

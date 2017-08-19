@@ -1,6 +1,7 @@
 (ns my-money.events
     (:require [clojure.string :as string]
               [reagent.core :as r]
+              [reagent.session :as session]
               [ajax.core :refer [GET]]
               [my-money.calculations :as calc]
               [my-money.event-filters :as filters]
@@ -9,8 +10,7 @@
 (defonce response-data (r/atom nil))
 (defonce recurring-expenses (r/atom nil))
 
-(defonce form-data (r/atom {:username ""
-                            :selected-filters {:type "all"
+(defonce form-data (r/atom {:selected-filters {:type "all"
                                                :month "All-time"}}))
 
 (defn handle-response [response]
@@ -19,17 +19,13 @@
 (defn recurring-expenses-handler [response]
   (reset! recurring-expenses response))
 
-(defn get-recurring-expenses [username]
- (GET "/events/recurring/expenses" {:handler recurring-expenses-handler
-                                    :params {:user username}}))
+(defn get-recurring-expenses []
+ (GET "/events/recurring/expenses"
+      {:handler recurring-expenses-handler}))
 
-(defn get-events
-  ([]
-   (get-events (:username @form-data)))
-  ([username]
-   (get-recurring-expenses username)
-   (GET "/events" {:handler handle-response
-                   :params {:user username}})))
+(defn get-events []
+  (get-recurring-expenses)
+  (GET "/events" {:handler handle-response}))
 
 (defn balance-info [events]
   (when events
@@ -95,18 +91,6 @@
   (.preventDefault e)
   (get-events))
 
-(defn event-retrieval-form [form-data]
-  [:form.form-inline {:on-submit event-retrieval-handler}
-   [:label {:for "events-username"} "Username"]
-   [:input {:class "form-control"
-            :id "events-username"
-            :type "text"
-            :value (:username @form-data)
-            :on-change #(swap! form-data assoc :username (-> % .-target .-value))}]
-   [:input {:type "submit"
-            :class "btn btn-primary"
-            :value "Get events"}]])
-
 (defn- events-for-month [events month]
   (let [month-filter (filters/month-filter month)]
     (filter month-filter events)))
@@ -140,15 +124,15 @@
           events-for-balance-info (if (= "All-time" selected-month)
                                     @response-data
                                     (events-for-month @response-data selected-month))]
-      [:div.container
-       [event-retrieval-form form-data]
-       [filter-selector @response-data]
-       [balance-info events-for-balance-info]
-       [:div.container-fluid
-        [:div.col-md-8
-         [:h1 "Events"]
-         [event-type-selector]
-         [bank-event-table filtered-events]]
-        [:div.col-md-4
-         [:h1 "Recurring expenses"]
-         [recurring-expense-info @recurring-expenses]]]])))
+      (when (session/get :identity)
+        [:div.container
+         [filter-selector @response-data]
+         [balance-info events-for-balance-info]
+         [:div.container-fluid
+          [:div.col-md-8
+           [:h1 "Events"]
+           [event-type-selector]
+           [bank-event-table filtered-events]]
+          [:div.col-md-4
+           [:h1 "Recurring expenses"]
+           [recurring-expense-info @recurring-expenses]]]]))))

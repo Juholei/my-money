@@ -23,12 +23,15 @@
                  :recipient ""
                  :type "123"})
 
+(def user {:username "test_person"
+            :password "testpassword"})
+
 (deftest test-users
   (jdbc/with-db-transaction [t-conn *db*]
     (jdbc/db-set-rollback-only! t-conn)
     (is (= 1 (db/create-user!
               t-conn
-              {:username "test_person"})))
+              user)))
     (is (= "test_person" (:username (db/get-user-by-username t-conn {:username "test_person"}))))))
 
 (deftest test-events
@@ -36,7 +39,7 @@
     (jdbc/db-set-rollback-only! t-conn)
     (db/create-user!
      t-conn
-     {:username "test_person"})
+     user)
     (let [user-id (:id (db/get-user-by-username t-conn {:username "test_person"}))]
       (is (= 1 (db/create-event! t-conn (assoc test-event :user-id user-id))))
       (is (= 1 (count (db/get-events t-conn {:user-id user-id})))))))
@@ -46,7 +49,7 @@
     (jdbc/db-set-rollback-only! t-conn)
     (db/create-user!
      t-conn
-     {:username "test_person"})
+     user)
     (let [user-id (:id (db/get-user-by-username t-conn {:username "test_person"}))]
       (is (= 1 (db/create-event! t-conn (assoc test-event :user-id user-id))))
       (is (= 0 (db/create-event! t-conn (assoc test-event :user-id user-id)))))))
@@ -56,10 +59,11 @@
     (jdbc/db-set-rollback-only! t-conn)
     (db/create-user!
      t-conn
-     {:username "test_person"})
+     user)
     (db/create-user!
      t-conn
-     {:username "test_person2"})
+     {:username "test_person2"
+      :password "testpassword"})
     (let [user-id (:id (db/get-user-by-username t-conn {:username "test_person"}))
           user-id2 (:id (db/get-user-by-username t-conn {:username "test_person2"}))]
       (is (= 1 (db/create-event! t-conn (assoc test-event :user-id user-id))))
@@ -74,7 +78,7 @@
     (jdbc/db-set-rollback-only! t-conn)
     (db/create-user!
      t-conn
-     {:username "test_person"})
+     user)
     (let [user-id (:id (db/get-user-by-username t-conn {:username "test_person"}))]
       (is (= 1 (db/create-event! t-conn (assoc test-event :user-id user-id))))
       (is (= 1 (db/create-event! t-conn (-> test-event

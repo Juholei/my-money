@@ -1,6 +1,7 @@
 (ns my-money.handler
   (:require [compojure.core :refer [routes wrap-routes]]
             [my-money.layout :refer [error-page]]
+            [my-money.routes.auth :refer [auth-routes]]
             [my-money.routes.home :refer [home-routes]]
             [my-money.routes.upload :refer [upload-routes]]
             [my-money.routes.events :refer [events-routes]]
@@ -18,11 +19,15 @@
     (-> #'home-routes
         (wrap-routes middleware/wrap-csrf)
         (wrap-routes middleware/wrap-formats))
+    (-> #'auth-routes
+        (wrap-routes middleware/wrap-formats))
     (-> #'upload-routes
         (wrap-routes middleware/wrap-csrf)
+        (wrap-routes middleware/wrap-restricted)
         (wrap-routes middleware/wrap-formats))
     (-> #'events-routes
         (wrap-routes middleware/wrap-csrf)
+        (wrap-routes middleware/wrap-restricted)
         (wrap-routes middleware/wrap-formats))
     (route/not-found
       (:body

@@ -1,8 +1,8 @@
 -- :name create-user! :! :n
 -- :doc creates a new user record
 INSERT INTO users
-(username)
-VALUES (:username)
+(username, password)
+VALUES (:username, :password)
 
 -- :name get-user :? :1
 -- :doc retrieve a user given the id.
