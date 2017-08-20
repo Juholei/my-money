@@ -20,11 +20,8 @@
       (str total-rows))))
 
 (defroutes upload-routes
-  (POST "/upload" [file username]
-    (when-not (db/get-user-by-username {:username username})
-      (db/create-user! {:username username}))
-
-    (let [user-id (:id (db/get-user-by-username {:username username}))
+  (POST "/upload" [file :as req]
+    (let [user-id (:id (db/get-user-by-username {:username (:identity req)}))
           data (-> (:tempfile file)
                    (slurp :encoding "ISO-8859-1")
                    (read-csv)
