@@ -5,41 +5,32 @@
             [my-money.components.common :as c]
             [my-money.events :as events]))
 
-(defn upload-response-handler [response username]
+(defn upload-response-handler [response]
   (events/get-events)
   (session/update! :alerts conj {:string (str "Added " response " events")
                                  :timestamp (.getTime (js/Date.))})
   (session/remove! :modal))
 
-(defn upload [username]
+(defn upload []
   (let [file-input (.getElementById js/document "file-input")
         file (aget (.-files file-input) 0)
         file-name (.-name file)
         form-data (doto (js/FormData.)
-                    (.append "file" file file-name)
-                    (.append "username" @username))]
+                    (.append "file" file file-name))]
     (POST "/upload" {:body form-data
-                     :handler #(upload-response-handler % username)})))
+                     :handler upload-response-handler})))
 
-(defn- upload-form [username]
+(defn- upload-form []
   [:div.form
    [:div.form-group
     [:label "Add your bank csv"
      [:input.form-control-file {:type "file"
-                                :id "file-input"}]]]
-   [:div.form-group
-    [:label "Username"
-     [:input {:class "form-control"
-              :type "text"
-              :value @username
-              :on-change #(reset! username (-> % .-target .-value))}]]]])
+                                :id "file-input"}]]]])
 
-(defn upload-button [username]
+(defn upload-button []
   [:button {:class "btn btn-primary"
-            :on-click #(upload username)}
+            :on-click #(upload)}
            "Submit"])
 
 (defn upload-modal []
-  (let [username (r/atom nil)]
-    (fn []
-      [c/modal "Upload" [upload-form username] [upload-button username]])))
+  [c/modal "Upload" [upload-form] [upload-button]])
