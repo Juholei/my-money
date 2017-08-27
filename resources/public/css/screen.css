@@ -78,6 +78,7 @@ body {
 
 .modal-backdrop {
   z-index: 3;
+  opacity: 0.5;
 }
 
 .btn {

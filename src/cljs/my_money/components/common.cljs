@@ -15,7 +15,7 @@
                                        "×"]]
      [:div.modal-body body]
      [:div.modal-footer footer]]]
-   [:div.modal-backdrop.fade.in {:on-click close-modal}]])
+   [:div.modal-backdrop {:on-click close-modal}]])
 
 (defn alert [message close-fn]
   [:div.alert.alert-success.alert-dismissible

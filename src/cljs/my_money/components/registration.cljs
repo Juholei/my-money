@@ -35,5 +35,6 @@
                [buttons fields-data]])))
 
 (defn registration-button []
-  [:a.btn {:on-click #(session/put! :modal registration-form)}
-          "Register"])
+  [:a.nav-link.active {:href "#"
+                       :on-click #(session/put! :modal registration-form)}
+   "Register"])

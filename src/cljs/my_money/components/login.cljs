@@ -40,5 +40,6 @@
       [c/modal "Login" [fields data] [buttons data]])))
 
 (defn login-button []
- [:a.btn {:on-click #(session/put! :modal login-form)}
-         "Login"])
+ [:a.nav-link.active {:href "#"
+                      :on-click #(session/put! :modal login-form)}
+  "Login"])
