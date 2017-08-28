@@ -29,7 +29,7 @@
 
 (defn balance-info [events]
   (when events
-    [:div.container
+    [:div.row
      [:h1.col-md-4 (str "Balance " (calc/balance events) "€")]
      [:h1.col-md-4 (str "Expenses " (calc/expenses events) "€")]
      [:h1.col-md-4 (str "Income " (calc/income events) "€")]]))
@@ -128,7 +128,7 @@
         [:div.container
          [filter-selector @response-data]
          [balance-info events-for-balance-info]
-         [:div.container-fluid
+         [:div.row
           [:div.col-md-8
            [:h1 "Events"]
            [event-type-selector]
