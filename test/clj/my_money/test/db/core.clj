@@ -19,8 +19,8 @@
 
 (def test-event {:transaction-id "2412231/876567/9412363"
                  :transaction-date (c/to-date (t/date-time 2017 02 24))
-                 :amount 500
-                 :recipient ""
+                 :amount -500
+                 :recipient "Test recipient"
                  :type "123"})
 
 (def user {:username "test_person"
@@ -67,9 +67,23 @@
     (let [user-id (:id (db/get-user-by-username t-conn {:username "test_person"}))
           user-id2 (:id (db/get-user-by-username t-conn {:username "test_person2"}))]
       (is (= 1 (db/create-event! t-conn (assoc test-event :user-id user-id))))
-      (is (= 1 (db/create-event! t-conn (-> test-event
-                                            (assoc :user-id user-id2)))))
+      (is (= 1 (db/create-event! t-conn (assoc test-event :user-id user-id2))))
+      (is (empty? (db/get-recurring-expenses t-conn {:user-id user-id}))))))
+
+
+(deftest test-recurring-events-are-found
+  (jdbc/with-db-transaction [t-conn *db*]
+    (jdbc/db-set-rollback-only! t-conn)
+    (db/create-user!
+     t-conn
+     user)
+    (let [user-id (:id (db/get-user-by-username t-conn {:username "test_person"}))
+          test-event-for-user (assoc test-event :user-id user-id)]
+      (is (= 1 (db/create-event! t-conn test-event-for-user)))
+      (is (= 1 (db/create-event! t-conn (-> test-event-for-user
+                                            (assoc :transaction-date (c/to-date (t/date-time 2017 03 24)))))))
       (let [recurring-expenses (db/get-recurring-expenses t-conn {:user-id user-id})]
+        (is (not (empty? recurring-expenses)))
         (doseq [expense recurring-expenses]
           (is (= user-id (:user_id expense))))))))
 
@@ -83,4 +97,6 @@
       (is (= 1 (db/create-event! t-conn (assoc test-event :user-id user-id))))
       (is (= 1 (db/create-event! t-conn (-> test-event
                                             (assoc :user-id user-id)
-                                            (assoc :transaction-date (c/to-date (t/date-time 2017 03 24))))))))))
+                                            (assoc :transaction-date (c/to-date (t/date-time 2017 03 24)))))))
+      (is (= 2 (count (db/get-events t-conn {:user-id user-id}))))
+      (is (= 2 (count (db/get-recurring-expenses t-conn {:user-id user-id})))))))
