@@ -23,30 +23,32 @@
 
 (defn user-menu []
   (if-let [user (session/get :identity)]
-    [:li.nav-item.float-xs-right
-     [:a.dropdown-item.btn
-      {:on-click #(POST "/logout"
-                        {:handler (fn []
-                                    (session/remove! :identity))})}
-      [:i.fa.fa-user " " user " | log out"]]]
-    [:ul.nav.navbar-nav.float-xs-right
+    [:ul.navbar-nav.ml-auto
+     [:li.nav-item
+      [:a.btn.btn-outline-danger.btn-sm
+       {:href "#"
+        :on-click #(POST "/logout"
+                         {:handler (fn []
+                                     (session/remove! :identity))})}
+       [:i.fa.fa-user " " user " | log out"]]]]
+    [:ul.navbar-nav.ml-auto
      [:li.nav-item [login/login-button]]
      [:li.nav-item [registration/registration-button]]]))
 
 (defn navbar []
   (let [collapsed? (r/atom true)]
     (fn []
-      [:nav.navbar.navbar-dark.bg-primary
-       [:button.navbar-toggler.hidden-sm-up
-        {:on-click #(swap! collapsed? not)} "☰"]
-       [:div.collapse.navbar-toggleable-xs
-        (when-not @collapsed? {:class "in"})
-        [:a.navbar-brand {:href "#/"} "my-money"]
-        [:ul.nav.navbar-nav
+      [:nav.navbar-expand-lg.navbar-dark.bg-dark
+       [:a.navbar-brand {:href "#"} "my-money"]
+       [:button.navbar-toggler {:type "button"
+                                :on-click #(swap! collapsed? not)}
+        [:span.navbar-toggler-icon]]
+       [:div.collapse.navbar-collapse
+        (when-not @collapsed? {:class "show"})
+        [:ul.navbar-nav
          [nav-link "#/" "Home" :home collapsed?]
-         [nav-link "#/about" "About" :about collapsed?]
-         [:button.btn.btn-secondary  {:on-click #(session/put! :modal upload/upload-modal)} "Upload"]
-         [user-menu]]]])))
+         [:button.btn.btn-outline-info {:on-click #(session/put! :modal upload/upload-modal)} "Upload"]]
+        [user-menu]]])))
 
 (defn about-page []
   [:div.container

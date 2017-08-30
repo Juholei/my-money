@@ -3,37 +3,37 @@
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
 
-  :dependencies [[bouncer "1.0.0"]
-                 [buddy "1.3.0"]
-                 [clj-time "0.13.0"]
-                 [cljs-ajax "0.5.8"]
-                 [compojure "1.5.1"]
-                 [conman "0.6.2"]
-                 [cprop "0.1.9"]
-                 [luminus-immutant "0.2.2"]
-                 [luminus-migrations "0.2.9"]
+  :dependencies [[bouncer "1.0.1"]
+                 [buddy "2.0.0"]
+                 [clj-time "0.14.0"]
+                 [cljs-ajax "0.7.1"]
+                 [compojure "1.6.0"]
+                 [conman "0.6.8"]
+                 [cprop "0.1.11"]
+                 [luminus-immutant "0.2.3"]
+                 [luminus-migrations "0.4.0"]
                  [luminus-nrepl "0.1.4"]
-                 [markdown-clj "0.9.91"]
-                 [metosin/ring-http-response "0.8.0"]
-                 [metosin/muuntaja "0.2.1"]
+                 [markdown-clj "1.0.1"]
+                 [metosin/ring-http-response "0.9.0"]
+                 [metosin/muuntaja "0.3.2"]
                  [mount "0.1.11"]
                  [org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.9.293" :scope "provided"]
-                 [org.clojure/data.csv "0.1.3"]
+                 [org.clojure/clojurescript "1.9.908" :scope "provided"]
+                 [org.clojure/data.csv "0.1.4"]
                  [org.clojure/tools.cli "0.3.5"]
-                 [org.clojure/tools.logging "0.3.1"]
-                 [org.postgresql/postgresql "9.4.1212"]
-                 [org.webjars.bower/tether "1.3.7"]
-                 [org.webjars/bootstrap "4.0.0-alpha.5"]
+                 [org.clojure/tools.logging "0.4.0"]
+                 [org.postgresql/postgresql "42.1.4"]
+                 [org.webjars.bower/tether "1.4.0"]
+                 [org.webjars/bootstrap "4.0.0-beta"]
                  [org.webjars/font-awesome "4.7.0"]
                  [org.webjars/webjars-locator-jboss-vfs "0.1.0"]
-                 [reagent "0.6.0"]
-                 [reagent-utils "0.2.0"]
-                 [ring-middleware-format "0.7.0"]
-                 [ring-webjars "0.1.1"]
-                 [ring/ring-defaults "0.2.1"]
+                 [reagent "0.7.0"]
+                 [reagent-utils "0.2.1"]
+                 [ring-middleware-format "0.7.2"]
+                 [ring-webjars "0.2.0"]
+                 [ring/ring-defaults "0.3.1"]
                  [secretary "1.2.3"]
-                 [selmer "1.10.3"]]
+                 [selmer "1.11.0"]]
 
   :min-lein-version "2.0.0"
 
@@ -44,9 +44,9 @@
   :main my-money.core
   :migratus {:store :database :db ~(get (System/getenv) "DATABASE_URL")}
 
-  :plugins [[lein-cprop "1.0.1"]
-            [migratus-lein "0.4.3"]
-            [lein-cljsbuild "1.1.4"]
+  :plugins [[lein-cprop "1.0.3"]
+            [migratus-lein "0.5.1"]
+            [lein-cljsbuild "1.1.7"]
             [lein-immutant "2.1.0"]]
   :clean-targets ^{:protect false}
   [:target-path [:cljsbuild :builds :app :compiler :output-dir] [:cljsbuild :builds :app :compiler :output-to]]
@@ -82,17 +82,17 @@
    :test          [:project/dev :project/test :profiles/test]
 
    :project/dev  {:dependencies [[prone "1.1.4"]
-                                 [ring/ring-mock "0.3.0"]
-                                 [ring/ring-devel "1.5.0"]
-                                 [pjstadig/humane-test-output "0.8.1"]
-                                 [binaryage/devtools "0.8.3"]
-                                 [com.cemerick/piggieback "0.2.2-SNAPSHOT"]
+                                 [ring/ring-mock "0.3.1"]
+                                 [ring/ring-devel "1.6.2"]
+                                 [pjstadig/humane-test-output "0.8.2"]
+                                 [binaryage/devtools "0.9.4"]
+                                 [com.cemerick/piggieback "0.2.2"]
                                  [doo "0.1.7"]
-                                 [figwheel-sidecar "0.5.8"]]
-                  :plugins      [[com.jakemccrary/lein-test-refresh "0.18.1"]
+                                 [figwheel-sidecar "0.5.13"]]
+                  :plugins      [[com.jakemccrary/lein-test-refresh "0.21.1"]
                                  [lein-doo "0.1.7"]
-                                 [lein-figwheel "0.5.8"]
-                                 [org.clojure/clojurescript "1.9.293"]]
+                                 [lein-figwheel "0.5.13"]
+                                 [org.clojure/clojurescript "1.9.908"]]
                   :cljsbuild
                   {:builds
                    {:app
@@ -123,7 +123,8 @@
                      {:output-to "target/test.js"
                       :main "my-money.doo-runner"
                       :optimizations :whitespace
-                      :pretty-print true}}}}}
+                      :pretty-print true
+                      :process-shim false}}}}}
 
 
    :profiles/dev {}
