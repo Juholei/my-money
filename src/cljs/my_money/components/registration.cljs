@@ -5,6 +5,7 @@
             [reagent.session :as session]))
 
 (defn- registration-handler [data]
+  (session/remove! :modal)
   (session/put! :identity (:username data))
   (reset! data {}))
 
@@ -15,13 +16,16 @@
 
 (defn- buttons [data]
   [:div
-   [:button.btn.btn-primary {:on-click #(register! data)}
-                            "Register"]
+   [:input.btn.btn-primary {:type "submit"
+                             :form "registration"
+                             :value "Register"
+                             :on-click #(do (.preventDefault %)
+                                            (register! data))}]
    [:button.btn.btn-danger {:on-click #(c/close-modal)}
                            "Cancel"]])
 
 (defn- fields [data]
-  [:div
+  [:form {:id "registration"}
    [:strong "✱ required field"]
    [c/text-input "Username" :username "Enter a username" data]
    [c/password-input "Password" :password "Enter a password" data]
