@@ -25,12 +25,15 @@
 
 (defn- buttons [data]
   [:div
-   [:button.btn.btn-primary {:on-click #(login! data)}
-                            "Login"]
+   [:input.btn.btn-primary {:type "submit"
+                            :form "login"
+                            :value "Login"
+                            :on-click #(do (.preventDefault %)
+                                           (login! data))}]
    [:button.btn.btn-danger {:on-click #(c/close-modal)} "Cancel"]])
 
 (defn- fields [data]
-  [:div
+  [:form {:id "login"}
    [c/text-input "Username" :username "Enter your username" data false]
    [c/password-input "Password" :password "Enter your password" data false]])
 
