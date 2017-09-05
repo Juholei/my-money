@@ -4,6 +4,7 @@
               [reagent.session :as session]
               [ajax.core :refer [GET]]
               [my-money.calculations :as calc]
+              [my-money.charts :as charts]
               [my-money.event-filters :as filters]
               [my-money.recurring-events :as re]))
 
@@ -121,6 +122,7 @@
       (when (session/get :identity)
         [:div.container
          [month-filter enabled-filters response-data]
+         [charts/chart (events-for-time-period @response-data (:month @enabled-filters))]
          [balance-info enabled-filters response-data]
          [:div.row
           [:div.col-md-8
