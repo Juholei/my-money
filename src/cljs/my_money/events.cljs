@@ -30,8 +30,8 @@
     (let [month-filter (filters/month-filter period)]
       (filter month-filter events))))
 
-(defn balance-info [filters events]
-  (when-let [filtered-events (events-for-time-period @events (:month @filters))]
+(defn balance-info [enabled-filters events]
+  (when-let [filtered-events (events-for-time-period @events (:month @enabled-filters))]
     [:div.row
      [:h1.col-md-4 (str "Balance " (calc/balance filtered-events) "€")]
      [:h1.col-md-4 (str "Expenses " (calc/expenses filtered-events) "€")]
@@ -48,19 +48,19 @@
             :name type
             :on-click #(swap! data assoc :type value)}]])
 
-(defn month-filter [filters events]
+(defn month-filter [enabled-filters events]
   [:form
-   [:select {:on-change #(swap! filters assoc :month (-> % .-target .-value))}
+   [:select {:on-change #(swap! enabled-filters assoc :month (-> % .-target .-value))}
     [:option "All-time"]
     (for [month (filters/months @events)]
       ^{:key month}
       [:option month])]])
 
-(defn event-type-selector [filters]
+(defn event-type-selector [enabled-filters]
   [:div.btn-group {:data-toggle "buttons"}
-   [labelled-radio-button filters "all" "type"]
-   [labelled-radio-button filters "expenses" "type"]
-   [labelled-radio-button filters "incomes" "type"]])
+   [labelled-radio-button enabled-filters "all" "type"]
+   [labelled-radio-button enabled-filters "expenses" "type"]
+   [labelled-radio-button enabled-filters "incomes" "type"]])
 
 (defn amount->pretty-string [amount]
   (str (/ amount 100) "€"))
@@ -72,8 +72,8 @@
        "."
        (.getFullYear date)))
 
-(defn bank-event-table [filters events]
-  (let [filtered-events (filter (filters/combined-filter @filters) @events)]
+(defn bank-event-table [enabled-filters events]
+  (let [filtered-events (filter (filters/combined-filter @enabled-filters) @events)]
     [:div.table-responsive
      [:table.table.table-striped
       [:thead
@@ -115,18 +115,18 @@
      [recurring-expense-item expense])])
 
 (defn events-page []
-  (let [filters (r/atom {:type "all"
-                         :month "All-time"})]
+  (let [enabled-filters (r/atom {:type "all"
+                                 :month "All-time"})]
     (fn []
       (when (session/get :identity)
         [:div.container
-         [month-filter filters response-data]
-         [balance-info filters response-data]
+         [month-filter enabled-filters response-data]
+         [balance-info enabled-filters response-data]
          [:div.row
           [:div.col-md-8
            [:h1 "Events"]
-           [event-type-selector filters]
-           [bank-event-table filters response-data]]
+           [event-type-selector enabled-filters]
+           [bank-event-table enabled-filters response-data]]
           [:div.col-md-4
            [:h1 "Recurring expenses"]
            [recurring-expense-info recurring-expenses]]]]))))
