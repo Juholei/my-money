@@ -44,3 +44,9 @@
 
 (defn password-input [label id placeholder fields & [optional?]]
   (form-input :password label id placeholder fields optional?))
+
+(defn collapsing-button [collapsed?]
+  [:i {:class (if @collapsed?
+                "fa fa-plus-square-o"
+                "fa fa-minus-square-o")
+       :on-click #(swap! collapsed? not)}])
