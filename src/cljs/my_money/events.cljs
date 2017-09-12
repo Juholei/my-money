@@ -4,14 +4,12 @@
               [reagent.session :as session]
               [ajax.core :refer [GET]]
               [my-money.calculations :as calc]
+              [my-money.charts :as charts]
               [my-money.event-filters :as filters]
               [my-money.recurring-events :as re]))
 
 (defonce response-data (r/atom nil))
 (defonce recurring-expenses (r/atom nil))
-
-(defonce form-data (r/atom {:selected-filters {:type "all"
-                                               :month "All-time"}}))
 
 (defn handle-response [response]
   (reset! response-data response))
@@ -27,40 +25,43 @@
   (get-recurring-expenses)
   (GET "/events" {:handler handle-response}))
 
-(defn balance-info [events]
-  (when events
-    [:div.row
-     [:h1.col-md-4 (str "Balance " (calc/balance events) "€")]
-     [:h1.col-md-4 (str "Expenses " (calc/expenses events) "€")]
-     [:h1.col-md-4 (str "Income " (calc/income events) "€")]]))
+(defn- events-for-time-period [events period]
+  (if (= period "All-time")
+    events
+    (let [month-filter (filters/month-filter period)]
+      (filter month-filter events))))
 
-(defn labelled-radio-button [value type]
+(defn balance-info [enabled-filters events]
+  (when-let [filtered-events (events-for-time-period @events (:month @enabled-filters))]
+    [:div.row
+     [:h1.col-md-4 (str "Balance " (calc/balance filtered-events) "€")]
+     [:h1.col-md-4 (str "Expenses " (calc/expenses filtered-events) "€")]
+     [:h1.col-md-4 (str "Income " (calc/income filtered-events) "€")]]))
+
+(defn labelled-radio-button [data value type]
   [:label.btn.btn-primary
-   (when (= value (get-in @form-data [:selected-filters :type]))
+   (when (= value (:type @data))
      {:class "active"})
    (string/capitalize value)
    [:input {:type "radio"
             :value value
             :id value
             :name type
-            :on-click #(swap! form-data assoc-in [:selected-filters :type] value)}]])
+            :on-click #(swap! data assoc :type value)}]])
 
-(defn month-filter [events]
-  [:select {:on-change #(swap! form-data assoc-in [:selected-filters :month] (-> % .-target .-value))}
-   [:option "All-time"]
-   (for [month (filters/months events)]
-     ^{:key month}
-     [:option month])])
-
-(defn event-type-selector []
-  [:div.btn-group {:data-toggle "buttons"}
-   [labelled-radio-button "all" "type"]
-   [labelled-radio-button "expenses" "type"]
-   [labelled-radio-button "incomes" "type"]])
-
-(defn filter-selector [events]
+(defn month-filter [enabled-filters events]
   [:form
-   [month-filter events]])
+   [:select {:on-change #(swap! enabled-filters assoc :month (-> % .-target .-value))}
+    [:option "All-time"]
+    (for [month (filters/months @events)]
+      ^{:key month}
+      [:option month])]])
+
+(defn event-type-selector [enabled-filters]
+  [:div.btn-group {:data-toggle "buttons"}
+   [labelled-radio-button enabled-filters "all" "type"]
+   [labelled-radio-button enabled-filters "expenses" "type"]
+   [labelled-radio-button enabled-filters "incomes" "type"]])
 
 (defn amount->pretty-string [amount]
   (str (/ amount 100) "€"))
@@ -72,28 +73,25 @@
        "."
        (.getFullYear date)))
 
-(defn bank-event-table [events]
-  [:div.table-responsive
-   [:table.table.table-striped
-    [:thead
-     [:tr
-      [:th "Date"]
-      [:th "Amount"]
-      [:th "Recipient"]]]
-    [:tbody (for [event events]
-              ^{:key (:id event)}
-              [:tr
-               [:td (date->pretty-string (:transaction_date event))]
-               [:td (amount->pretty-string (:amount event))]
-               [:td (str (:recipient event))]])]]])
+(defn bank-event-table [enabled-filters events]
+  (let [filtered-events (filter (filters/combined-filter @enabled-filters) @events)]
+    [:div.table-responsive
+     [:table.table.table-striped
+      [:thead
+       [:tr
+        [:th "Date"]
+        [:th "Amount"]
+        [:th "Recipient"]]]
+      [:tbody (for [event filtered-events]
+                ^{:key (:id event)}
+                [:tr
+                 [:td (date->pretty-string (:transaction_date event))]
+                 [:td (amount->pretty-string (:amount event))]
+                 [:td (str (:recipient event))]])]]]))
 
 (defn- event-retrieval-handler [e]
   (.preventDefault e)
   (get-events))
-
-(defn- events-for-month [events month]
-  (let [month-filter (filters/month-filter month)]
-    (filter month-filter events)))
 
 (defn recurring-expense-item [expense]
   (let [expense-state (r/atom {:data expense
@@ -108,31 +106,29 @@
          [:div "Occurrences "
            [:ul
             (for [occurrence (get-in @expense-state [:data :events])]
+              ^{:key (str (:transaction_id occurrence) (:transaction_date occurrence))}
               [:li (date->pretty-string (:transaction_date occurrence))])]])])))
 
 (defn recurring-expense-info [recurring-expenses]
   [:div.list-group
-   (for [expense (re/sort-recurring-events recurring-expenses)]
-     ^{:key (:id expense)}
+   (for [expense (re/sort-recurring-events @recurring-expenses)]
+     ^{:key (:recipient expense)}
      [recurring-expense-item expense])])
 
 (defn events-page []
-  (fn []
-    (let [applied-filters (filters/combined-filter (:selected-filters @form-data))
-          filtered-events (filter applied-filters @response-data)
-          selected-month (get-in @form-data [:selected-filters :month])
-          events-for-balance-info (if (= "All-time" selected-month)
-                                    @response-data
-                                    (events-for-month @response-data selected-month))]
+  (let [enabled-filters (r/atom {:type "all"
+                                 :month "All-time"})]
+    (fn []
       (when (session/get :identity)
         [:div.container
-         [filter-selector @response-data]
-         [balance-info events-for-balance-info]
+         [month-filter enabled-filters response-data]
+         [charts/chart (events-for-time-period @response-data (:month @enabled-filters))]
+         [balance-info enabled-filters response-data]
          [:div.row
           [:div.col-md-8
            [:h1 "Events"]
-           [event-type-selector]
-           [bank-event-table filtered-events]]
+           [event-type-selector enabled-filters]
+           [bank-event-table enabled-filters response-data]]
           [:div.col-md-4
            [:h1 "Recurring expenses"]
-           [recurring-expense-info @recurring-expenses]]]]))))
+           [recurring-expense-info recurring-expenses]]]]))))

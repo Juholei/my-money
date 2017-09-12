@@ -19,3 +19,13 @@
                          {:amount -100}
                          {:amount 150}
                          {:amount 150}]))))
+
+(deftest test-sum-til-date
+  (let [events [{:amount 300 :transaction_date (js/Date. 2016 8 1)}
+                {:amount -100 :transaction_date (js/Date. 2017 4 1)}
+                {:amount 150  :transaction_date (js/Date. 2017 5 1)}
+                {:amount 150  :transaction_date (js/Date. 2017 6 1)}]]
+    (is (= 300 (calc/sum-til-date (js/Date. 2016 8 1) events)))
+    (is (= 200 (calc/sum-til-date (js/Date. 2017 4 1) events)))
+    (is (= 350 (calc/sum-til-date (js/Date. 2017 5 1) events)))
+    (is (= 500 (calc/sum-til-date (js/Date. 2017 6 1) events)))))
