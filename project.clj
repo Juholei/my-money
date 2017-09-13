@@ -7,7 +7,7 @@
                  [buddy "2.0.0"]
                  [clj-time "0.14.0"]
                  [cljs-ajax "0.7.1"]
-                 [cljsjs/react-chartjs-2 "2.0.5-1"]
+                 [cljsjs/react-chartjs-2 "2.0.5-1" :exclusions [cljsjs/react]]
                  [compojure "1.6.0"]
                  [conman "0.6.8"]
                  [cprop "0.1.11"]
