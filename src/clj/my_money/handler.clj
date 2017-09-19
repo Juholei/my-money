@@ -5,6 +5,7 @@
             [my-money.routes.home :refer [home-routes]]
             [my-money.routes.upload :refer [upload-routes]]
             [my-money.routes.events :refer [events-routes]]
+            [my-money.routes.config :refer [config-routes]]
             [compojure.route :as route]
             [my-money.env :refer [defaults]]
             [mount.core :as mount]
@@ -26,6 +27,10 @@
         (wrap-routes middleware/wrap-restricted)
         (wrap-routes middleware/wrap-formats))
     (-> #'events-routes
+        (wrap-routes middleware/wrap-csrf)
+        (wrap-routes middleware/wrap-restricted)
+        (wrap-routes middleware/wrap-formats))
+    (-> #'config-routes
         (wrap-routes middleware/wrap-csrf)
         (wrap-routes middleware/wrap-restricted)
         (wrap-routes middleware/wrap-formats))
