@@ -3,10 +3,14 @@
             [compojure.core :refer [defroutes POST]]
             [ring.util.http-response :as response]))
 
+(defn amount-string->cent-integer [string]
+  (Integer/parseInt (clojure.string/replace string "." "")))
 (defroutes config-routes
   (POST "/save-config" []
     (fn [{:keys [session params]}]
       (let [username (:identity session)
-            user-id (:id (db/get-user-by-username {:username username}))]
-        (println params)
+            user-id (:id (db/get-user-by-username {:username username}))
+            amount (amount-string->cent-integer (:amount params))]
+        (db/update-starting-amount! {:user-id user-id
+                                     :starting-amount amount})
         (response/ok)))))

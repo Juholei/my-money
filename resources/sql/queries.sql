@@ -43,3 +43,8 @@ INNER JOIN (SELECT recipient, amount
 ON A.recipient = B.recipient AND A.amount = B.amount
 WHERE user_id = :user-id
 ORDER By transaction_date DESC
+
+-- :name update-starting-amount! :! :n
+UPDATE users
+SET starting_amount = :starting-amount
+where id = :user-id
