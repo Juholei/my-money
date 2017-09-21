@@ -10,6 +10,7 @@
 
 (defonce response-data (r/atom nil))
 (defonce recurring-expenses (r/atom nil))
+(defonce config (r/atom {:starting-amount 0}))
 
 (defn handle-response [response]
   (reset! response-data response))
@@ -23,7 +24,8 @@
 
 (defn get-events []
   (get-recurring-expenses)
-  (GET "/events" {:handler handle-response}))
+  (GET "/events" {:handler handle-response})
+  (GET "/get-config" {:handler #(reset! config %)}))
 
 (defn- events-for-time-period [events period]
   (if (= period "All-time")
@@ -122,7 +124,7 @@
       (when (session/get :identity)
         [:div.container
          [month-filter enabled-filters response-data]
-         [charts/chart (events-for-time-period @response-data (:month @enabled-filters))]
+         [charts/chart (events-for-time-period @response-data (:month @enabled-filters)) (:starting-amount @config)]
          [balance-info enabled-filters response-data]
          [:div.row
           [:div.col-md-8
