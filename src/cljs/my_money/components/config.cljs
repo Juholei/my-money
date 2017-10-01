@@ -31,12 +31,20 @@
           ^{:key matched-recipient}
           [result-list-item data :selected-recipients matched-recipient])))))
 
+(defn savings-recipient-list [data]
+  [:div
+   [:h6 "Savings recipients"]
+   (into [:ul.list-group]
+     (for [recipient (:selected-recipients @data)]
+       ^{:key (str "active_" recipient)}
+       [:li.list-group-item recipient]))])
 
 (defn- fields [data]
   [:div
    [c/number-input "Starting amount (Amount of money before first event)" :amount "Amount" data [false]]
    [c/search-input "Add recipients as savings" :recipient-search "Recipient" data [false]]
-   [search-result-list data ["Savings account" "Fund"]]])
+   [search-result-list data ["Savings account" "Fund"]]
+   [savings-recipient-list data]])
 
 (defn config-saved []
   (session/remove! :modal))
