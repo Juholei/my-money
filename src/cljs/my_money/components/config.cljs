@@ -37,7 +37,10 @@
    (into [:ul.list-group]
      (for [recipient (:selected-recipients @data)]
        ^{:key (str "active_" recipient)}
-       [:li.list-group-item recipient]))])
+       [:li.list-group-item recipient
+        [:button.btn.close
+         {:on-click #(swap! data update :selected-recipients disj recipient)}
+         "×"]]))])
 
 (defn- fields [data]
   [:div
