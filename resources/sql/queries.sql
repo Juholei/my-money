@@ -48,3 +48,10 @@ ORDER By transaction_date DESC
 UPDATE users
 SET starting_amount = :starting-amount
 where id = :user-id
+
+-- :name save-savings! :! :n
+INSERT INTO savings
+(user_id, recipients)
+VALUES (:user-id, :recipients)
+ON CONFLICT (user_id) DO UPDATE
+SET recipients = :recipients
