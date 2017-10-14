@@ -50,8 +50,14 @@ SET starting_amount = :starting-amount
 where id = :user-id
 
 -- :name save-savings! :! :n
+-- :doc Save array of savings recipients
 INSERT INTO savings
 (user_id, recipients)
 VALUES (:user-id, :recipients)
 ON CONFLICT (user_id) DO UPDATE
 SET recipients = :recipients
+
+-- :name get-savings :? :1
+-- :doc retrieve array of savings recipients for the the user-id
+SELECT * FROM savings
+WHERE user_id = :user-id
