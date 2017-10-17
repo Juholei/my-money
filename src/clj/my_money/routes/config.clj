@@ -4,7 +4,9 @@
             [ring.util.http-response :as response]))
 
 (defn amount-string->cent-integer [string]
-  (Integer/parseInt (clojure.string/replace string "." "")))
+  (if (clojure.string/includes? string ".")
+    (Integer/parseInt (clojure.string/replace string "." ""))
+    (* 100 (Integer/parseInt string))))
 
 (defn to-db-array [db v]
   (.createArrayOf (.getConnection (:datasource db)) "text" (into-array v)))

@@ -124,7 +124,7 @@
       (when (session/get :identity)
         [:div.container
          [month-filter enabled-filters response-data]
-         [charts/chart (events-for-time-period @response-data (:month @enabled-filters)) (:starting-amount @config)]
+         [charts/chart (events-for-time-period @response-data (:month @enabled-filters)) config]
          [balance-info enabled-filters response-data]
          [:div.row
           [:div.col-md-8

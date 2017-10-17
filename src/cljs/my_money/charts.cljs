@@ -22,10 +22,10 @@
 (defn- moneyfy-y-label [tooltip]
   (str (.-yLabel tooltip) "€"))
 
-(defn chart [data starting-amount]
+(defn chart [data config]
   (let [collapsed? (r/atom false)]
-    (fn [data]
-      (let [date-sums (events->date-sums data starting-amount)
+    (fn [data config]
+      (let [date-sums (events->date-sums data (:starting-amount @config))
             chart-options {:width 400
                            :height 100
                            :data {:labels (map :date date-sums)
