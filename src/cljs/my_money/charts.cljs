@@ -32,8 +32,7 @@
                                   :datasets [{:data (map date-sum->amount date-sums)
                                               :fill false}]}
                            :options {:scales {:xAxes [{:display false}]}
-                                     :legend {:display false}
-                                     :tooltips {:callbacks {:label moneyfy-y-label}}}}]
+                                     :legend {:display false}}}]
 
         [:div.container
          [c/collapsing-button collapsed?]
