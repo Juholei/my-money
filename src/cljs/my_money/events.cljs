@@ -22,10 +22,13 @@
  (GET "/events/recurring/expenses"
       {:handler recurring-expenses-handler}))
 
+(defn get-config []
+  (GET "/get-config" {:handler #(reset! config %)}))
+
 (defn get-events []
   (get-recurring-expenses)
   (GET "/events" {:handler handle-response})
-  (GET "/get-config" {:handler #(reset! config %)}))
+  (get-config))
 
 (defn- events-for-time-period [events period]
   (if (= period "All-time")

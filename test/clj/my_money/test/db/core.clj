@@ -111,14 +111,10 @@
                             (let [user-id (:id (db/get-user-by-username t-conn {:username "test_person"}))]
                               (is (= 1 (db/save-savings! t-conn {:user-id user-id
                                                                  :recipients (to-db-array *db* ["A" "B"])})))
-                              (is (= {:user_id user-id
-                                      :recipients ["A" "B"]}
-                                     (-> (db/get-savings t-conn {:user-id user-id})
-                                         (dissoc :created))))
+                              (is (= {:recipients ["A" "B"]}
+                                     (db/get-savings t-conn {:user-id user-id})))
                               (is (= 1 (db/save-savings! t-conn {:user-id user-id
                                                                  :recipients (to-db-array *db* ["C" "D" "E"])})))
-                              (is (= {:user_id user-id
-                                      :recipients ["C" "D" "E"]}
-                                     (-> (db/get-savings t-conn {:user-id user-id})
-                                         (dissoc :created)))))))
+                              (is (= {:recipients ["C" "D" "E"]}
+                                     (db/get-savings t-conn {:user-id user-id}))))))
 

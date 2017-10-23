@@ -59,5 +59,5 @@ SET recipients = :recipients
 
 -- :name get-savings :? :1
 -- :doc retrieve array of savings recipients for the the user-id
-SELECT * FROM savings
+SELECT recipients FROM savings
 WHERE user_id = :user-id

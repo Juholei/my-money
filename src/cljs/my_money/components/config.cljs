@@ -30,28 +30,29 @@
       (into [:ul.list-group]
         (for [matched-recipient matched-recipients]
           ^{:key matched-recipient}
-          [result-list-item data :selected-recipients matched-recipient])))))
+          [result-list-item data :recipients matched-recipient])))))
 
 (defn savings-recipient-list [data]
   [:div
    [:h6 "Savings recipients"]
    (into [:ul.list-group]
-     (for [recipient (:selected-recipients @data)]
+     (for [recipient (:recipients @data)]
        ^{:key (str "active_" recipient)}
        [:li.list-group-item recipient
         [:button.btn.close
-         {:on-click #(swap! data update :selected-recipients disj recipient)}
+         {:on-click #(swap! data update :recipients disj recipient)}
          "×"]]))])
 
 
 (defn- fields [data]
   [:div
-   [c/number-input "Starting amount (Amount of money before first event)" :amount "Amount" data [false]]
+   [c/number-input "Starting amount (Amount of money before first event)" :starting-amount "Amount" data [false]]
    [c/search-input "Add recipients as savings" :recipient-search "Recipient" data [false]]
    [search-result-list data (into #{} (map :recipient @events/response-data))]
    [savings-recipient-list data]])
 
 (defn config-saved []
+  (events/get-config)
   (session/remove! :modal))
 
 (defn save-config! [config]
@@ -65,7 +66,7 @@
    [:button.btn.btn-danger {:on-click #(c/close-modal)} "Cancel"]])
 
 (defn config-modal []
-  (let [fields-data (r/atom {:selected-recipients #{}})]
+  (let [fields-data (r/atom @events/config)]
     (fn []
       [c/modal "Configuration"
                [fields fields-data]
