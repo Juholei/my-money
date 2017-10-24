@@ -4,9 +4,11 @@
             [ring.util.http-response :as response]))
 
 (defn amount-string->cent-integer [amount]
-  (if (clojure.string/includes? amount ".")
-    (Integer/parseInt (clojure.string/replace amount "." ""))
-    (* 100 (Integer/parseInt amount))))
+  (if (number? amount)
+    (* 10 amount)
+    (if (clojure.string/includes? amount ".")
+      (Integer/parseInt (clojure.string/replace amount "." ""))
+      (* 100 (Integer/parseInt amount)))))
 
 (defn to-db-array [db v]
   (.createArrayOf (.getConnection (:datasource db)) "text" (into-array v)))
@@ -30,5 +32,5 @@
        (let [username (:identity session)
              user (db/get-user-by-username {:username username})
              savings-recipients (:recipients (db/get-savings {:user-id (:id user)}))]
-         (response/ok {:starting-amount (str (:starting_amount user))
+         (response/ok {:starting-amount (:starting_amount user)
                        :recipients (set savings-recipients)})))))

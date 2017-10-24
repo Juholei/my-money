@@ -56,9 +56,13 @@
   (session/remove! :modal))
 
 (defn save-config! [config]
-  (ajax/POST "/save-config"
-             {:params @config
-              :handler config-saved}))
+  (let [starting-amount-changed? (not= (:starting-amount @config)
+                                    (:starting-amount @events/config))]
+    (ajax/POST "/save-config"
+               {:params (if starting-amount-changed?
+                          @config
+                          (dissoc @config :starting-amount))
+                :handler config-saved})))
 
 (defn- buttons [data]
   [:div
