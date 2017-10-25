@@ -57,7 +57,7 @@
 
 (defn save-config! [config]
   (let [starting-amount-changed? (not= (:starting-amount @config)
-                                    (:starting-amount @events/config))]
+                                       (:starting-amount @events/config))]
     (ajax/POST "/save-config"
                {:params (if starting-amount-changed?
                           @config

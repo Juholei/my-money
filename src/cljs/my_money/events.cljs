@@ -39,9 +39,11 @@
 (defn balance-info [enabled-filters events]
   (when-let [filtered-events (events-for-time-period @events (:month @enabled-filters))]
     [:div.row
-     [:h1.col-md-4 (str "Balance " (calc/balance filtered-events) "€")]
-     [:h1.col-md-4 (str "Expenses " (calc/expenses filtered-events) "€")]
-     [:h1.col-md-4 (str "Income " (calc/income filtered-events) "€")]]))
+     [:h1.col-md-3 (str "Balance " (calc/balance filtered-events) "€")]
+     [:h1.col-md-3 (str "Expenses " (-> (calc/expenses filtered-events (:recipients @config))
+                                        (.toFixed 2)) "€")]
+     [:h1.col-md-3 (str "Income " (calc/income filtered-events) "€")]
+     [:h1.col-md-3 (str "Savings " (calc/savings filtered-events (:recipients @config)) "€")]]))
 
 (defn labelled-radio-button [data value type]
   [:label.btn.btn-primary
