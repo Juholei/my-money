@@ -5,7 +5,7 @@
 
 (defn amount-string->cent-integer [amount]
   (if (number? amount)
-    (* 10 amount)
+    (* 100 amount)
     (if (clojure.string/includes? amount ".")
       (Integer/parseInt (clojure.string/replace amount "." ""))
       (* 100 (Integer/parseInt amount)))))

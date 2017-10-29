@@ -56,7 +56,7 @@
   (session/remove! :modal))
 
 (defn save-config! [config]
-  (let [starting-amount-changed? (not= (:starting-amount @config)
+  (let [starting-amount-changed? (not= (* (:starting-amount @config) 100)
                                        (:starting-amount @events/config))]
     (ajax/POST "/save-config"
                {:params (if starting-amount-changed?
@@ -70,7 +70,7 @@
    [:button.btn.btn-danger {:on-click #(c/close-modal)} "Cancel"]])
 
 (defn config-modal []
-  (let [fields-data (r/atom @events/config)]
+  (let [fields-data (r/atom (update @events/config :starting-amount / 100))]
     (fn []
       [c/modal "Configuration"
                [fields fields-data]
