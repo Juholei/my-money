@@ -7,6 +7,7 @@
             [markdown.core :refer [md->html]]
             [my-money.ajax :refer [load-interceptors!]]
             [my-money.components.common :as c]
+            [my-money.components.config :as config]
             [my-money.components.registration :as registration]
             [my-money.components.login :as login]
             [my-money.components.upload :as upload]
@@ -47,7 +48,10 @@
         (when-not @collapsed? {:class "show"})
         [:ul.navbar-nav
          [nav-link "#/" "Home" :home collapsed?]
-         [:button.btn.btn-outline-info {:on-click #(session/put! :modal upload/upload-modal)} "Upload"]]
+         (when (session/get :identity)
+           [:ul.navbar-nav
+            [:button.btn.btn-outline-info.fa.fa-cog.fa-inverse {:on-click #(session/put! :modal config/config-modal)}]
+            [:button.btn.btn-outline-info {:on-click #(session/put! :modal upload/upload-modal)} "Upload"]])]
         [user-menu]]])))
 
 (defn about-page []

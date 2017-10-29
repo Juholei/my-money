@@ -6,6 +6,7 @@
             [clj-time.core :as t]
             [clj-time.coerce :as c]
             [my-money.config :refer [env]]
+            [my-money.routes.config :refer [to-db-array]]
             [mount.core :as mount]))
 
 (use-fixtures
@@ -100,3 +101,20 @@
                                             (assoc :transaction-date (c/to-date (t/date-time 2017 03 24)))))))
       (is (= 2 (count (db/get-events t-conn {:user-id user-id}))))
       (is (= 2 (count (db/get-recurring-expenses t-conn {:user-id user-id})))))))
+
+(deftest test-saving-and-retrieving-savings-recipients
+  (jdbc/with-db-transaction [t-conn *db*]
+                            (jdbc/db-set-rollback-only! t-conn)
+                            (db/create-user!
+                              t-conn
+                              user)
+                            (let [user-id (:id (db/get-user-by-username t-conn {:username "test_person"}))]
+                              (is (= 1 (db/save-savings! t-conn {:user-id user-id
+                                                                 :recipients (to-db-array *db* ["A" "B"])})))
+                              (is (= {:recipients ["A" "B"]}
+                                     (db/get-savings t-conn {:user-id user-id})))
+                              (is (= 1 (db/save-savings! t-conn {:user-id user-id
+                                                                 :recipients (to-db-array *db* ["C" "D" "E"])})))
+                              (is (= {:recipients ["C" "D" "E"]}
+                                     (db/get-savings t-conn {:user-id user-id}))))))
+
