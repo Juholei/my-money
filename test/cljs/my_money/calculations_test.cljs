@@ -13,12 +13,24 @@
   (is (= -1 (calc/expenses [{:amount 300}
                             {:amount -100}
                             {:amount 150}
-                            {:amount 150}]))))
+                            {:amount 150}] #{}))))
 (deftest test-income
   (is (= 6 (calc/income [{:amount 300}
                          {:amount -100}
                          {:amount 150}
                          {:amount 150}]))))
+
+(deftest test-savings
+  (is (= 1 (calc/savings [{:amount 300}
+                          {:amount -100 :recipient "Savings account"}
+                          {:amount 150}
+                          {:amount 150}] #{"Savings account"}))))
+
+(deftest test-expenses-with-savings
+  (is (= -3 (calc/expenses [{:amount -300}
+                            {:amount -100 :recipient "Savings account"}
+                            {:amount 150}
+                            {:amount 150}] #{"Savings account"}))))
 
 (deftest test-sum-til-date
   (let [events [{:amount 300 :transaction_date (js/Date. 2016 8 1)}
