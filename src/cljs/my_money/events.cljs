@@ -3,17 +3,17 @@
               [reagent.core :as r]
               [reagent.session :as session]
               [ajax.core :refer [GET]]
+              [my-money.app.state :as state]
               [my-money.calculations :as calc]
               [my-money.charts :as charts]
               [my-money.event-filters :as filters]
               [my-money.recurring-events :as re]))
 
-(defonce response-data (r/atom nil))
 (defonce recurring-expenses (r/atom nil))
 (defonce config (r/atom {:starting-amount 0}))
 
 (defn handle-response [response]
-  (reset! response-data response))
+  (swap! state/app assoc :events response))
 
 (defn recurring-expenses-handler [response]
   (reset! recurring-expenses response))
@@ -37,7 +37,7 @@
       (filter month-filter events))))
 
 (defn balance-info [enabled-filters events]
-  (when-let [filtered-events (events-for-time-period @events (:month @enabled-filters))]
+  (when-let [filtered-events (events-for-time-period events (:month @enabled-filters))]
     [:div.row
      [:h1.col-md-3 (str "Balance " (calc/balance filtered-events) "€")]
      [:h1.col-md-3 (str "Expenses " (-> (calc/expenses filtered-events (:recipients @config))
@@ -60,7 +60,7 @@
   [:form
    [:select {:on-change #(swap! enabled-filters assoc :month (-> % .-target .-value))}
     [:option "All-time"]
-    (for [month (filters/months @events)]
+    (for [month (filters/months events)]
       ^{:key month}
       [:option month])]])
 
@@ -81,7 +81,7 @@
        (.getFullYear date)))
 
 (defn bank-event-table [enabled-filters events]
-  (let [filtered-events (filter (filters/combined-filter @enabled-filters) @events)]
+  (let [filtered-events (filter (filters/combined-filter @enabled-filters) events)]
     [:div.table-responsive
      [:table.table.table-striped
       [:thead
@@ -128,14 +128,14 @@
     (fn []
       (when (session/get :identity)
         [:div.container
-         [month-filter enabled-filters response-data]
-         [charts/chart (events-for-time-period @response-data (:month @enabled-filters)) config]
-         [balance-info enabled-filters response-data]
+         [month-filter enabled-filters (:events @state/app)]
+         [charts/chart (events-for-time-period (:events @state/app) (:month @enabled-filters)) config]
+         [balance-info enabled-filters (:events @state/app)]
          [:div.row
           [:div.col-md-8
            [:h1 "Events"]
            [event-type-selector enabled-filters]
-           [bank-event-table enabled-filters response-data]]
+           [bank-event-table enabled-filters (:events @state/app)]]
           [:div.col-md-4
            [:h1 "Recurring expenses"]
            [recurring-expense-info recurring-expenses]]]]))))

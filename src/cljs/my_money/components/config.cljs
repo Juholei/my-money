@@ -1,5 +1,6 @@
 (ns my-money.components.config
   (:require [clojure.string :as string]
+            [my-money.app.state :as state]
             [my-money.events :as events]
             [my-money.components.common :as c]
             [ajax.core :as ajax]
@@ -48,7 +49,7 @@
   [:div
    [c/number-input "Starting amount (Amount of money before first event)" :starting-amount "Amount" data [false]]
    [c/search-input "Add recipients as savings" :recipient-search "Recipient" data [false]]
-   [search-result-list data (into #{} (map :recipient @events/response-data))]
+   [search-result-list data (into #{} (map :recipient (:events @state/app)))]
    [savings-recipient-list data]])
 
 (defn config-saved []
