@@ -126,7 +126,7 @@
       (when (session/get :identity)
         [:div.container
          [month-filter enabled-filters (:events @state/app)]
-         [charts/chart (events-for-time-period (:events @state/app) (:month @enabled-filters)) state/app]
+         [charts/chart (events-for-time-period (:events @state/app) (:month @enabled-filters)) (:starting-amount @state/app)]
          [balance-info enabled-filters (:events @state/app)]
          [:div.row
           [:div.col-md-8
