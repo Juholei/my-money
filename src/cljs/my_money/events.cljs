@@ -9,14 +9,13 @@
               [my-money.event-filters :as filters]
               [my-money.recurring-events :as re]))
 
-(defonce recurring-expenses (r/atom nil))
 (defonce config (r/atom {:starting-amount 0}))
 
 (defn handle-response [response]
   (swap! state/app assoc :events response))
 
 (defn recurring-expenses-handler [response]
-  (reset! recurring-expenses response))
+  (swap! state/app assoc :recurring-expenses response))
 
 (defn get-recurring-expenses []
  (GET "/events/recurring/expenses"
@@ -118,7 +117,7 @@
 
 (defn recurring-expense-info [recurring-expenses]
   [:div.list-group
-   (for [expense (re/sort-recurring-events @recurring-expenses)]
+   (for [expense (re/sort-recurring-events recurring-expenses)]
      ^{:key (:recipient expense)}
      [recurring-expense-item expense])])
 
@@ -138,4 +137,4 @@
            [bank-event-table enabled-filters (:events @state/app)]]
           [:div.col-md-4
            [:h1 "Recurring expenses"]
-           [recurring-expense-info recurring-expenses]]]]))))
+           [recurring-expense-info (:recurring-expenses @state/app)]]]]))))
