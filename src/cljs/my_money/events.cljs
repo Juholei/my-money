@@ -9,8 +9,6 @@
               [my-money.event-filters :as filters]
               [my-money.recurring-events :as re]))
 
-(defonce config (r/atom {:starting-amount 0}))
-
 (defn handle-response [response]
   (swap! state/app assoc :events response))
 
@@ -22,7 +20,7 @@
       {:handler recurring-expenses-handler}))
 
 (defn get-config []
-  (GET "/get-config" {:handler #(reset! config %)}))
+  (GET "/get-config" {:handler #(swap! state/app merge %)}))
 
 (defn get-events []
   (get-recurring-expenses)
@@ -39,10 +37,10 @@
   (when-let [filtered-events (events-for-time-period events (:month @enabled-filters))]
     [:div.row
      [:h1.col-md-3 (str "Balance " (calc/balance filtered-events) "€")]
-     [:h1.col-md-3 (str "Expenses " (-> (calc/expenses filtered-events (:recipients @config))
+     [:h1.col-md-3 (str "Expenses " (-> (calc/expenses filtered-events (:recipients @state/app))
                                         (.toFixed 2)) "€")]
      [:h1.col-md-3 (str "Income " (calc/income filtered-events) "€")]
-     [:h1.col-md-3 (str "Savings " (calc/savings filtered-events (:recipients @config)) "€")]]))
+     [:h1.col-md-3 (str "Savings " (calc/savings filtered-events (:recipients @state/app)) "€")]]))
 
 (defn labelled-radio-button [data value type]
   [:label.btn.btn-primary
@@ -128,7 +126,7 @@
       (when (session/get :identity)
         [:div.container
          [month-filter enabled-filters (:events @state/app)]
-         [charts/chart (events-for-time-period (:events @state/app) (:month @enabled-filters)) config]
+         [charts/chart (events-for-time-period (:events @state/app) (:month @enabled-filters)) state/app]
          [balance-info enabled-filters (:events @state/app)]
          [:div.row
           [:div.col-md-8

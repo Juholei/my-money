@@ -2,4 +2,6 @@
   (:require [reagent.core :as r]))
 
 (defonce app (r/atom {:events '()
-                      :recurring-expenses '()}))
+                      :recurring-expenses '()
+                      :starting-amount 0
+                      :recipients #{}}))
