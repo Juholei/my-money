@@ -33,8 +33,8 @@
     (let [month-filter (filters/month-filter period)]
       (filter month-filter events))))
 
-(defn balance-info [enabled-filters events]
-  (when-let [filtered-events (events-for-time-period events (:month @enabled-filters))]
+(defn balance-info [month events]
+  (when-let [filtered-events (events-for-time-period events month)]
     [:div.row
      [:h1.col-md-3 (str "Balance " (calc/balance filtered-events) "€")]
      [:h1.col-md-3 (str "Expenses " (-> (calc/expenses filtered-events (:recipients @state/app))
@@ -44,18 +44,18 @@
 
 (defn labelled-radio-button [data value type]
   [:label.btn.btn-primary
-   (when (= value (:type @data))
+   (when (= value (get-in @data [:filters :type]))
      {:class "active"})
    (string/capitalize value)
    [:input {:type "radio"
             :value value
             :id value
             :name type
-            :on-click #(swap! data assoc :type value)}]])
+            :on-click #(swap! data assoc-in [:filters :type] value)}]])
 
 (defn month-filter [enabled-filters events]
   [:form
-   [:select {:on-change #(swap! enabled-filters assoc :month (-> % .-target .-value))}
+   [:select {:on-change #(swap! enabled-filters assoc-in [:filters :month] (-> % .-target .-value))}
     [:option "All-time"]
     (for [month (filters/months events)]
       ^{:key month}
@@ -78,7 +78,7 @@
        (.getFullYear date)))
 
 (defn bank-event-table [enabled-filters events]
-  (let [filtered-events (filter (filters/combined-filter @enabled-filters) events)]
+  (let [filtered-events (filter (filters/combined-filter enabled-filters) events)]
     [:div.table-responsive
      [:table.table.table-striped
       [:thead
@@ -120,19 +120,18 @@
      [recurring-expense-item expense])])
 
 (defn events-page []
-  (let [enabled-filters (r/atom {:type "all"
-                                 :month "All-time"})]
-    (fn []
-      (when (session/get :identity)
-        [:div.container
-         [month-filter enabled-filters (:events @state/app)]
-         [charts/chart (events-for-time-period (:events @state/app) (:month @enabled-filters)) (:starting-amount @state/app)]
-         [balance-info enabled-filters (:events @state/app)]
-         [:div.row
-          [:div.col-md-8
-           [:h1 "Events"]
-           [event-type-selector enabled-filters]
-           [bank-event-table enabled-filters (:events @state/app)]]
-          [:div.col-md-4
-           [:h1 "Recurring expenses"]
-           [recurring-expense-info (:recurring-expenses @state/app)]]]]))))
+  (when (session/get :identity)
+    [:div.container
+     [month-filter state/app (:events @state/app)]
+     [charts/chart (events-for-time-period (:events @state/app)
+                                           (get-in @state/app [:filters :month]))
+                   (:starting-amount @state/app)]
+     [balance-info (get-in @state/app [:filters :month]) (:events @state/app)]
+     [:div.row
+      [:div.col-md-8
+       [:h1 "Events"]
+       [event-type-selector state/app]
+       [bank-event-table (:filters @state/app) (:events @state/app)]]
+      [:div.col-md-4
+       [:h1 "Recurring expenses"]
+       [recurring-expense-info (:recurring-expenses @state/app)]]]]))

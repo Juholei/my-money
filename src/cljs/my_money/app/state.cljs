@@ -4,4 +4,6 @@
 (defonce app (r/atom {:events '()
                       :recurring-expenses '()
                       :starting-amount 0
-                      :recipients #{}}))
+                      :recipients #{}
+                      :filters {:type "all"
+                                :month "All-time"}}))
