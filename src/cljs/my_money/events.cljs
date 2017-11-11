@@ -119,19 +119,18 @@
      ^{:key (:recipient expense)}
      [recurring-expense-item expense])])
 
-(defn events-page []
+(defn events-page [{:keys [events filters recurring-expenses starting-amount] :as app}]
   (when (session/get :identity)
     [:div.container
-     [month-filter state/app (:events @state/app)]
-     [charts/chart (events-for-time-period (:events @state/app)
-                                           (get-in @state/app [:filters :month]))
-                   (:starting-amount @state/app)]
-     [balance-info (get-in @state/app [:filters :month]) (:events @state/app)]
+     [month-filter state/app events]
+     [charts/chart (events-for-time-period events (:month filters))
+                   starting-amount]
+     [balance-info (:month filters) events]
      [:div.row
       [:div.col-md-8
        [:h1 "Events"]
        [event-type-selector state/app]
-       [bank-event-table (:filters @state/app) (:events @state/app)]]
+       [bank-event-table filters events]]
       [:div.col-md-4
        [:h1 "Recurring expenses"]
-       [recurring-expense-info (:recurring-expenses @state/app)]]]]))
+       [recurring-expense-info recurring-expenses]]]]))

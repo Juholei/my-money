@@ -6,6 +6,7 @@
             [goog.history.EventType :as HistoryEventType]
             [markdown.core :refer [md->html]]
             [my-money.ajax :refer [load-interceptors!]]
+            [my-money.app.state :as state]
             [my-money.components.common :as c]
             [my-money.components.config :as config]
             [my-money.components.registration :as registration]
@@ -62,7 +63,7 @@
 
 (defn home-page []
   [:div.container
-   [events-page]])
+   [events-page @state/app]])
 
 (def pages
   {:home #'home-page
