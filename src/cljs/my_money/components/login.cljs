@@ -1,6 +1,6 @@
 (ns my-money.components.login
   (:require [my-money.components.common :as c]
-            [my-money.events :as events]
+            [my-money.app.controller.events :as ec]
             [ajax.core :as ajax]
             [goog.crypt.base64 :as b64]
             [reagent.core :as r]
@@ -15,7 +15,7 @@
   (session/remove! :modal)
   (session/put! :identity (:username @data))
   (reset! data {})
-  (events/get-events))
+  (ec/get-events))
 
 (defn login! [data]
   (let [username (:username @data)

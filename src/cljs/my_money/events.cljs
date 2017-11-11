@@ -2,30 +2,11 @@
     (:require [clojure.string :as string]
               [reagent.core :as r]
               [reagent.session :as session]
-              [ajax.core :refer [GET]]
               [my-money.app.state :as state]
               [my-money.calculations :as calc]
               [my-money.charts :as charts]
               [my-money.event-filters :as filters]
               [my-money.recurring-events :as re]))
-
-(defn handle-response [response]
-  (swap! state/app assoc :events response))
-
-(defn recurring-expenses-handler [response]
-  (swap! state/app assoc :recurring-expenses response))
-
-(defn get-recurring-expenses []
- (GET "/events/recurring/expenses"
-      {:handler recurring-expenses-handler}))
-
-(defn get-config []
-  (GET "/get-config" {:handler #(swap! state/app merge %)}))
-
-(defn get-events []
-  (get-recurring-expenses)
-  (GET "/events" {:handler handle-response})
-  (get-config))
 
 (defn- events-for-time-period [events period]
   (if (= period "All-time")
@@ -92,10 +73,6 @@
                  [:td (date->pretty-string (:transaction_date event))]
                  [:td (amount->pretty-string (:amount event))]
                  [:td (str (:recipient event))]])]]]))
-
-(defn- event-retrieval-handler [e]
-  (.preventDefault e)
-  (get-events))
 
 (defn recurring-expense-item [expense]
   (let [expense-state (r/atom {:data expense

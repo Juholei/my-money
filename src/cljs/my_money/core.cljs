@@ -6,13 +6,14 @@
             [goog.history.EventType :as HistoryEventType]
             [markdown.core :refer [md->html]]
             [my-money.ajax :refer [load-interceptors!]]
+            [my-money.app.controller.events :as ec]
             [my-money.app.state :as state]
             [my-money.components.common :as c]
             [my-money.components.config :as config]
             [my-money.components.registration :as registration]
             [my-money.components.login :as login]
             [my-money.components.upload :as upload]
-            [my-money.events :refer [get-events events-page]]
+            [my-money.events :refer [events-page]]
             [ajax.core :refer [GET POST]])
   (:import goog.History))
 
@@ -127,5 +128,5 @@
   (fetch-docs!)
   (hook-browser-navigation!)
   (session/put! :identity js/identity)
-  (get-events)
+  (ec/get-events)
   (mount-components))

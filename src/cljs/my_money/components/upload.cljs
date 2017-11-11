@@ -3,10 +3,10 @@
             [reagent.core :as r]
             [reagent.session :as session]
             [my-money.components.common :as c]
-            [my-money.events :as events]))
+            [my-money.app.controller.events :as ec]))
 
 (defn upload-response-handler [response]
-  (events/get-events)
+  (ec/get-events)
   (session/update! :alerts conj {:string (str "Added " response " events")
                                  :timestamp (.getTime (js/Date.))})
   (session/remove! :modal))
