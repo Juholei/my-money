@@ -1,6 +1,7 @@
 (ns my-money.components.config
   (:require [clojure.string :as string]
             [my-money.app.state :as state]
+            [my-money.app.controller.config :as cc]
             [my-money.app.controller.events :as ec]
             [my-money.components.common :as c]
             [ajax.core :as ajax]
@@ -53,7 +54,7 @@
    [savings-recipient-list data]])
 
 (defn config-saved []
-  (ec/get-config)
+  (cc/get-config)
   (session/remove! :modal))
 
 (defn save-config! [config]

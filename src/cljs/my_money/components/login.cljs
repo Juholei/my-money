@@ -1,5 +1,6 @@
 (ns my-money.components.login
   (:require [my-money.components.common :as c]
+            [my-money.app.controller.config :as cc]
             [my-money.app.controller.events :as ec]
             [ajax.core :as ajax]
             [goog.crypt.base64 :as b64]
@@ -15,6 +16,7 @@
   (session/remove! :modal)
   (session/put! :identity (:username @data))
   (reset! data {})
+  (cc/get-config)
   (ec/get-events))
 
 (defn login! [data]

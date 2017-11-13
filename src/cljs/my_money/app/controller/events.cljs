@@ -12,11 +12,6 @@
 (defn handle-response [response]
   (swap! state/app assoc :events response))
 
-(defn get-config []
-  (GET "/get-config" {:handler #(swap! state/app merge %)}))
-
 (defn get-events []
   (get-recurring-expenses)
-  (GET "/events" {:handler handle-response})
-  (get-config))
-
+  (GET "/events" {:handler handle-response}))

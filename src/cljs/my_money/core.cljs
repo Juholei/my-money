@@ -7,6 +7,7 @@
             [markdown.core :refer [md->html]]
             [my-money.ajax :refer [load-interceptors!]]
             [my-money.app.controller.events :as ec]
+            [my-money.app.controller.config :as cc]
             [my-money.app.state :as state]
             [my-money.components.common :as c]
             [my-money.components.config :as config]
@@ -128,5 +129,6 @@
   (fetch-docs!)
   (hook-browser-navigation!)
   (session/put! :identity js/identity)
+  (cc/get-config)
   (ec/get-events)
   (mount-components))
