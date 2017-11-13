@@ -2,9 +2,7 @@
   (:require [clojure.string :as string]
             [my-money.app.state :as state]
             [my-money.app.controller.config :as cc]
-            [my-money.app.controller.events :as ec]
             [my-money.components.common :as c]
-            [ajax.core :as ajax]
             [reagent.core :as r]
             [reagent.session :as session]))
 
@@ -53,22 +51,9 @@
    [search-result-list data (into #{} (map :recipient (:events @state/app)))]
    [savings-recipient-list data]])
 
-(defn config-saved []
-  (cc/get-config)
-  (session/remove! :modal))
-
-(defn save-config! [config]
-  (let [starting-amount-changed? (not= (* (:starting-amount @config) 100)
-                                       (:starting-amount @state/app))]
-    (ajax/POST "/save-config"
-               {:params (if starting-amount-changed?
-                          @config
-                          (dissoc @config :starting-amount))
-                :handler config-saved})))
-
 (defn- buttons [data]
   [:div
-   [:button.btn.btn-primary {:on-click #(save-config! data)} "Save"]
+   [:button.btn.btn-primary {:on-click #(cc/save-config! data)} "Save"]
    [:button.btn.btn-danger {:on-click #(c/close-modal)} "Cancel"]])
 
 (defn config-modal []
