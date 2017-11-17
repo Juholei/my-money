@@ -1,18 +1,8 @@
 (ns my-money.components.registration
   (:require [my-money.components.common :as c]
-            [ajax.core :as ajax]
+            [my-money.app.controller.authentication :as ac]
             [reagent.core :as r]
             [reagent.session :as session]))
-
-(defn- registration-handler [data]
-  (session/remove! :modal)
-  (session/put! :identity (:username data))
-  (reset! data {}))
-
-(defn register! [data]
-  (ajax/POST "/register"
-             {:params @data
-              :handler #(registration-handler data)}))
 
 (defn- buttons [data]
   [:div
@@ -20,7 +10,7 @@
                              :form "registration"
                              :value "Register"
                              :on-click #(do (.preventDefault %)
-                                            (register! data))}]
+                                            (ac/register! data))}]
    [:button.btn.btn-danger {:on-click #(c/close-modal)}
                            "Cancel"]])
 

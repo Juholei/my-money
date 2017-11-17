@@ -1,6 +1,6 @@
 (ns my-money.components.login
   (:require [my-money.components.common :as c]
-            [my-money.app.controller.login :as lc]
+            [my-money.app.controller.authentication :as ac]
             [reagent.core :as r]
             [reagent.session :as session]))
 
@@ -10,7 +10,7 @@
                             :form "login"
                             :value "Login"
                             :on-click #(do (.preventDefault %)
-                                           (lc/login! data))}]
+                                           (ac/login! data))}]
    [:button.btn.btn-danger {:on-click #(c/close-modal)} "Cancel"]])
 
 (defn- fields [data]

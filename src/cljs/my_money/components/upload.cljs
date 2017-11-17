@@ -1,15 +1,8 @@
 (ns my-money.components.upload
-  (:require [ajax.core :refer [GET POST]]
-            [reagent.core :as r]
-            [reagent.session :as session]
+  (:require [reagent.core :as r]
             [my-money.components.common :as c]
-            [my-money.app.controller.events :as ec]))
+            [my-money.app.controller.upload :as uc]))
 
-(defn upload-response-handler [response]
-  (ec/get-events)
-  (session/update! :alerts conj {:string (str "Added " response " events")
-                                 :timestamp (.getTime (js/Date.))})
-  (session/remove! :modal))
 
 (defn upload []
   (let [file-input (.getElementById js/document "file-input")
@@ -17,8 +10,7 @@
         file-name (.-name file)
         form-data (doto (js/FormData.)
                     (.append "file" file file-name))]
-    (POST "/upload" {:body form-data
-                     :handler upload-response-handler})))
+    (uc/upload! form-data)))
 
 (defn- upload-form []
   [:div.form

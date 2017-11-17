@@ -6,6 +6,7 @@
             [goog.history.EventType :as HistoryEventType]
             [markdown.core :refer [md->html]]
             [my-money.ajax :refer [load-interceptors!]]
+            [my-money.app.controller.authentication :as ac]
             [my-money.app.controller.events :as ec]
             [my-money.app.controller.config :as cc]
             [my-money.app.state :as state]
@@ -14,8 +15,7 @@
             [my-money.components.registration :as registration]
             [my-money.components.login :as login]
             [my-money.components.upload :as upload]
-            [my-money.events :refer [events-page]]
-            [ajax.core :refer [GET POST]])
+            [my-money.events :refer [events-page]])
   (:import goog.History))
 
 (defn nav-link [uri title page collapsed?]
@@ -31,9 +31,7 @@
      [:li.nav-item
       [:a.btn.btn-outline-danger.btn-sm
        {:href "#"
-        :on-click #(POST "/logout"
-                         {:handler (fn []
-                                     (session/remove! :identity))})}
+        :on-click #(ac/logout!)}
        [:i.fa.fa-user " " user " | log out"]]]]
     [:ul.navbar-nav.ml-auto
      [:li.nav-item [login/login-button]]
@@ -117,16 +115,12 @@
 
 ;; -------------------------
 ;; Initialize app
-(defn fetch-docs! []
-  (GET "/docs" {:handler #(session/put! :docs %)}))
-
 (defn mount-components []
   (r/render [#'navbar] (.getElementById js/document "navbar"))
   (r/render [#'page] (.getElementById js/document "app")))
 
 (defn init! []
   (load-interceptors!)
-  (fetch-docs!)
   (hook-browser-navigation!)
   (session/put! :identity js/identity)
   (cc/get-config)
