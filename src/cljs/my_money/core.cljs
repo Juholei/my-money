@@ -7,7 +7,6 @@
             [markdown.core :refer [md->html]]
             [my-money.ajax :refer [load-interceptors!]]
             [my-money.app.controller.authentication :as ac]
-            [my-money.app.controller.events :as ec]
             [my-money.app.controller.config :as cc]
             [my-money.app.state :as state]
             [my-money.components.common :as c]
@@ -56,9 +55,9 @@
             [:button.btn.btn-outline-info {:on-click #(session/put! :modal upload/upload-modal)} "Upload"]])]
         [user-menu]]])))
 
-(defn modal []
+(defn modal [e!]
   (when-let [session-modal (session/get :modal)]
-    [session-modal]))
+    [session-modal e!]))
 
 (defn remove-alert [alert]
   (fn []
@@ -76,7 +75,7 @@
 (defn page [e! app]
   [:div
    [navbar]
-   [modal]
+   [modal e!]
    [alerts]
    [events-page e! app]])
 
@@ -108,5 +107,4 @@
   (hook-browser-navigation!)
   (session/put! :identity js/identity)
   (cc/get-config)
-  (ec/get-events)
   (mount-components))

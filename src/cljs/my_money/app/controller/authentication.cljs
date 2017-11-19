@@ -3,24 +3,13 @@
             [my-money.app.controller.events :as ec]
             [ajax.core :as ajax]
             [goog.crypt.base64 :as b64]
-            [reagent.session :as session]))
+            [reagent.session :as session]
+            [tuck.core :as tuck]))
 
 (defn- encode-auth [username password]
   (->> (str username ":" password)
        b64/encodeString
        (str "Basic ")))
-
-(defn- login-handler [data]
-  (session/remove! :modal)
-  (session/put! :identity (:username @data))
-  (reset! data {})
-  (cc/get-config)
-  (ec/get-events))
-
-(defn login! [data]
-  (let [{:keys [username password]} @data]
-    (ajax/POST "/login" {:headers {"Authorization" (encode-auth username password)}
-                         :handler #(login-handler data)})))
 
 (defn logout! []
   (ajax/POST "/logout"
@@ -36,3 +25,23 @@
   (ajax/POST "/register"
              {:params @data
               :handler #(registration-handler data)}))
+
+(defrecord Login [credentials])
+(defrecord LoginSucceeded [credentials])
+
+(extend-protocol tuck/Event
+  Login
+  (process-event [{{:keys [username password] :as data} :credentials} app]
+    (tuck/action! (fn [e!]
+                    (ajax/POST "/login" {:headers {"Authorization" (encode-auth username password)}
+                                         :handler #(e! (->LoginSucceeded data))})))
+    app)
+
+  LoginSucceeded
+  (process-event [{{:keys [username password]} :credentials} app]
+    (tuck/action! (fn [e!]
+                    (session/remove! :modal)
+                    (session/put! :identity username)
+                    (cc/get-config)
+                    (e! (ec/->GetEvents))))
+    app))

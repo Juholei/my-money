@@ -3,6 +3,7 @@
               [reagent.core :as r]
               [reagent.session :as session]
               [my-money.app.state :as state]
+              [my-money.app.controller.events :as ec]
               [my-money.calculations :as calc]
               [my-money.charts :as charts]
               [my-money.event-filters :as filters]
@@ -96,18 +97,20 @@
      ^{:key (:recipient expense)}
      [recurring-expense-item expense])])
 
-(defn events-page [e! {:keys [events filters recurring-expenses starting-amount] :as app}]
-  (when (session/get :identity)
-    [:div.container
-     [month-filter state/app events]
-     [charts/chart (events-for-time-period events (:month filters))
-                   starting-amount]
-     [balance-info (:month filters) events]
-     [:div.row
-      [:div.col-md-8
-       [:h1 "Events"]
-       [event-type-selector state/app]
-       [bank-event-table filters events]]
-      [:div.col-md-4
-       [:h1 "Recurring expenses"]
-       [recurring-expense-info recurring-expenses]]]]))
+(defn events-page [e! app]
+  (e! (ec/->GetEvents))
+  (fn [e! {:keys [events filters recurring-expenses starting-amount] :as app}]
+    (when (session/get :identity)
+      [:div.container
+       [month-filter state/app events]
+       [charts/chart (events-for-time-period events (:month filters))
+                     starting-amount]
+       [balance-info (:month filters) events]
+       [:div.row
+        [:div.col-md-8
+         [:h1 "Events"]
+         [event-type-selector state/app]
+         [bank-event-table filters events]]
+        [:div.col-md-4
+         [:h1 "Recurring expenses"]
+         [recurring-expense-info recurring-expenses]]]])))

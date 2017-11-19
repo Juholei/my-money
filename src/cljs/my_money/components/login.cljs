@@ -4,13 +4,13 @@
             [reagent.core :as r]
             [reagent.session :as session]))
 
-(defn- buttons [data]
+(defn- buttons [e! data]
   [:div
    [:input.btn.btn-primary {:type "submit"
                             :form "login"
                             :value "Login"
                             :on-click #(do (.preventDefault %)
-                                           (ac/login! data))}]
+                                           (e! (ac/->Login @data)))}]
    [:button.btn.btn-danger {:on-click #(c/close-modal)} "Cancel"]])
 
 (defn- fields [data]
@@ -18,10 +18,10 @@
    [c/text-input "Username" :username "Enter your username" data false]
    [c/password-input "Password" :password "Enter your password" data false]])
 
-(defn login-form []
+(defn login-form [e!]
   (let [data (r/atom {})]
     (fn []
-      [c/modal "Login" [fields data] [buttons data]])))
+      [c/modal "Login" [fields data] [buttons e! data]])))
 
 (defn login-button []
  [:a.nav-link.active {:href "#"
