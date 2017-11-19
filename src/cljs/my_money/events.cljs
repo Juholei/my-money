@@ -96,7 +96,7 @@
      ^{:key (:recipient expense)}
      [recurring-expense-item expense])])
 
-(defn events-page [{:keys [events filters recurring-expenses starting-amount] :as app}]
+(defn events-page [e! {:keys [events filters recurring-expenses starting-amount] :as app}]
   (when (session/get :identity)
     [:div.container
      [month-filter state/app events]

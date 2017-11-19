@@ -15,7 +15,8 @@
             [my-money.components.registration :as registration]
             [my-money.components.login :as login]
             [my-money.components.upload :as upload]
-            [my-money.events :refer [events-page]])
+            [my-money.events :refer [events-page]]
+            [tuck.core :as tuck])
   (:import goog.History))
 
 (defn nav-link [uri title page collapsed?]
@@ -40,7 +41,7 @@
 (defn navbar []
   (let [collapsed? (r/atom true)]
     (fn []
-      [:nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+      [:nav#navbar.navbar.navbar-expand-lg.navbar-dark.bg-dark
        [:a.navbar-brand {:href "#"} "my-money"]
        [:button.navbar-toggler {:type "button"
                                 :on-click #(swap! collapsed? not)}
@@ -54,20 +55,6 @@
             [:button.btn.btn-outline-info.fa.fa-cog.fa-inverse {:on-click #(session/put! :modal config/config-modal)}]
             [:button.btn.btn-outline-info {:on-click #(session/put! :modal upload/upload-modal)} "Upload"]])]
         [user-menu]]])))
-
-(defn about-page []
-  [:div.container
-   [:div.row
-    [:div.col-md-12
-     "this is the story of my-money... work in progress"]]])
-
-(defn home-page []
-  [:div.container
-   [events-page @state/app]])
-
-(def pages
-  {:home #'home-page
-   :about #'about-page})
 
 (defn modal []
   (when-let [session-modal (session/get :modal)]
@@ -86,11 +73,12 @@
        ^{:key (:timestamp alert)}
        [c/alert (:string alert) (remove-alert alert)])]))
 
-(defn page []
+(defn page [e! app]
   [:div
+   [navbar]
    [modal]
    [alerts]
-   [(pages (session/get :page))]])
+   [events-page e! app]])
 
 ;; -------------------------
 ;; Routes
@@ -98,9 +86,6 @@
 
 (secretary/defroute "/" []
   (session/put! :page :home))
-
-(secretary/defroute "/about" []
-  (session/put! :page :about))
 
 ;; -------------------------
 ;; History
@@ -116,8 +101,7 @@
 ;; -------------------------
 ;; Initialize app
 (defn mount-components []
-  (r/render [#'navbar] (.getElementById js/document "navbar"))
-  (r/render [#'page] (.getElementById js/document "app")))
+  (r/render (tuck/tuck state/app page) (.getElementById js/document "app")))
 
 (defn init! []
   (load-interceptors!)
