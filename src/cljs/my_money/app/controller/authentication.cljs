@@ -43,5 +43,6 @@
                     (session/remove! :modal)
                     (session/put! :identity username)
                     (cc/get-config)
-                    (e! (ec/->GetEvents))))
+                    (e! (ec/->GetEvents))
+                    (e! (ec/->GetRecurringExpenses))))
     app))

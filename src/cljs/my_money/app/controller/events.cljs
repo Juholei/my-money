@@ -3,27 +3,29 @@
             [my-money.app.state :as state]
             [tuck.core :as tuck]))
 
-(defn recurring-expenses-handler [response]
-  (swap! state/app assoc :recurring-expenses response))
-
-(defn get-recurring-expenses []
-  (GET "/events/recurring/expenses"
-       {:handler recurring-expenses-handler}))
-
-(defn handle-response [response]
-  (swap! state/app assoc :events response))
-
 (defrecord GetEvents [])
 (defrecord GetEventsResult [events])
+(defrecord GetRecurringExpenses [])
+(defrecord GetRecurringExpensesResult [expenses])
 
 (extend-protocol tuck/Event
   GetEvents
   (process-event [_ app]
     (tuck/action! (fn [e!]
-                    (get-recurring-expenses)
                     (GET "/events" {:handler #(e! (->GetEventsResult %))})))
     app)
 
   GetEventsResult
   (process-event [{events :events} app]
-    (assoc app :events events)))
+    (assoc app :events events))
+
+  GetRecurringExpenses
+  (process-event [_ app]
+    (tuck/action! (fn [e!]
+                    (GET "/events/recurring/expenses"
+                         {:handler #(e! (->GetRecurringExpensesResult %))})))
+    app)
+
+  GetRecurringExpensesResult
+  (process-event [{expenses :expenses} app]
+    (assoc app :recurring-expenses expenses)))

@@ -99,6 +99,7 @@
 
 (defn events-page [e! app]
   (e! (ec/->GetEvents))
+  (e! (ec/->GetRecurringExpenses))
   (fn [e! {:keys [events filters recurring-expenses starting-amount] :as app}]
     (when (session/get :identity)
       [:div.container
