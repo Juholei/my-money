@@ -98,8 +98,8 @@
      [recurring-expense-item expense])])
 
 (defn events-page [e! app]
-  (e! (ec/->GetEvents))
-  (e! (ec/->GetRecurringExpenses))
+  (e! (ec/->RetrieveEvents))
+  (e! (ec/->RetrieveRecurringExpenses))
   (fn [e! {:keys [events filters recurring-expenses starting-amount] :as app}]
     (when (session/get :identity)
       [:div.container

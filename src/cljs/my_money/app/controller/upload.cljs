@@ -4,7 +4,7 @@
             [reagent.session :as session]))
 
 (defn- upload-response-handler [e! response]
-  (e! (ec/->GetEvents))
+  (e! (ec/->RetrieveEvents))
   (session/update! :alerts conj {:string    (str "Added " response " events")
                                  :timestamp (.getTime (js/Date.))})
   (session/remove! :modal))
