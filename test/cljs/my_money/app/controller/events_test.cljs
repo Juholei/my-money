@@ -9,8 +9,25 @@
                     :recipient "Vincent Adultman"
                     :id 687}))
 
+(def test-expenses '({:transaction_id "20170821/049003/946733"
+                      :user_id 1
+                      :amount -5000
+                      :recipient "Vincent Adultman"
+                      :id 737}))
+
 (deftest test-settings-events
   (is (= {:events test-events}
          (tuck/process-event (ce/->SetEvents test-events)
                              {}))))
+
+(deftest test-setting-recurring-expenses
+  (is (= {:recurring-expenses test-expenses}
+         (tuck/process-event (ce/->SetRecurringExpenses test-expenses)))))
+
+(deftest test-setting-both-expenses-and-events
+  (is (= {:events test-events
+          :recurring-expenses test-expenses}
+         (->> {}
+              (tuck/process-event (ce/->SetEvents test-events))
+              (tuck/process-event (ce/->SetRecurringExpenses test-expenses))))))
 
