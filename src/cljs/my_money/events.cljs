@@ -2,7 +2,6 @@
     (:require [clojure.string :as string]
               [reagent.core :as r]
               [reagent.session :as session]
-              [my-money.app.state :as state]
               [my-money.app.controller.events :as ec]
               [my-money.calculations :as calc]
               [my-money.charts :as charts]
@@ -15,14 +14,14 @@
     (let [month-filter (filters/month-filter period)]
       (filter month-filter events))))
 
-(defn balance-info [month events]
+(defn balance-info [month events savings-recipients]
   (when-let [filtered-events (events-for-time-period events month)]
     [:div.row
      [:h1.col-md-3 (str "Balance " (calc/balance filtered-events) "€")]
-     [:h1.col-md-3 (str "Expenses " (-> (calc/expenses filtered-events (:recipients @state/app))
+     [:h1.col-md-3 (str "Expenses " (-> (calc/expenses filtered-events savings-recipients)
                                         (.toFixed 2)) "€")]
      [:h1.col-md-3 (str "Income " (calc/income filtered-events) "€")]
-     [:h1.col-md-3 (str "Savings " (calc/savings filtered-events (:recipients @state/app)) "€")]]))
+     [:h1.col-md-3 (str "Savings " (calc/savings filtered-events savings-recipients) "€")]]))
 
 (defn labelled-radio-button [e! active-value value type]
   [:label.btn.btn-primary
@@ -100,13 +99,13 @@
 (defn events-page [e! app]
   (e! (ec/->RetrieveEvents))
   (e! (ec/->RetrieveRecurringExpenses))
-  (fn [e! {:keys [events filters recurring-expenses starting-amount] :as app}]
+  (fn [e! {:keys [events filters recurring-expenses starting-amount recipients] :as app}]
     (when (session/get :identity)
       [:div.container
        [month-filter e! events]
        [charts/chart (events-for-time-period events (:month filters))
                      starting-amount]
-       [balance-info (:month filters) events]
+       [balance-info (:month filters) events recipients]
        [:div.row
         [:div.col-md-8
          [:h1 "Events"]
