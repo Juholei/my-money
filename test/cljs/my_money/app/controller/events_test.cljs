@@ -29,11 +29,18 @@
          (-> (tuck/process-event (ce/->SelectMonth "2.2017") {})
              (get-in [:filters :month])))))
 
+(deftest test-setting-event-type-in-filters
+  (is (= "all"
+         (-> (tuck/process-event (ce/->SelectType "all") {})
+             (get-in [:filters :type])))))
+
 (deftest test-setting-everything
   (is (= {:events test-events
           :recurring-expenses test-expenses
-          :filters {:month "2.2017"}}
+          :filters {:month "2.2017"
+                    :type "all"}}
          (->> {}
               (tuck/process-event (ce/->SetEvents test-events))
               (tuck/process-event (ce/->SetRecurringExpenses test-expenses))
-              (tuck/process-event (ce/->SelectMonth "2.2017"))))))
+              (tuck/process-event (ce/->SelectMonth "2.2017"))
+              (tuck/process-event (ce/->SelectType "all"))))))

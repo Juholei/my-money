@@ -24,16 +24,16 @@
      [:h1.col-md-3 (str "Income " (calc/income filtered-events) "€")]
      [:h1.col-md-3 (str "Savings " (calc/savings filtered-events (:recipients @state/app)) "€")]]))
 
-(defn labelled-radio-button [data value type]
+(defn labelled-radio-button [e! active-value value type]
   [:label.btn.btn-primary
-   (when (= value (get-in @data [:filters :type]))
+   (when (= value active-value)
      {:class "active"})
    (string/capitalize value)
    [:input {:type "radio"
             :value value
             :id value
             :name type
-            :on-click #(swap! data assoc-in [:filters :type] value)}]])
+            :on-click #(e! (ec/->SelectType value))}]])
 
 (defn month-filter [e! events]
   [:form
@@ -43,11 +43,11 @@
       ^{:key month}
       [:option month])]])
 
-(defn event-type-selector [enabled-filters]
+(defn event-type-selector [e! active-value]
   [:div.btn-group {:data-toggle "buttons"}
-   [labelled-radio-button enabled-filters "all" "type"]
-   [labelled-radio-button enabled-filters "expenses" "type"]
-   [labelled-radio-button enabled-filters "incomes" "type"]])
+   [labelled-radio-button e! active-value "all" "type"]
+   [labelled-radio-button e! active-value "expenses" "type"]
+   [labelled-radio-button e! active-value "incomes" "type"]])
 
 (defn amount->pretty-string [amount]
   (str (/ amount 100) "€"))
@@ -110,7 +110,7 @@
        [:div.row
         [:div.col-md-8
          [:h1 "Events"]
-         [event-type-selector state/app]
+         [event-type-selector e! (:type filters)]
          [bank-event-table filters events]]
         [:div.col-md-4
          [:h1 "Recurring expenses"]
