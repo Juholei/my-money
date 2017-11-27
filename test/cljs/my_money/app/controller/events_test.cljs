@@ -22,12 +22,18 @@
 
 (deftest test-setting-recurring-expenses
   (is (= {:recurring-expenses test-expenses}
-         (tuck/process-event (ce/->SetRecurringExpenses test-expenses)))))
+         (tuck/process-event (ce/->SetRecurringExpenses test-expenses) {}))))
 
-(deftest test-setting-both-expenses-and-events
+(deftest test-setting-month-in-filters
+  (is (= "2.2017"
+         (-> (tuck/process-event (ce/->SelectMonth "2.2017") {})
+             (get-in [:filters :month])))))
+
+(deftest test-setting-everything
   (is (= {:events test-events
-          :recurring-expenses test-expenses}
+          :recurring-expenses test-expenses
+          :filters {:month "2.2017"}}
          (->> {}
               (tuck/process-event (ce/->SetEvents test-events))
-              (tuck/process-event (ce/->SetRecurringExpenses test-expenses))))))
-
+              (tuck/process-event (ce/->SetRecurringExpenses test-expenses))
+              (tuck/process-event (ce/->SelectMonth "2.2017"))))))

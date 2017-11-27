@@ -35,9 +35,9 @@
             :name type
             :on-click #(swap! data assoc-in [:filters :type] value)}]])
 
-(defn month-filter [enabled-filters events]
+(defn month-filter [e! events]
   [:form
-   [:select {:on-change #(swap! enabled-filters assoc-in [:filters :month] (-> % .-target .-value))}
+   [:select {:on-change #(e! (ec/->SelectMonth (-> % .-target .-value)))}
     [:option "All-time"]
     (for [month (filters/months events)]
       ^{:key month}
@@ -103,7 +103,7 @@
   (fn [e! {:keys [events filters recurring-expenses starting-amount] :as app}]
     (when (session/get :identity)
       [:div.container
-       [month-filter state/app events]
+       [month-filter e! events]
        [charts/chart (events-for-time-period events (:month filters))
                      starting-amount]
        [balance-info (:month filters) events]
