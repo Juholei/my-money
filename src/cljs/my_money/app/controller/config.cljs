@@ -1,20 +1,31 @@
 (ns my-money.app.controller.config
   (:require [ajax.core :refer [GET POST]]
             [my-money.app.state :as state]
-            [reagent.session :as session]))
+            [reagent.session :as session]
+            [tuck.core :as tuck]))
 
 (defn get-config []
   (GET "/get-config" {:handler #(swap! state/app merge %)}))
 
-(defn- config-saved []
-  (get-config)
-  (session/remove! :modal))
+(defrecord SaveConfig [config])
+(defrecord ConfigSaved [])
 
-(defn save-config! [config]
-  (let [starting-amount-changed? (not= (* (:starting-amount @config) 100)
-                                       (:starting-amount @state/app))]
-    (POST "/save-config"
-          {:params (if starting-amount-changed?
-                     @config
-                     (dissoc @config :starting-amount))
-           :handler config-saved})))
+(extend-protocol tuck/Event
+  SaveConfig
+  (process-event [{config :config} app]
+    (tuck/action! (fn [e!]
+                    (let [starting-amount-changed? (not= (* (:starting-amount config) 100)
+                                                         (:starting-amount app))]
+                      (POST "/save-config"
+                            {:params (if starting-amount-changed?
+                                       config
+                                       (dissoc config :starting-amount))
+                             :handler #(e! (->ConfigSaved))}))))
+    app)
+
+  ConfigSaved
+  (process-event [_ app]
+    (tuck/action! (fn [e!]
+                    (session/remove! :modal)
+                    (get-config)))
+    app))
