@@ -73,11 +73,13 @@
        [c/alert (:string alert) (remove-alert alert)])]))
 
 (defn page [e! app]
-  [:div
-   [navbar]
-   [modal e!]
-   [alerts]
-   [events-page e! app]])
+  (e! (cc/->RetrieveConfig))
+  (fn [e! app]
+    [:div
+     [navbar]
+     [modal e!]
+     [alerts]
+     [events-page e! app]]))
 
 ;; -------------------------
 ;; Routes
@@ -106,5 +108,4 @@
   (load-interceptors!)
   (hook-browser-navigation!)
   (session/put! :identity js/identity)
-  (cc/get-config)
   (mount-components))

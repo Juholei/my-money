@@ -4,11 +4,10 @@
             [reagent.session :as session]
             [tuck.core :as tuck]))
 
-(defn get-config []
-  (GET "/get-config" {:handler #(swap! state/app merge %)}))
-
 (defrecord SaveConfig [config])
 (defrecord ConfigSaved [])
+(defrecord RetrieveConfig [])
+(defrecord SetConfig [config])
 
 (extend-protocol tuck/Event
   SaveConfig
@@ -27,5 +26,15 @@
   (process-event [_ app]
     (tuck/action! (fn [e!]
                     (session/remove! :modal)
-                    (get-config)))
-    app))
+                    (e! (->RetrieveConfig))))
+    app)
+
+  RetrieveConfig
+  (process-event [_ app]
+    (tuck/action! (fn [e!]
+                    (GET "/get-config" {:handler #(swap! state/app merge %)})))
+    app)
+
+  SetConfig
+  (process-event [{config :config} app]
+    (merge app config)))

@@ -42,7 +42,7 @@
     (tuck/action! (fn [e!]
                     (session/remove! :modal)
                     (session/put! :identity username)
-                    (cc/get-config)
+                    (e! (cc/->RetrieveConfig))
                     (e! (ec/->RetrieveEvents))
                     (e! (ec/->RetrieveRecurringExpenses))))
     app))
