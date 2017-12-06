@@ -1,20 +1,25 @@
 (ns my-money.app.controller.authentication
   (:require [my-money.app.controller.config :as cc]
             [my-money.app.controller.events :as ec]
+            [my-money.app.state :refer [initial-state]]
             [ajax.core :as ajax]
             [goog.crypt.base64 :as b64]
             [reagent.session :as session]
             [tuck.core :as tuck]))
+
+(defrecord Login [credentials])
+(defrecord LoginSucceeded [credentials])
+(defrecord Logout [])
+(defrecord LogoutSucceeded [])
 
 (defn- encode-auth [username password]
   (->> (str username ":" password)
        b64/encodeString
        (str "Basic ")))
 
-(defn logout! []
+(defn- logout! [e!]
   (ajax/POST "/logout"
-             {:handler (fn []
-                         (session/remove! :identity))}))
+             {:handler #(e! (->LogoutSucceeded))}))
 
 (defn- registration-handler [data]
   (session/remove! :modal)
@@ -25,9 +30,6 @@
   (ajax/POST "/register"
              {:params @data
               :handler #(registration-handler data)}))
-
-(defrecord Login [credentials])
-(defrecord LoginSucceeded [credentials])
 
 (extend-protocol tuck/Event
   Login
@@ -45,4 +47,14 @@
                     (e! (cc/->RetrieveConfig))
                     (e! (ec/->RetrieveEvents))
                     (e! (ec/->RetrieveRecurringExpenses))))
-    app))
+    app)
+
+  Logout
+  (process-event [_ app]
+    (tuck/action! logout!)
+    app)
+
+  LogoutSucceeded
+  (process-event [_ app]
+    (session/remove! :identity)
+    initial-state))

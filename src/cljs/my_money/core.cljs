@@ -25,21 +25,21 @@
     {:href uri
      :on-click #(reset! collapsed? true)} title]])
 
-(defn user-menu []
+(defn user-menu [e!]
   (if-let [user (session/get :identity)]
     [:ul.navbar-nav.ml-auto
      [:li.nav-item
       [:a.btn.btn-outline-danger.btn-sm
        {:href "#"
-        :on-click #(ac/logout!)}
+        :on-click #(e! (ac/->Logout))}
        [:i.fa.fa-user " " user " | log out"]]]]
     [:ul.navbar-nav.ml-auto
      [:li.nav-item [login/login-button]]
      [:li.nav-item [registration/registration-button]]]))
 
-(defn navbar []
+(defn navbar [e!]
   (let [collapsed? (r/atom true)]
-    (fn []
+    (fn [e!]
       [:nav#navbar.navbar.navbar-expand-lg.navbar-dark.bg-dark
        [:a.navbar-brand {:href "#"} "my-money"]
        [:button.navbar-toggler {:type "button"
@@ -53,7 +53,7 @@
            [:ul.navbar-nav
             [:button.btn.btn-outline-info.fa.fa-cog.fa-inverse {:on-click #(session/put! :modal config/config-modal)}]
             [:button.btn.btn-outline-info {:on-click #(session/put! :modal upload/upload-modal)} "Upload"]])]
-        [user-menu]]])))
+        [user-menu e!]]])))
 
 (defn modal [e!]
   (when-let [session-modal (session/get :modal)]
@@ -76,7 +76,7 @@
   (e! (cc/->RetrieveConfig))
   (fn [e! app]
     [:div
-     [navbar]
+     [navbar e!]
      [modal e!]
      [alerts]
      [events-page e! app]]))
