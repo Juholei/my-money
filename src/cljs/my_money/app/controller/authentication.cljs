@@ -11,6 +11,8 @@
 (defrecord LoginSucceeded [credentials])
 (defrecord Logout [])
 (defrecord LogoutSucceeded [])
+(defrecord Register [username password])
+(defrecord RegistrationSucceeded [username])
 
 (defn- encode-auth [username password]
   (->> (str username ":" password)
@@ -20,16 +22,6 @@
 (defn- logout! [e!]
   (ajax/POST "/logout"
              {:handler #(e! (->LogoutSucceeded))}))
-
-(defn- registration-handler [data]
-  (session/remove! :modal)
-  (session/put! :identity (:username data))
-  (reset! data {}))
-
-(defn register! [data]
-  (ajax/POST "/register"
-             {:params @data
-              :handler #(registration-handler data)}))
 
 (extend-protocol tuck/Event
   Login
@@ -57,4 +49,19 @@
   LogoutSucceeded
   (process-event [_ app]
     (session/remove! :identity)
-    initial-state))
+    initial-state)
+
+  Register
+  (process-event [{:keys [username] :as credentials} app]
+    (tuck/action! (fn [e!]
+                    (ajax/POST "/register"
+                               {:params (into {} credentials)
+                                :handler #(e! (->RegistrationSucceeded username))})))
+    app)
+
+  RegistrationSucceeded
+  (process-event [{username :username} app]
+    (tuck/action! (fn [_]
+                    (session/remove! :modal)
+                    (session/put! :identity username)))
+    app))

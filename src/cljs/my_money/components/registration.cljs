@@ -4,13 +4,13 @@
             [reagent.core :as r]
             [reagent.session :as session]))
 
-(defn- buttons [data]
+(defn- buttons [e! {:keys [username password]}]
   [:div
    [:input.btn.btn-primary {:type "submit"
                              :form "registration"
                              :value "Register"
                              :on-click #(do (.preventDefault %)
-                                            (ac/register! data))}]
+                                            (e! (ac/->Register username password)))}]
    [:button.btn.btn-danger {:on-click #(c/close-modal)}
                            "Cancel"]])
 
@@ -26,7 +26,7 @@
     (fn []
       [c/modal "Register a new account"
                [fields fields-data]
-               [buttons fields-data]])))
+               [buttons e! @fields-data]])))
 
 (defn registration-button []
   [:a.nav-link.active {:href "#"
