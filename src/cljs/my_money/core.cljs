@@ -6,13 +6,16 @@
             [goog.history.EventType :as HistoryEventType]
             [markdown.core :refer [md->html]]
             [my-money.ajax :refer [load-interceptors!]]
+            [my-money.app.controller.authentication :as ac]
+            [my-money.app.controller.config :as cc]
+            [my-money.app.state :as state]
             [my-money.components.common :as c]
-            [my-money.components.config :as config]
-            [my-money.components.registration :as registration]
-            [my-money.components.login :as login]
-            [my-money.components.upload :as upload]
-            [my-money.events :refer [get-events events-page]]
-            [ajax.core :refer [GET POST]])
+            [my-money.views.config :as config]
+            [my-money.views.registration :as registration]
+            [my-money.views.login :as login]
+            [my-money.views.upload :as upload]
+            [my-money.views.events :refer [events-page]]
+            [tuck.core :as tuck])
   (:import goog.History))
 
 (defn nav-link [uri title page collapsed?]
@@ -22,24 +25,22 @@
     {:href uri
      :on-click #(reset! collapsed? true)} title]])
 
-(defn user-menu []
+(defn user-menu [e!]
   (if-let [user (session/get :identity)]
     [:ul.navbar-nav.ml-auto
      [:li.nav-item
       [:a.btn.btn-outline-danger.btn-sm
        {:href "#"
-        :on-click #(POST "/logout"
-                         {:handler (fn []
-                                     (session/remove! :identity))})}
+        :on-click #(e! (ac/->Logout))}
        [:i.fa.fa-user " " user " | log out"]]]]
     [:ul.navbar-nav.ml-auto
      [:li.nav-item [login/login-button]]
      [:li.nav-item [registration/registration-button]]]))
 
-(defn navbar []
+(defn navbar [e!]
   (let [collapsed? (r/atom true)]
-    (fn []
-      [:nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+    (fn [e!]
+      [:nav#navbar.navbar.navbar-expand-lg.navbar-dark.bg-dark
        [:a.navbar-brand {:href "#"} "my-money"]
        [:button.navbar-toggler {:type "button"
                                 :on-click #(swap! collapsed? not)}
@@ -52,25 +53,11 @@
            [:ul.navbar-nav
             [:button.btn.btn-outline-info.fa.fa-cog.fa-inverse {:on-click #(session/put! :modal config/config-modal)}]
             [:button.btn.btn-outline-info {:on-click #(session/put! :modal upload/upload-modal)} "Upload"]])]
-        [user-menu]]])))
+        [user-menu e!]]])))
 
-(defn about-page []
-  [:div.container
-   [:div.row
-    [:div.col-md-12
-     "this is the story of my-money... work in progress"]]])
-
-(defn home-page []
-  [:div.container
-   [events-page]])
-
-(def pages
-  {:home #'home-page
-   :about #'about-page})
-
-(defn modal []
+(defn modal [e!]
   (when-let [session-modal (session/get :modal)]
-    [session-modal]))
+    [session-modal e!]))
 
 (defn remove-alert [alert]
   (fn []
@@ -85,11 +72,14 @@
        ^{:key (:timestamp alert)}
        [c/alert (:string alert) (remove-alert alert)])]))
 
-(defn page []
-  [:div
-   [modal]
-   [alerts]
-   [(pages (session/get :page))]])
+(defn page [e! app]
+  (e! (cc/->RetrieveConfig))
+  (fn [e! app]
+    [:div
+     [navbar e!]
+     [modal e!]
+     [alerts]
+     [events-page e! app]]))
 
 ;; -------------------------
 ;; Routes
@@ -97,9 +87,6 @@
 
 (secretary/defroute "/" []
   (session/put! :page :home))
-
-(secretary/defroute "/about" []
-  (session/put! :page :about))
 
 ;; -------------------------
 ;; History
@@ -114,17 +101,11 @@
 
 ;; -------------------------
 ;; Initialize app
-(defn fetch-docs! []
-  (GET "/docs" {:handler #(session/put! :docs %)}))
-
 (defn mount-components []
-  (r/render [#'navbar] (.getElementById js/document "navbar"))
-  (r/render [#'page] (.getElementById js/document "app")))
+  (r/render (tuck/tuck state/app page) (.getElementById js/document "app")))
 
 (defn init! []
   (load-interceptors!)
-  (fetch-docs!)
   (hook-browser-navigation!)
   (session/put! :identity js/identity)
-  (get-events)
   (mount-components))

@@ -36,7 +36,8 @@
                  [ring-webjars "0.2.0"]
                  [ring/ring-defaults "0.3.1"]
                  [secretary "1.2.3"]
-                 [selmer "1.11.0"]]
+                 [selmer "1.11.0"]
+                 [webjure/tuck "0.4.3"]]
 
   :min-lein-version "2.0.0"
 

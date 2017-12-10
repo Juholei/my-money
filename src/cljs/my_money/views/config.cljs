@@ -1,8 +1,8 @@
-(ns my-money.components.config
+(ns my-money.views.config
   (:require [clojure.string :as string]
-            [my-money.events :as events]
+            [my-money.app.state :as state]
+            [my-money.app.controller.config :as cc]
             [my-money.components.common :as c]
-            [ajax.core :as ajax]
             [reagent.core :as r]
             [reagent.session :as session]))
 
@@ -48,30 +48,19 @@
   [:div
    [c/number-input "Starting amount (Amount of money before first event)" :starting-amount "Amount" data [false]]
    [c/search-input "Add recipients as savings" :recipient-search "Recipient" data [false]]
-   [search-result-list data (into #{} (map :recipient @events/response-data))]
+   [search-result-list data (into #{} (map :recipient (:events @state/app)))]
    [savings-recipient-list data]])
 
-(defn config-saved []
-  (events/get-config)
-  (session/remove! :modal))
-
-(defn save-config! [config]
-  (let [starting-amount-changed? (not= (* (:starting-amount @config) 100)
-                                       (:starting-amount @events/config))]
-    (ajax/POST "/save-config"
-               {:params (if starting-amount-changed?
-                          @config
-                          (dissoc @config :starting-amount))
-                :handler config-saved})))
-
-(defn- buttons [data]
+(defn- buttons [e! data]
   [:div
-   [:button.btn.btn-primary {:on-click #(save-config! data)} "Save"]
+   [:button.btn.btn-primary {:on-click #(e! (cc/->SaveConfig @data))} "Save"]
    [:button.btn.btn-danger {:on-click #(c/close-modal)} "Cancel"]])
 
-(defn config-modal []
-  (let [fields-data (r/atom (update @events/config :starting-amount / 100))]
+(defn config-modal [e!]
+  (let [fields-data (r/atom {:starting-amount (/ (:starting-amount @state/app) 100)
+                             :recipient-search ""
+                             :recipients (:recipients @state/app)})]
     (fn []
       [c/modal "Configuration"
                [fields fields-data]
-               [buttons fields-data]])))
+               [buttons e! fields-data]])))

@@ -1,11 +1,9 @@
-(ns my-money.charts
+(ns my-money.components.charts
   (:require [my-money.calculations :as calc]
             [my-money.components.common :as c]
             [reagent.core :as r]
             [goog.object :as obj]
             [cljsjs.react-chartjs-2]))
-
-(def bar-chart (r/adapt-react-class (obj/get js/reactChartjs2 "Bar")))
 
 (def line-chart (r/adapt-react-class (obj/get js/reactChartjs2 "Line")))
 
@@ -22,10 +20,10 @@
 (defn- moneyfy-y-label [tooltip]
   (str (.-yLabel tooltip) "€"))
 
-(defn chart [data config]
+(defn chart [data starting-amount]
   (let [collapsed? (r/atom false)]
-    (fn [data config]
-      (let [date-sums (events->date-sums data (:starting-amount @config))
+    (fn [data starting-amount]
+      (let [date-sums (events->date-sums data starting-amount)
             chart-options {:width 400
                            :height 100
                            :data {:labels (map :date date-sums)
