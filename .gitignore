@@ -14,3 +14,5 @@ figwheel_server.log
 /node_modules
 npm-debug.log
 /out
+.idea/
+my-money.iml
