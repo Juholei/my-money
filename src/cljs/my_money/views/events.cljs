@@ -1,10 +1,10 @@
-(ns my-money.events
+(ns my-money.views.events
     (:require [clojure.string :as string]
               [reagent.core :as r]
               [reagent.session :as session]
               [my-money.app.controller.events :as ec]
               [my-money.calculations :as calc]
-              [my-money.charts :as charts]
+              [my-money.components.charts :as charts]
               [my-money.event-filters :as filters]
               [my-money.recurring-events :as re]))
 

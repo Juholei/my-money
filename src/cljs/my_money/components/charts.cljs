@@ -1,11 +1,9 @@
-(ns my-money.charts
+(ns my-money.components.charts
   (:require [my-money.calculations :as calc]
             [my-money.components.common :as c]
             [reagent.core :as r]
             [goog.object :as obj]
             [cljsjs.react-chartjs-2]))
-
-(def bar-chart (r/adapt-react-class (obj/get js/reactChartjs2 "Bar")))
 
 (def line-chart (r/adapt-react-class (obj/get js/reactChartjs2 "Line")))
 

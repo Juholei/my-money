@@ -1,4 +1,4 @@
-(ns my-money.components.config
+(ns my-money.views.config
   (:require [clojure.string :as string]
             [my-money.app.state :as state]
             [my-money.app.controller.config :as cc]

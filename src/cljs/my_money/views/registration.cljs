@@ -1,4 +1,4 @@
-(ns my-money.components.registration
+(ns my-money.views.registration
   (:require [my-money.components.common :as c]
             [my-money.app.controller.authentication :as ac]
             [reagent.core :as r]

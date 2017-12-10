@@ -10,11 +10,11 @@
             [my-money.app.controller.config :as cc]
             [my-money.app.state :as state]
             [my-money.components.common :as c]
-            [my-money.components.config :as config]
-            [my-money.components.registration :as registration]
-            [my-money.components.login :as login]
-            [my-money.components.upload :as upload]
-            [my-money.events :refer [events-page]]
+            [my-money.views.config :as config]
+            [my-money.views.registration :as registration]
+            [my-money.views.login :as login]
+            [my-money.views.upload :as upload]
+            [my-money.views.events :refer [events-page]]
             [tuck.core :as tuck])
   (:import goog.History))
 

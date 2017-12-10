@@ -1,4 +1,4 @@
-(ns my-money.components.upload
+(ns my-money.views.upload
   (:require [reagent.core :as r]
             [my-money.components.common :as c]
             [my-money.app.controller.upload :as uc]))

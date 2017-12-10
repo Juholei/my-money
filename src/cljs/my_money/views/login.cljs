@@ -1,4 +1,4 @@
-(ns my-money.components.login
+(ns my-money.views.login
   (:require [my-money.components.common :as c]
             [my-money.app.controller.authentication :as ac]
             [reagent.core :as r]
