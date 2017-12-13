@@ -56,3 +56,9 @@
                 "fa fa-plus-square-o"
                 "fa fa-minus-square-o")
        :on-click #(swap! collapsed? not)}])
+
+(defn progress-bar [visible]
+  (when visible
+    [:div.progress-bar.progress-bar-striped.progress-bar-animated {:style {:width "100%"
+                                                                           :height "0.3em"
+                                                                           :margin-top "-10px"}}]))

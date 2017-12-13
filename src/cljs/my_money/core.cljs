@@ -77,6 +77,7 @@
   (fn [e! app]
     [:div
      [navbar e!]
+     [c/progress-bar (:in-progress app)]
      [modal e!]
      [alerts]
      [events-page e! app]]))

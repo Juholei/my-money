@@ -29,7 +29,7 @@
     (tuck/action! (fn [e!]
                     (ajax/POST "/login" {:headers {"Authorization" (encode-auth username password)}
                                          :handler #(e! (->LoginSucceeded data))})))
-    app)
+    (assoc app :in-progress true))
 
   LoginSucceeded
   (process-event [{{:keys [username password]} :credentials} app]
@@ -39,7 +39,7 @@
                     (e! (cc/->RetrieveConfig))
                     (e! (ec/->RetrieveEvents))
                     (e! (ec/->RetrieveRecurringExpenses))))
-    app)
+    (assoc app :in-progress false))
 
   Logout
   (process-event [_ app]
