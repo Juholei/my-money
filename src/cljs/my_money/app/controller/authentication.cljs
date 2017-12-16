@@ -13,6 +13,7 @@
 (defrecord LogoutSucceeded [])
 (defrecord Register [username password])
 (defrecord RegistrationSucceeded [username])
+(defrecord ErrorHandler [])
 
 (defn- encode-auth [username password]
   (->> (str username ":" password)
@@ -28,7 +29,8 @@
   (process-event [{{:keys [username password] :as data} :credentials} app]
     (tuck/action! (fn [e!]
                     (ajax/POST "/login" {:headers {"Authorization" (encode-auth username password)}
-                                         :handler #(e! (->LoginSucceeded data))})))
+                                         :handler #(e! (->LoginSucceeded data))
+                                         :error-handler #(e! (->ErrorHandler))})))
     (assoc app :in-progress true))
 
   LoginSucceeded
@@ -64,4 +66,8 @@
     (tuck/action! (fn [_]
                     (session/remove! :modal)
                     (session/put! :identity username)))
-    app))
+    app)
+
+  ErrorHandler
+  (process-event [_ app]
+    (assoc app :in-progress false)))
