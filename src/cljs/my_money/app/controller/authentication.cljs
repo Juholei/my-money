@@ -1,6 +1,7 @@
 (ns my-money.app.controller.authentication
   (:require [my-money.app.controller.config :as cc]
             [my-money.app.controller.events :as ec]
+            [my-money.app.controller.navigation :as nc]
             [my-money.app.state :refer [initial-state]]
             [ajax.core :as ajax]
             [goog.crypt.base64 :as b64]
@@ -31,7 +32,7 @@
                     (ajax/POST "/login" {:headers {"Authorization" (encode-auth username password)}
                                          :handler #(e! (->LoginSucceeded data))
                                          :error-handler #(e! (->ErrorHandler))})))
-    (assoc app :in-progress true))
+    (nc/set-in-progress app true))
 
   LoginSucceeded
   (process-event [{{:keys [username password]} :credentials} app]
@@ -41,7 +42,7 @@
                     (e! (cc/->RetrieveConfig))
                     (e! (ec/->RetrieveEvents))
                     (e! (ec/->RetrieveRecurringExpenses))))
-    (assoc app :in-progress false))
+    (nc/set-in-progress app false))
 
   Logout
   (process-event [_ app]
@@ -70,4 +71,4 @@
 
   ErrorHandler
   (process-event [_ app]
-    (assoc app :in-progress false)))
+    (nc/set-in-progress app false)))
