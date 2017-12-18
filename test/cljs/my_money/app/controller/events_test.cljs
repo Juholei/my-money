@@ -16,7 +16,8 @@
                       :id 737}))
 
 (deftest test-settings-events
-  (is (= {:events test-events}
+  (is (= {:events test-events
+          :in-progress false}
          (tuck/process-event (ce/->SetEvents test-events)
                              {}))))
 
@@ -38,7 +39,8 @@
   (is (= {:events test-events
           :recurring-expenses test-expenses
           :filters {:month "2.2017"
-                    :type "all"}}
+                    :type "all"}
+          :in-progress false}
          (->> {}
               (tuck/process-event (ce/->SetEvents test-events))
               (tuck/process-event (ce/->SetRecurringExpenses test-expenses))
