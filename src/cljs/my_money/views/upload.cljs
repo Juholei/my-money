@@ -10,7 +10,7 @@
         file-name (.-name file)
         form-data (doto (js/FormData.)
                     (.append "file" file file-name))]
-    (uc/upload! e! form-data)))
+    (e! (uc/->Upload form-data))))
 
 (defn- upload-form []
   [:div.form
