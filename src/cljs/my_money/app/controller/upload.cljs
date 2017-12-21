@@ -19,7 +19,8 @@
   UploadFinished
   (process-event [{response :response} app]
     (tuck/action! (fn [e!]
-                    (e! (ec/->RetrieveEvents))))
+                    (e! (ec/->RetrieveEvents))
+                    (e! (ec/->RetrieveRecurringExpenses))))
     (session/update! :alerts conj {:string    (str "Added " response " events")
                                    :timestamp (.getTime (js/Date.))})
     (session/remove! :modal)
