@@ -65,9 +65,8 @@
     nil))
 
 (defn modal [e! modal-key]
-  (when-let [session-modal (modal-key->modal modal-key)]
-    [session-modal e! #(e! (nc/->CloseModal))]))
-
+  (when-let [opened-modal (modal-key->modal modal-key)]
+    [opened-modal e! #(e! (nc/->CloseModal))]))
 
 (defn remove-alert [alert]
   (fn []
