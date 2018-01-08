@@ -37,12 +37,13 @@
   LoginSucceeded
   (process-event [{{:keys [username password]} :credentials} app]
     (tuck/action! (fn [e!]
-                    (session/remove! :modal)
                     (session/put! :identity username)
                     (e! (cc/->RetrieveConfig))
                     (e! (ec/->RetrieveEvents))
                     (e! (ec/->RetrieveRecurringExpenses))))
-    (nc/set-in-progress app false))
+    (-> app
+        (nc/set-in-progress false)
+        (dissoc :modal)))
 
   Logout
   (process-event [_ app]
@@ -65,9 +66,8 @@
   RegistrationSucceeded
   (process-event [{username :username} app]
     (tuck/action! (fn [_]
-                    (session/remove! :modal)
                     (session/put! :identity username)))
-    app)
+    (dissoc app :modal))
 
   ErrorHandler
   (process-event [_ app]

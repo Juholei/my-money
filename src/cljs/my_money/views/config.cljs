@@ -2,9 +2,9 @@
   (:require [clojure.string :as string]
             [my-money.app.state :as state]
             [my-money.app.controller.config :as cc]
+            [my-money.app.controller.navigation :as nc]
             [my-money.components.common :as c]
-            [reagent.core :as r]
-            [reagent.session :as session]))
+            [reagent.core :as r]))
 
 (defn search [search-term strings]
   (filter #(string/includes?
@@ -54,13 +54,14 @@
 (defn- buttons [e! data]
   [:div
    [:button.btn.btn-primary {:on-click #(e! (cc/->SaveConfig @data))} "Save"]
-   [:button.btn.btn-danger {:on-click #(c/close-modal)} "Cancel"]])
+   [:button.btn.btn-danger {:on-click #(e! (nc/->CloseModal))} "Cancel"]])
 
-(defn config-modal [e!]
+(defn config-modal [e! close-fn]
   (let [fields-data (r/atom {:starting-amount (/ (:starting-amount @state/app) 100)
                              :recipient-search ""
                              :recipients (:recipients @state/app)})]
     (fn []
       [c/modal "Configuration"
                [fields fields-data]
-               [buttons e! fields-data]])))
+               [buttons e! fields-data]
+               close-fn])))

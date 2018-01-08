@@ -1,21 +1,17 @@
 (ns my-money.components.common
-  (:require [reagent.core :as r]
-            [reagent.session :as session]))
+  (:require [reagent.core :as r]))
 
-(defn close-modal []
-  (session/remove! :modal))
-
-(defn modal [header body footer]
+(defn modal [header body footer close-fn]
   [:div
    [:div.modal-dialog
     [:div.modal-content
      [:div.modal-header [:span.modal-title.h5 header]
                         [:button.close {:type "button"
-                                        :on-click close-modal}
+                                        :on-click close-fn}
                                        "×"]]
      [:div.modal-body body]
      [:div.modal-footer footer]]]
-   [:div.modal-backdrop {:on-click close-modal}]])
+   [:div.modal-backdrop {:on-click close-fn}]])
 
 (defn alert [message close-fn]
   [:div.alert.alert-success.alert-dismissible

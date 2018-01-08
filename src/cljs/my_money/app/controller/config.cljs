@@ -1,7 +1,6 @@
 (ns my-money.app.controller.config
   (:require [ajax.core :refer [GET POST]]
             [my-money.app.state :as state]
-            [reagent.session :as session]
             [tuck.core :as tuck]))
 
 (defrecord SaveConfig [config])
@@ -25,9 +24,8 @@
   ConfigSaved
   (process-event [_ app]
     (tuck/action! (fn [e!]
-                    (session/remove! :modal)
                     (e! (->RetrieveConfig))))
-    app)
+    (dissoc app :modal))
 
   RetrieveConfig
   (process-event [_ app]
