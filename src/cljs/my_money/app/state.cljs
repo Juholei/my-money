@@ -7,6 +7,7 @@
                     :recipients #{}
                     :filters {:type "all"
                               :month "All-time"}
-                    :in-progress false})
+                    :in-progress false
+                    :modal nil})
 
 (defonce app (r/atom initial-state))

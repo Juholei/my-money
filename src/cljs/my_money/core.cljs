@@ -7,6 +7,7 @@
             [markdown.core :refer [md->html]]
             [my-money.ajax :refer [load-interceptors!]]
             [my-money.app.controller.authentication :as ac]
+            [my-money.app.controller.navigation :as nc]
             [my-money.app.controller.config :as cc]
             [my-money.app.state :as state]
             [my-money.components.common :as c]
@@ -34,8 +35,8 @@
         :on-click #(e! (ac/->Logout))}
        [:i.fa.fa-user " " user " | log out"]]]]
     [:ul.navbar-nav.ml-auto
-     [:li.nav-item [login/login-button]]
-     [:li.nav-item [registration/registration-button]]]))
+     [:li.nav-item [login/login-button e!]]
+     [:li.nav-item [registration/registration-button e!]]]))
 
 (defn navbar [e!]
   (let [collapsed? (r/atom true)]
@@ -51,13 +52,22 @@
          [nav-link "#/" "Home" :home collapsed?]
          (when (session/get :identity)
            [:ul.navbar-nav
-            [:button.btn.btn-outline-info.fa.fa-cog.fa-inverse {:on-click #(session/put! :modal config/config-modal)}]
-            [:button.btn.btn-outline-info {:on-click #(session/put! :modal upload/upload-modal)} "Upload"]])]
+            [:button.btn.btn-outline-info.fa.fa-cog.fa-inverse {:on-click #(e! (nc/->OpenModal :config))}]
+            [:button.btn.btn-outline-info {:on-click #(e! (nc/->OpenModal :upload))} "Upload"]])]
         [user-menu e!]]])))
 
-(defn modal [e!]
-  (when-let [session-modal (session/get :modal)]
-    [session-modal e!]))
+(defn modal-key->modal [key]
+  (condp = key
+    :registration registration/registration-form
+    :login login/login-form
+    :config config/config-modal
+    :upload upload/upload-modal
+    nil))
+
+(defn modal [e! modal-key]
+  (when-let [session-modal (modal-key->modal modal-key)]
+    [session-modal e! #(e! (nc/->CloseModal))]))
+
 
 (defn remove-alert [alert]
   (fn []
@@ -78,7 +88,7 @@
     [:div
      [navbar e!]
      [c/progress-bar (:in-progress app)]
-     [modal e!]
+     [modal e! (:modal app)]
      [alerts]
      [events-page e! app]]))
 

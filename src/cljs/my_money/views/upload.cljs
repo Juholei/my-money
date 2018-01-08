@@ -24,5 +24,5 @@
             :on-click #(upload e!)}
            "Submit"])
 
-(defn upload-modal [e!]
-  [c/modal "Upload" [upload-form] [upload-button e!]])
+(defn upload-modal [e! close-fn]
+  [c/modal "Upload" [upload-form] [upload-button e!] close-fn])

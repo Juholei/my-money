@@ -23,5 +23,6 @@
                     (e! (ec/->RetrieveRecurringExpenses))))
     (session/update! :alerts conj {:string    (str "Added " response " events")
                                    :timestamp (.getTime (js/Date.))})
-    (session/remove! :modal)
-    (nc/set-in-progress app false)))
+    (-> app
+        (nc/set-in-progress false)
+        (dissoc :modal))))

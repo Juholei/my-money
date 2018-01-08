@@ -1,8 +1,8 @@
 (ns my-money.views.login
   (:require [my-money.components.common :as c]
             [my-money.app.controller.authentication :as ac]
-            [reagent.core :as r]
-            [reagent.session :as session]))
+            [my-money.app.controller.navigation :as nc]
+            [reagent.core :as r]))
 
 (defn- buttons [e! data]
   [:div
@@ -11,19 +11,19 @@
                             :value "Login"
                             :on-click #(do (.preventDefault %)
                                            (e! (ac/->Login @data)))}]
-   [:button.btn.btn-danger {:on-click #(c/close-modal)} "Cancel"]])
+   [:button.btn.btn-danger {:on-click #(e! (nc/->CloseModal))} "Cancel"]])
 
 (defn- fields [data]
   [:form {:id "login"}
    [c/text-input "Username" :username "Enter your username" data false]
    [c/password-input "Password" :password "Enter your password" data false]])
 
-(defn login-form [e!]
+(defn login-form [e! close-fn]
   (let [data (r/atom {})]
     (fn []
-      [c/modal "Login" [fields data] [buttons e! data]])))
+      [c/modal "Login" [fields data] [buttons e! data] close-fn])))
 
-(defn login-button []
+(defn login-button [e!]
  [:a.nav-link.active {:href "#"
-                      :on-click #(session/put! :modal login-form)}
+                      :on-click #(e! (nc/->OpenModal :login))}
   "Login"])
