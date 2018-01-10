@@ -7,6 +7,7 @@
             [markdown.core :refer [md->html]]
             [my-money.ajax :refer [load-interceptors!]]
             [my-money.app.controller.authentication :as ac]
+            [my-money.app.controller.alerts :as alerts-controller]
             [my-money.app.controller.navigation :as nc]
             [my-money.app.controller.config :as cc]
             [my-money.app.state :as state]
@@ -74,12 +75,12 @@
                            (= (:timestamp alert) (:timestamp another-alert)))]
       (session/update! :alerts (partial remove correct-alert?)))))
 
-(defn alerts []
-  (when-let [session-alerts (session/get :alerts)]
+(defn alerts [e! alerts]
+  (when (not-empty alerts)
     [:div.container
-     (for [alert session-alerts]
+     (for [alert alerts]
        ^{:key (:timestamp alert)}
-       [c/alert (:string alert) (remove-alert alert)])]))
+       [c/alert (:string alert) #(e! (alerts-controller/->RemoveAlert alert))])]))
 
 (defn page [e! app]
   (e! (cc/->RetrieveConfig))
@@ -88,7 +89,7 @@
      [navbar e!]
      [c/progress-bar (:in-progress app)]
      [modal e! (:modal app)]
-     [alerts]
+     [alerts e! (:alerts app)]
      [events-page e! app]]))
 
 ;; -------------------------
