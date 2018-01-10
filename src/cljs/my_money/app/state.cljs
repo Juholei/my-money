@@ -8,6 +8,7 @@
                     :filters {:type "all"
                               :month "All-time"}
                     :in-progress false
-                    :modal nil})
+                    :modal nil
+                    :alerts '()})
 
 (defonce app (r/atom initial-state))
