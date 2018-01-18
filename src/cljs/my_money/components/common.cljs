@@ -58,3 +58,23 @@
     [:div.progress-bar.progress-bar-striped.progress-bar-animated {:style {:width "100%"
                                                                            :height "0.3em"
                                                                            :margin-top "-10px"}}]))
+
+(defn page-button [active? index on-click]
+  [:li.page-item {:class (when active? "active")}
+   [:a.page-link {:href "#"
+                  :on-click #(on-click index)}
+                 index]])
+
+(defn paginator [current max on-click]
+  [:nav>ul.pagination
+   [:li.page-item {:class (when (= current 1) "disabled")}
+    [:a.page-link {:href "#"
+                   :on-click #(on-click (dec current))}
+                  "Previous"]]
+   (for [i (range 1 (inc max))]
+     ^{:key (str "paginator-" i)}
+     [page-button (= i current) i on-click])
+   [:li.page-item {:class (when (= current max) "disabled")}
+    [:a.page-link {:href "#"
+                   :on-click #(on-click (inc current))}
+                  "Next"]]])

@@ -6,6 +6,7 @@
 
 (defrecord OpenModal [modal])
 (defrecord CloseModal [])
+(defrecord SelectEventPage [page])
 
 (extend-protocol tuck/Event
   OpenModal
@@ -14,4 +15,9 @@
 
   CloseModal
   (process-event [_ app]
-    (dissoc app :modal)))
+    (dissoc app :modal))
+
+  SelectEventPage
+  (process-event [{page :page} app]
+    (assoc app :event-page page)))
+

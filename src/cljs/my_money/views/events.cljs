@@ -1,12 +1,14 @@
 (ns my-money.views.events
-    (:require [clojure.string :as string]
-              [reagent.core :as r]
-              [reagent.session :as session]
-              [my-money.app.controller.events :as ec]
-              [my-money.calculations :as calc]
-              [my-money.components.charts :as charts]
-              [my-money.event-filters :as filters]
-              [my-money.recurring-events :as re]))
+  (:require [clojure.string :as string]
+            [reagent.core :as r]
+            [reagent.session :as session]
+            [my-money.app.controller.events :as ec]
+            [my-money.app.controller.navigation :as nc]
+            [my-money.calculations :as calc]
+            [my-money.components.charts :as charts]
+            [my-money.event-filters :as filters]
+            [my-money.recurring-events :as re]
+            [my-money.components.common :as c]))
 
 (defn- events-for-time-period [events period]
   (if (= period "All-time")
@@ -99,7 +101,8 @@
 (defn events-page [e! app]
   (e! (ec/->RetrieveEvents))
   (e! (ec/->RetrieveRecurringExpenses))
-  (fn [e! {:keys [events filters recurring-expenses starting-amount recipients] :as app}]
+  (fn [e! {:keys [events filters recurring-expenses starting-amount
+                  recipients event-page events-on-page] :as app}]
     (when (session/get :identity)
       [:div.container
        [month-filter e! events]
@@ -110,6 +113,7 @@
         [:div.col-md-8
          [:h1 "Events"]
          [event-type-selector e! (:type filters)]
+         [c/paginator event-page (/ (count events) events-on-page) #(e! (nc/->SelectEventPage %))]
          [bank-event-table filters events]]
         [:div.col-md-4
          [:h1 "Recurring expenses"]
