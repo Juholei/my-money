@@ -10,7 +10,7 @@
                     :in-progress false
                     :modal nil
                     :alerts '()
-                    :event-page 1
-                    :events-on-page 20})
+                    :event-page 0
+                    :events-on-page 100})
 
 (defonce app (r/atom initial-state))

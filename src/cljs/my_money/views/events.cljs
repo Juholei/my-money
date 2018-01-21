@@ -60,21 +60,20 @@
        "."
        (.getFullYear date)))
 
-(defn bank-event-table [enabled-filters events]
-  (let [filtered-events (filter (filters/combined-filter enabled-filters) events)]
-    [:div.table-responsive
-     [:table.table.table-striped
-      [:thead
-       [:tr
-        [:th "Date"]
-        [:th "Amount"]
-        [:th "Recipient"]]]
-      [:tbody (for [event filtered-events]
-                ^{:key (:id event)}
-                [:tr
-                 [:td (date->pretty-string (:transaction_date event))]
-                 [:td (amount->pretty-string (:amount event))]
-                 [:td (str (:recipient event))]])]]]))
+(defn bank-event-table [events]
+  [:div.table-responsive
+   [:table.table.table-striped
+    [:thead
+     [:tr
+      [:th "Date"]
+      [:th "Amount"]
+      [:th "Recipient"]]]
+    [:tbody (for [event events]
+              ^{:key (:id event)}
+              [:tr
+               [:td (date->pretty-string (:transaction_date event))]
+               [:td (amount->pretty-string (:amount event))]
+               [:td (str (:recipient event))]])]]])
 
 (defn recurring-expense-item [expense]
   (let [expense-state (r/atom {:data expense
@@ -104,17 +103,20 @@
   (fn [e! {:keys [events filters recurring-expenses starting-amount
                   recipients event-page events-on-page] :as app}]
     (when (session/get :identity)
-      [:div.container
-       [month-filter e! events]
-       [charts/chart (events-for-time-period events (:month filters))
-                     starting-amount]
-       [balance-info (:month filters) events recipients]
-       [:div.row
-        [:div.col-md-8
-         [:h1 "Events"]
-         [event-type-selector e! (:type filters)]
-         [c/paginator event-page (/ (count events) events-on-page) #(e! (nc/->SelectEventPage %))]
-         [bank-event-table filters events]]
-        [:div.col-md-4
-         [:h1 "Recurring expenses"]
-         [recurring-expense-info recurring-expenses]]]])))
+      (let [filtered-events (filter (filters/combined-filter filters) events)
+            paged-events (partition events-on-page filtered-events)
+            events-to-display (nth paged-events event-page nil)]
+        [:div.container
+         [month-filter e! events]
+         [charts/chart (events-for-time-period events (:month filters))
+                       starting-amount]
+         [balance-info (:month filters) events recipients]
+         [:div.row
+          [:div.col-md-8
+           [:h1 "Events"]
+           [event-type-selector e! (:type filters)]
+           [c/paginator event-page (count paged-events) #(e! (nc/->SelectEventPage %))]
+           [bank-event-table events-to-display]]
+          [:div.col-md-4
+           [:h1 "Recurring expenses"]
+           [recurring-expense-info recurring-expenses]]]]))))

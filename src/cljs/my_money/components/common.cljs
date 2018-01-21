@@ -62,19 +62,22 @@
 (defn page-button [active? index on-click]
   [:li.page-item {:class (when active? "active")}
    [:a.page-link {:href "#"
-                  :on-click #(on-click index)}
-                 index]])
+                  :on-click #(do (.preventDefault %)
+                                 (on-click index))}
+                 (inc index)]])
 
 (defn paginator [current max on-click]
   [:nav>ul.pagination
-   [:li.page-item {:class (when (= current 1) "disabled")}
+   [:li.page-item {:class (when (= current 0) "disabled")}
     [:a.page-link {:href "#"
-                   :on-click #(on-click (dec current))}
+                   :on-click #(do (.preventDefault %)
+                                  (on-click (dec current)))}
                   "Previous"]]
-   (for [i (range 1 (inc max))]
+   (for [i (range 0 max)]
      ^{:key (str "paginator-" i)}
      [page-button (= i current) i on-click])
-   [:li.page-item {:class (when (= current max) "disabled")}
+   [:li.page-item {:class (when (= (inc current) max) "disabled")}
     [:a.page-link {:href "#"
-                   :on-click #(on-click (inc current))}
+                   :on-click #(do (.preventDefault %)
+                                  (on-click (inc current)))}
                   "Next"]]])
