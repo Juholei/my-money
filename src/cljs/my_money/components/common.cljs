@@ -59,15 +59,18 @@
                                                                            :height "0.3em"
                                                                            :margin-top "-10px"}}]))
 
-(defn page-button [active? index on-click]
+(defn- page-button [active? index on-click]
   [:li.page-item {:class (when active? "active")}
    [:a.page-link {:href "#"
                   :on-click #(do (.preventDefault %)
                                  (on-click index))}
                  (inc index)]])
 
-(defn paginator [current max on-click]
-  [:nav>ul.pagination
+(defn paginator
+  "on-click parameter is a function that takes as a parameter
+   the index of the page to navigate to"
+  [current max on-click]
+  [:nav>ul.pagination.justify-content-center
    [:li.page-item {:class (when (= current 0) "disabled")}
     [:a.page-link {:href "#"
                    :on-click #(do (.preventDefault %)
