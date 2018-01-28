@@ -69,18 +69,22 @@
 (defn paginator
   "on-click parameter is a function that takes as a parameter
    the index of the page to navigate to"
-  [current max on-click]
-  [:nav>ul.pagination.justify-content-center
-   [:li.page-item {:class (when (= current 0) "disabled")}
-    [:a.page-link {:href "#"
-                   :on-click #(do (.preventDefault %)
-                                  (on-click (dec current)))}
-                  "Previous"]]
-   (for [i (range 0 max)]
-     ^{:key (str "paginator-" i)}
-     [page-button (= i current) i on-click])
-   [:li.page-item {:class (when (= (inc current) max) "disabled")}
-    [:a.page-link {:href "#"
-                   :on-click #(do (.preventDefault %)
-                                  (on-click (inc current)))}
-                  "Next"]]])
+  [current last on-click]
+  (let [first-page-button-to-show (max (- current 3) 0)
+        last-page-button-to-show (min (+ current 3) last)]
+    [:nav>ul.pagination.justify-content-center
+     [page-button false 0 on-click]
+     [:li.page-item {:class (when (= current 0) "disabled")}
+      [:a.page-link {:href "#"
+                     :on-click #(do (.preventDefault %)
+                                    (on-click (dec current)))}
+                    "Previous"]]
+     (for [i (range first-page-button-to-show last-page-button-to-show)]
+       ^{:key (str "paginator-" i)}
+       [page-button (= i current) i on-click])
+     [:li.page-item {:class (when (= (inc current) last) "disabled")}
+      [:a.page-link {:href "#"
+                     :on-click #(do (.preventDefault %)
+                                    (on-click (inc current)))}
+                    "Next"]]
+     [page-button false (dec last) on-click]]))
