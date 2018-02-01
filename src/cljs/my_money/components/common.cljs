@@ -66,6 +66,17 @@
                                  (on-click index))}
                  (inc index)]])
 
+(defn- more-pages-indicator [visible?]
+  (when visible?
+    [:li.page-item.disabled>a.page-link {:href "#"} "..."]))
+
+(defn- navigation-button [disabled? text on-click-fn]
+  [:li.page-item {:class (when disabled? "disabled")}
+   [:a.page-link {:href "#"
+                  :on-click #(do (.preventDefault %)
+                                 (on-click-fn))}
+    text]])
+
 (defn paginator
   "on-click parameter is a function that takes as a parameter
    the index of the page to navigate to"
@@ -74,17 +85,11 @@
         last-page-button-to-show (min (+ current 3) last)]
     [:nav>ul.pagination.justify-content-center
      [page-button false 0 on-click]
-     [:li.page-item {:class (when (= current 0) "disabled")}
-      [:a.page-link {:href "#"
-                     :on-click #(do (.preventDefault %)
-                                    (on-click (dec current)))}
-                    "Previous"]]
+     [navigation-button (= current 0) "Previous" #(on-click (dec current))]
+     [more-pages-indicator (not (zero? first-page-button-to-show))]
      (for [i (range first-page-button-to-show last-page-button-to-show)]
        ^{:key (str "paginator-" i)}
        [page-button (= i current) i on-click])
-     [:li.page-item {:class (when (= (inc current) last) "disabled")}
-      [:a.page-link {:href "#"
-                     :on-click #(do (.preventDefault %)
-                                    (on-click (inc current)))}
-                    "Next"]]
+     [more-pages-indicator (not= last-page-button-to-show last)]
+     [navigation-button (= (inc current) last) "Next" #(on-click (inc current))]
      [page-button false (dec last) on-click]]))
