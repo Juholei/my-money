@@ -82,14 +82,14 @@
    the index of the page to navigate to"
   [current last on-click]
   (let [first-page-button-to-show (max (- current 3) 0)
-        last-page-button-to-show (min (+ current 3) last)]
+        last-page-button-to-show (min (+ current 4) last)]
     [:nav>ul.pagination.justify-content-center
      [page-button false 0 on-click]
-     [navigation-button (= current 0) "Previous" #(on-click (dec current))]
+     [navigation-button (= current 0) [:span.fa.fa-angle-left] #(on-click (dec current))]
      [more-pages-indicator (not (zero? first-page-button-to-show))]
      (for [i (range first-page-button-to-show last-page-button-to-show)]
        ^{:key (str "paginator-" i)}
        [page-button (= i current) i on-click])
      [more-pages-indicator (not= last-page-button-to-show last)]
-     [navigation-button (= (inc current) last) "Next" #(on-click (inc current))]
+     [navigation-button (= (inc current) last) [:span.fa.fa-angle-right] #(on-click (inc current))]
      [page-button false (dec last) on-click]]))
