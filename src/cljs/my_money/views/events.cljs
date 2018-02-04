@@ -104,7 +104,7 @@
                   recipients event-page events-on-page] :as app}]
     (when (session/get :identity)
       (let [filtered-events (filter (filters/combined-filter filters) events)
-            paged-events (partition events-on-page filtered-events)
+            paged-events (partition events-on-page events-on-page nil filtered-events)
             events-to-display (nth paged-events event-page nil)]
         [:div.container
          [month-filter e! events]
