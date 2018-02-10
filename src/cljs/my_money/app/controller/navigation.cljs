@@ -7,6 +7,7 @@
 (defrecord OpenModal [modal])
 (defrecord CloseModal [])
 (defrecord SelectEventPage [page])
+(defrecord SetShowAllEvents [show-all?])
 
 (extend-protocol tuck/Event
   OpenModal
@@ -19,5 +20,8 @@
 
   SelectEventPage
   (process-event [{page :page} app]
-    (assoc app :event-page page)))
+    (assoc app :event-page page))
 
+  SetShowAllEvents
+  (process-event [{show-all? :show-all?} app]
+    (assoc app :show-all-events? show-all?)))

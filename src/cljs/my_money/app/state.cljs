@@ -11,6 +11,6 @@
                     :modal nil
                     :alerts '()
                     :event-page 0
-                    :events-on-page 100})
+                    :show-all-events? true})
 
 (defonce app (r/atom initial-state))

@@ -10,6 +10,8 @@
             [my-money.recurring-events :as re]
             [my-money.components.common :as c]))
 
+(def events-on-page 50)
+
 (defn- events-for-time-period [events period]
   (if (= period "All-time")
     events
@@ -101,11 +103,13 @@
   (e! (ec/->RetrieveEvents))
   (e! (ec/->RetrieveRecurringExpenses))
   (fn [e! {:keys [events filters recurring-expenses starting-amount
-                  recipients event-page events-on-page] :as app}]
+                  recipients event-page show-all-events?] :as app}]
     (when (session/get :identity)
       (let [filtered-events (filter (filters/combined-filter filters) events)
             paged-events (partition events-on-page events-on-page nil filtered-events)
-            events-to-display (nth paged-events event-page nil)]
+            events-to-display (if show-all-events?
+                                filtered-events
+                                (nth paged-events event-page nil))]
         [:div.container
          [month-filter e! events]
          [charts/chart (events-for-time-period events (:month filters))
@@ -115,7 +119,13 @@
           [:div.col-md-8
            [:h1 "Events"]
            [event-type-selector e! (:type filters)]
-           [c/paginator event-page (count paged-events) #(e! (nc/->SelectEventPage %))]
+           [:label
+            "Show all"
+            [:input {:type "checkbox"
+                     :checked show-all-events?
+                     :on-change #(e! (nc/->SetShowAllEvents (-> % .-target .-checked)))}]]
+           (when (not show-all-events?)
+             [c/paginator event-page (count paged-events) #(e! (nc/->SelectEventPage %))])
            [bank-event-table events-to-display]]
           [:div.col-md-4
            [:h1 "Recurring expenses"]
