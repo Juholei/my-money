@@ -119,11 +119,7 @@
           [:div.col-md-8
            [:h1 "Events"]
            [event-type-selector e! (:type filters)]
-           [:label
-            "Show all"
-            [:input {:type "checkbox"
-                     :checked show-all-events?
-                     :on-change #(e! (nc/->SetShowAllEvents (-> % .-target .-checked)))}]]
+           [c/labeled-checkbox "Show all" show-all-events? #(e! (nc/->SetShowAllEvents %))]
            (when (not show-all-events?)
              [c/paginator event-page (count paged-events) #(e! (nc/->SelectEventPage %))])
            [bank-event-table events-to-display]]

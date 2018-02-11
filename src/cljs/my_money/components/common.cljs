@@ -102,3 +102,9 @@
        [more-pages-indicator (not= last-page-button-to-show last)]
        [navigation-button (= (inc current) last) [:span.fa.fa-angle-right] #(on-click (inc current))]
        [page-button false (dec last) on-click]])))
+
+(defn labeled-checkbox [label checked? on-change-fn]
+  [:label label
+   [:input {:type "checkbox"
+            :checked checked?
+            :on-change #(on-change-fn (-> % .-target .-checked))}]])
