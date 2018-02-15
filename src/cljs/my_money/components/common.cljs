@@ -105,6 +105,6 @@
 
 (defn labeled-checkbox [label checked? on-change-fn]
   [:label label
-   [:input {:type "checkbox"
-            :checked checked?
-            :on-change #(on-change-fn (-> % .-target .-checked))}]])
+   [:input.mx-2 {:type "checkbox"
+                 :checked checked?
+                 :on-change #(on-change-fn (-> % .-target .-checked))}]])

@@ -119,9 +119,10 @@
           [:div.col-md-8
            [:h1 "Events"]
            [event-type-selector e! (:type filters)]
-           [c/labeled-checkbox "Show all" show-all-events? #(e! (nc/->SetShowAllEvents %))]
-           (when (not show-all-events?)
-             [c/paginator event-page (count paged-events) #(e! (nc/->SelectEventPage %))])
+           [:div.row.justify-content-center.align-items-baseline
+            [c/labeled-checkbox "Show all" show-all-events? #(e! (nc/->SetShowAllEvents %))]
+            (when (not show-all-events?)
+              [c/paginator event-page (count paged-events) #(e! (nc/->SelectEventPage %))])]
            [bank-event-table events-to-display]]
           [:div.col-md-4
            [:h1 "Recurring expenses"]
