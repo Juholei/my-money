@@ -99,6 +99,9 @@
      ^{:key (:recipient expense)}
      [recurring-expense-item expense])])
 
+(defn events->pages [events number-of-events-per-page]
+  (partition number-of-events-per-page number-of-events-per-page nil events))
+
 (defn events-page [e! app]
   (e! (ec/->RetrieveEvents))
   (e! (ec/->RetrieveRecurringExpenses))
@@ -106,7 +109,7 @@
                   recipients event-page show-all-events?] :as app}]
     (when (session/get :identity)
       (let [filtered-events (filter (filters/combined-filter filters) events)
-            paged-events (partition events-on-page events-on-page nil filtered-events)
+            paged-events (events->pages filtered-events events-on-page)
             events-to-display (if show-all-events?
                                 filtered-events
                                 (nth paged-events event-page nil))]
