@@ -9,6 +9,8 @@
                               :month "All-time"}
                     :in-progress false
                     :modal nil
-                    :alerts '()})
+                    :alerts '()
+                    :event-page 0
+                    :show-all-events? true})
 
 (defonce app (r/atom initial-state))

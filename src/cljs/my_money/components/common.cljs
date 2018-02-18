@@ -58,3 +58,53 @@
     [:div.progress-bar.progress-bar-striped.progress-bar-animated {:style {:width "100%"
                                                                            :height "0.3em"
                                                                            :margin-top "-10px"}}]))
+
+(defn- page-button [active? index on-click]
+  [:li.page-item {:class (when active? "active")}
+   [:a.page-link {:href "#"
+                  :on-click #(do (.preventDefault %)
+                                 (on-click index))}
+                 (inc index)]])
+
+(defn- more-pages-indicator [visible?]
+  (when visible?
+    [:li.page-item.disabled>a.page-link {:href "#"} "..."]))
+
+(defn- navigation-button [disabled? text on-click-fn]
+  [:li.page-item {:class (when disabled? "disabled")}
+   [:a.page-link {:href "#"
+                  :on-click #(do (.preventDefault %)
+                                 (on-click-fn))}
+    text]])
+
+(defn paginator
+  "on-click parameter is a function that takes as a parameter
+   the index of the page to navigate to"
+  [current last on-click]
+  (when (> last 1)
+    (let [previous-pages (- current 3)
+          next-pages (+ current 4)
+          first-page-button-to-show (max (if (>= next-pages last)
+                                           (- previous-pages (- next-pages last))
+                                           previous-pages)
+                                         0)
+          last-page-button-to-show (min (if (<= previous-pages 0)
+                                          (+ next-pages (- 0 previous-pages))
+                                          next-pages)
+                                        last)]
+      [:nav>ul.pagination.justify-content-center
+       [page-button false 0 on-click]
+       [navigation-button (= current 0) [:span.fa.fa-angle-left] #(on-click (dec current))]
+       [more-pages-indicator (not (zero? first-page-button-to-show))]
+       (for [i (range first-page-button-to-show last-page-button-to-show)]
+         ^{:key (str "paginator-" i)}
+         [page-button (= i current) i on-click])
+       [more-pages-indicator (not= last-page-button-to-show last)]
+       [navigation-button (= (inc current) last) [:span.fa.fa-angle-right] #(on-click (inc current))]
+       [page-button false (dec last) on-click]])))
+
+(defn labeled-checkbox [label checked? on-change-fn]
+  [:label label
+   [:input.mx-2 {:type "checkbox"
+                 :checked checked?
+                 :on-change #(on-change-fn (-> % .-target .-checked))}]])

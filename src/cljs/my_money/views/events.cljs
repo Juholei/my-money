@@ -1,12 +1,16 @@
 (ns my-money.views.events
-    (:require [clojure.string :as string]
-              [reagent.core :as r]
-              [reagent.session :as session]
-              [my-money.app.controller.events :as ec]
-              [my-money.calculations :as calc]
-              [my-money.components.charts :as charts]
-              [my-money.event-filters :as filters]
-              [my-money.recurring-events :as re]))
+  (:require [clojure.string :as string]
+            [reagent.core :as r]
+            [reagent.session :as session]
+            [my-money.app.controller.events :as ec]
+            [my-money.app.controller.navigation :as nc]
+            [my-money.calculations :as calc]
+            [my-money.components.charts :as charts]
+            [my-money.event-filters :as filters]
+            [my-money.recurring-events :as re]
+            [my-money.components.common :as c]))
+
+(def events-on-page 50)
 
 (defn- events-for-time-period [events period]
   (if (= period "All-time")
@@ -58,21 +62,20 @@
        "."
        (.getFullYear date)))
 
-(defn bank-event-table [enabled-filters events]
-  (let [filtered-events (filter (filters/combined-filter enabled-filters) events)]
-    [:div.table-responsive
-     [:table.table.table-striped
-      [:thead
-       [:tr
-        [:th "Date"]
-        [:th "Amount"]
-        [:th "Recipient"]]]
-      [:tbody (for [event filtered-events]
-                ^{:key (:id event)}
-                [:tr
-                 [:td (date->pretty-string (:transaction_date event))]
-                 [:td (amount->pretty-string (:amount event))]
-                 [:td (str (:recipient event))]])]]]))
+(defn bank-event-table [events]
+  [:div.table-responsive
+   [:table.table.table-striped
+    [:thead
+     [:tr
+      [:th "Date"]
+      [:th "Amount"]
+      [:th "Recipient"]]]
+    [:tbody (for [event events]
+              ^{:key (:id event)}
+              [:tr
+               [:td (date->pretty-string (:transaction_date event))]
+               [:td (amount->pretty-string (:amount event))]
+               [:td (str (:recipient event))]])]]])
 
 (defn recurring-expense-item [expense]
   (let [expense-state (r/atom {:data expense
@@ -96,21 +99,34 @@
      ^{:key (:recipient expense)}
      [recurring-expense-item expense])])
 
+(defn events->pages [events number-of-events-per-page]
+  (partition number-of-events-per-page number-of-events-per-page nil events))
+
 (defn events-page [e! app]
   (e! (ec/->RetrieveEvents))
   (e! (ec/->RetrieveRecurringExpenses))
-  (fn [e! {:keys [events filters recurring-expenses starting-amount recipients] :as app}]
+  (fn [e! {:keys [events filters recurring-expenses starting-amount
+                  recipients event-page show-all-events?] :as app}]
     (when (session/get :identity)
-      [:div.container
-       [month-filter e! events]
-       [charts/chart (events-for-time-period events (:month filters))
-                     starting-amount]
-       [balance-info (:month filters) events recipients]
-       [:div.row
-        [:div.col-md-8
-         [:h1 "Events"]
-         [event-type-selector e! (:type filters)]
-         [bank-event-table filters events]]
-        [:div.col-md-4
-         [:h1 "Recurring expenses"]
-         [recurring-expense-info recurring-expenses]]]])))
+      (let [filtered-events (filter (filters/combined-filter filters) events)
+            paged-events (events->pages filtered-events events-on-page)
+            events-to-display (if show-all-events?
+                                filtered-events
+                                (nth paged-events event-page nil))]
+        [:div.container
+         [month-filter e! events]
+         [charts/chart (events-for-time-period events (:month filters))
+                       starting-amount]
+         [balance-info (:month filters) events recipients]
+         [:div.row
+          [:div.col-md-8
+           [:h1 "Events"]
+           [event-type-selector e! (:type filters)]
+           [:div.row.justify-content-center.align-items-baseline
+            [c/labeled-checkbox "Show all" show-all-events? #(e! (nc/->SetShowAllEvents %))]
+            (when (not show-all-events?)
+              [c/paginator event-page (count paged-events) #(e! (nc/->SelectEventPage %))])]
+           [bank-event-table events-to-display]]
+          [:div.col-md-4
+           [:h1 "Recurring expenses"]
+           [recurring-expense-info recurring-expenses]]]]))))
