@@ -116,7 +116,7 @@
         [:div.container
          [month-filter e! events]
          [charts/chart (events-for-time-period events (:month filters))
-                       starting-amount]
+                       starting-amount events]
          [balance-info (:month filters) events recipients]
          [:div.row
           [:div.col-md-8

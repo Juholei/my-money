@@ -10,20 +10,20 @@
 (defn date-sum->amount [date-sum]
   (/ (:sum date-sum) 100))
 
-(defn events->date-sums [events starting-amount]
-  (let [dates (set (map :transaction_date events))
+(defn events->date-sums [events-to-display starting-amount all-events]
+  (let [dates (set (map :transaction_date events-to-display))
         date-sum (fn [acc date]
                    (conj acc {:date date
-                              :sum (+ starting-amount (calc/sum-til-date date events))}))]
+                              :sum (+ starting-amount (calc/sum-til-date date all-events))}))]
     (sort-by :date < (reduce date-sum [] dates))))
 
 (defn- moneyfy-y-label [tooltip]
   (str (.-yLabel tooltip) "€"))
 
-(defn chart [data starting-amount]
+(defn chart [events-to-show starting-amount all-events]
   (let [collapsed? (r/atom false)]
-    (fn [data starting-amount]
-      (let [date-sums (events->date-sums data starting-amount)
+    (fn [events-to-show starting-amount events]
+      (let [date-sums (events->date-sums events-to-show starting-amount events)
             chart-options {:width 400
                            :height 100
                            :data {:labels (map :date date-sums)
