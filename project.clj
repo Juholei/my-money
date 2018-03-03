@@ -92,10 +92,10 @@
                                  [binaryage/devtools "0.9.8"]
                                  [com.cemerick/piggieback "0.2.2"]
                                  [doo "0.1.8"]
-                                 [figwheel-sidecar "0.5.14"]]
+                                 [figwheel-sidecar "0.5.15"]]
                   :plugins      [[com.jakemccrary/lein-test-refresh "0.21.1"]
                                  [lein-doo "0.1.7"]
-                                 [lein-figwheel "0.5.14"]
+                                 [lein-figwheel "0.5.15"]
                                  [org.clojure/clojurescript "1.9.946"]]
                   :cljsbuild
                   {:builds
