@@ -20,7 +20,7 @@
                                 :id "file-input"}]]]])
 
 (defn upload-button [e! in-progress?]
-  [:button {:class "btn btn-primary"
+  [:button {:class    "btn btn-primary"
             :on-click #(upload e!)
             :disabled in-progress?}
    (if in-progress?
