@@ -113,9 +113,9 @@
   (let [state (r/atom {:rotation 0})]
     (fn [rotating?]
       (js/setTimeout #(swap! state update :rotation (fn [x] (+ 5 x))) 15)
-      [:svg {:width  "20"
-             :height "20"}
-       [:g {:transform (str "scale(0.05) translate(80, 100) rotate("
+      [:svg {:width  "16"
+             :height "16"}
+       [:g {:transform (str "scale(0.04) translate(70, 80) rotate("
                             (if rotating?
                               (:rotation @state)
                               0)
