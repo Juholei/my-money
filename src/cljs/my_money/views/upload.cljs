@@ -19,10 +19,13 @@
      [:input.form-control-file {:type "file"
                                 :id "file-input"}]]]])
 
-(defn upload-button [e!]
-  [:button {:class "btn btn-primary"
-            :on-click #(upload e!)}
-           "Submit"])
+(defn upload-button [e! in-progress?]
+  [:button {:class    "btn btn-primary"
+            :on-click #(upload e!)
+            :disabled in-progress?}
+   (if in-progress?
+     [c/euro-symbol in-progress?]
+     "Submit")])
 
-(defn upload-modal [e! close-fn]
-  [c/modal "Upload" [upload-form] [upload-button e!] close-fn])
+(defn upload-modal [e! close-fn in-progress?]
+  [c/modal "Upload" [upload-form] [upload-button e! in-progress?] close-fn])

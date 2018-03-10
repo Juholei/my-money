@@ -27,9 +27,9 @@
     :upload upload/upload-modal
     nil))
 
-(defn modal [e! modal-key]
+(defn modal [e! modal-key in-progress?]
   (when-let [opened-modal (modal-key->modal modal-key)]
-    [opened-modal e! #(e! (nc/->CloseModal))]))
+    [opened-modal e! #(e! (nc/->CloseModal)) in-progress?]))
 
 (defn alerts [e! alerts]
   (when (not-empty alerts)
@@ -44,7 +44,7 @@
     [:div
      [navbar/navbar e!]
      [c/progress-bar (:in-progress app)]
-     [modal e! (:modal app)]
+     [modal e! (:modal app) (:in-progress app)]
      [alerts e! (:alerts app)]
      [events-page e! app]]))
 
