@@ -42,7 +42,7 @@
   (e! (cc/->RetrieveConfig))
   (fn [e! app]
     [:div
-     [navbar/navbar e! (:in-progress app)]
+     [navbar/navbar e!]
      [c/progress-bar (:in-progress app)]
      [modal e! (:modal app) (:in-progress app)]
      [alerts e! (:alerts app)]

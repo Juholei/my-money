@@ -26,11 +26,11 @@
      [:li.nav-item [login/login-button e!]]
      [:li.nav-item [registration/registration-button e!]]]))
 
-(defn navbar [e! loading?]
+(defn navbar [e!]
   (let [collapsed? (r/atom true)]
-    (fn [e! loading?]
+    (fn [e!]
       [:nav#navbar.navbar.navbar-expand-lg.navbar-dark.bg-dark
-       [:a.navbar-brand {:href "#"} [c/euro-symbol loading?] "my-money"]
+       [:a.navbar-brand {:href "#"} "my-money"]
        [:button.navbar-toggler {:type "button"
                                 :on-click #(swap! collapsed? not)}
         [:span.navbar-toggler-icon]]
