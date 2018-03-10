@@ -4,8 +4,7 @@
             [my-money.app.controller.authentication :as ac]
             [my-money.app.controller.navigation :as nc]
             [my-money.views.login :as login]
-            [my-money.views.registration :as registration]
-            [my-money.components.common :as c]))
+            [my-money.views.registration :as registration]))
 
 (defn nav-link [uri title page collapsed?]
   [:li.nav-item
