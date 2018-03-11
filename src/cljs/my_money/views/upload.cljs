@@ -18,14 +18,8 @@
     [:label "Add your bank csv"
      [:input.form-control-file {:type "file"
                                 :id "file-input"}]]]])
-
 (defn upload-button [e! in-progress?]
-  [:button {:class    "btn btn-primary"
-            :on-click #(upload e!)
-            :disabled in-progress?}
-   (if in-progress?
-     [c/euro-symbol in-progress?]
-     "Submit")])
+  [c/disableable-button "Submit" [c/euro-symbol in-progress?] in-progress? #(upload e!)])
 
 (defn upload-modal [e! close-fn in-progress?]
   [c/modal "Upload" [upload-form] [upload-button e! in-progress?] close-fn])
