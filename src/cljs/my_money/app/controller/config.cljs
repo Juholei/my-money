@@ -1,7 +1,8 @@
 (ns my-money.app.controller.config
   (:require [ajax.core :refer [GET POST]]
             [my-money.app.state :as state]
-            [tuck.core :as tuck]))
+            [tuck.core :as tuck]
+            [my-money.app.controller.navigation :as nc]))
 
 (defrecord SaveConfig [config])
 (defrecord ConfigSaved [])
@@ -19,13 +20,15 @@
                                        config
                                        (dissoc config :starting-amount))
                              :handler #(e! (->ConfigSaved))}))))
-    app)
+    (nc/set-in-progress app true))
 
   ConfigSaved
   (process-event [_ app]
     (tuck/action! (fn [e!]
                     (e! (->RetrieveConfig))))
-    (dissoc app :modal))
+    (-> app
+        (nc/set-in-progress false)
+        (dissoc :modal)))
 
   RetrieveConfig
   (process-event [_ app]

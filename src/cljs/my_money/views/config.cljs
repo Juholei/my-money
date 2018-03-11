@@ -51,17 +51,17 @@
    [search-result-list data (into #{} (map :recipient (:events @state/app)))]
    [savings-recipient-list data]])
 
-(defn- buttons [e! data]
+(defn- buttons [e! data in-progress?]
   [:div
-   [:button.btn.btn-primary {:on-click #(e! (cc/->SaveConfig @data))} "Save"]
+   [c/disableable-button "Save" [c/euro-symbol in-progress?] in-progress? #(e! (cc/->SaveConfig @data))]
    [:button.btn.btn-danger {:on-click #(e! (nc/->CloseModal))} "Cancel"]])
 
-(defn config-modal [e! close-fn]
+(defn config-modal [e! close-fn in-progress?]
   (let [fields-data (r/atom {:starting-amount (/ (:starting-amount @state/app) 100)
                              :recipient-search ""
                              :recipients (:recipients @state/app)})]
-    (fn []
+    (fn [e! close-fn in-progress?]
       [c/modal "Configuration"
                [fields fields-data]
-               [buttons e! fields-data]
+               [buttons e! fields-data in-progress?]
                close-fn])))
