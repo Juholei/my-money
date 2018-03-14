@@ -8,7 +8,7 @@
                     :filters {:type "all"
                               :month "All-time"}
                     :in-progress false
-                    :modal nil
+                    :modal :login
                     :alerts '()
                     :event-page 0
                     :show-all-events? true})

@@ -40,8 +40,6 @@
 
 (defn page [e! app]
   (e! (cc/->RetrieveConfig))
-  (when-not (session/get :identity)
-    (e! (nc/->OpenModal :login)))
   (fn [e! app]
     [:div
      [navbar/navbar e!]
