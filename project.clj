@@ -35,7 +35,6 @@
                  [ring-middleware-format "0.7.2"]
                  [ring-webjars "0.2.0"]
                  [ring/ring-defaults "0.3.1"]
-                 [secretary "1.2.3"]
                  [selmer "1.11.3"]
                  [webjure/tuck "0.4.3"]]
 
