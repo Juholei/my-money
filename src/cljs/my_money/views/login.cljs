@@ -23,7 +23,5 @@
     (fn []
       [c/modal "Login" [fields data] [buttons e! data] close-fn])))
 
-(defn login-button [e!]
- [:a.nav-link.active {:href "#"
-                      :on-click #(e! (nc/->OpenModal :login))}
-  "Login"])
+(defn login-button []
+ [:a.nav-link.active {:href "#/login"} "Login"])

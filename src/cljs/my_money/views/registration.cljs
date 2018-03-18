@@ -29,7 +29,5 @@
                [buttons e! @fields-data]
                close-fn])))
 
-(defn registration-button [e!]
-  [:a.nav-link.active {:href "#"
-                       :on-click #(e! (nc/->OpenModal :registration))}
-   "Register"])
+(defn registration-button []
+  [:a.nav-link.active {:href "#/register"} "Register"])

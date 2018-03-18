@@ -2,6 +2,7 @@
   (:require [reagent.core :as r]
             [reagent.session :as session]
             [my-money.ajax :refer [load-interceptors!]]
+            [my-money.routes :as routes]
             [my-money.app.controller.alerts :as alerts-controller]
             [my-money.app.controller.navigation :as nc]
             [my-money.app.controller.config :as cc]
@@ -35,6 +36,7 @@
        [c/alert (:string alert) #(e! (alerts-controller/->RemoveAlert alert))])]))
 
 (defn page [e! app]
+  (routes/start! e!)
   (e! (cc/->RetrieveConfig))
   (fn [e! app]
     [:div
