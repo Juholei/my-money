@@ -4,7 +4,6 @@
             [my-money.ajax :refer [load-interceptors!]]
             [my-money.routes :as routes]
             [my-money.app.controller.alerts :as alerts-controller]
-            [my-money.app.controller.navigation :as nc]
             [my-money.app.controller.config :as cc]
             [my-money.app.state :as state]
             [my-money.components.common :as c]
@@ -26,7 +25,7 @@
 
 (defn modal [e! modal-key in-progress?]
   (when-let [opened-modal (modal-key->modal modal-key)]
-    [opened-modal e! #(e! (nc/->CloseModal)) in-progress?]))
+    [opened-modal e! #(routes/navigate! :home) in-progress?]))
 
 (defn alerts [e! alerts]
   (when (not-empty alerts)

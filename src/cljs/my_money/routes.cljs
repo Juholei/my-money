@@ -5,13 +5,15 @@
 (def router
   (r/router [["/" :home]
              ["/login" :login]
-             ["/register" :registration]]))
+             ["/register" :registration]
+             ["/config" :config]
+             ["/upload" :upload]]))
 
 (defn on-navigate
   "A function which will be called on each route change."
   [e! name params query]
-  (println "Route change to: " name params query)
-  (when (not= :home name)
+  (if (= name :home)
+    (e! (nc/->CloseModal))
     (e! (nc/->OpenModal name))))
 
 (defn start! [e!]

@@ -2,7 +2,6 @@
   (:require [clojure.string :as string]
             [my-money.app.state :as state]
             [my-money.app.controller.config :as cc]
-            [my-money.app.controller.navigation :as nc]
             [my-money.components.common :as c]
             [reagent.core :as r]))
 
@@ -51,10 +50,10 @@
    [search-result-list data (into #{} (map :recipient (:events @state/app)))]
    [savings-recipient-list data]])
 
-(defn- buttons [e! data in-progress?]
+(defn- buttons [e! data in-progress? close-fn]
   [:div
    [c/disableable-button "Save" [c/euro-symbol in-progress?] in-progress? #(e! (cc/->SaveConfig @data))]
-   [:button.btn.btn-danger {:on-click #(e! (nc/->CloseModal))} "Cancel"]])
+   [:button.btn.btn-danger {:on-click #(close-fn)} "Cancel"]])
 
 (defn config-modal [e! close-fn in-progress?]
   (let [fields-data (r/atom {:starting-amount (/ (:starting-amount @state/app) 100)
@@ -63,5 +62,5 @@
     (fn [e! close-fn in-progress?]
       [c/modal "Configuration"
                [fields fields-data]
-               [buttons e! fields-data in-progress?]
+               [buttons e! fields-data in-progress? close-fn]
                close-fn])))

@@ -6,7 +6,8 @@
             [ajax.core :as ajax]
             [goog.crypt.base64 :as b64]
             [reagent.session :as session]
-            [tuck.core :as tuck]))
+            [tuck.core :as tuck]
+            [my-money.routes :as routes]))
 
 (defrecord Login [credentials])
 (defrecord LoginSucceeded [credentials])
@@ -35,12 +36,13 @@
     (nc/set-in-progress app true))
 
   LoginSucceeded
-  (process-event [{{:keys [username password]} :credentials} app]
+  (process-event [{{:keys [username]} :credentials} app]
     (tuck/action! (fn [e!]
                     (session/put! :identity username)
                     (e! (cc/->RetrieveConfig))
                     (e! (ec/->RetrieveEvents))
-                    (e! (ec/->RetrieveRecurringExpenses))))
+                    (e! (ec/->RetrieveRecurringExpenses))
+                    (routes/navigate! :home)))
     (-> app
         (nc/set-in-progress false)
         (dissoc :modal)))
@@ -66,7 +68,8 @@
   RegistrationSucceeded
   (process-event [{username :username} app]
     (tuck/action! (fn [_]
-                    (session/put! :identity username)))
+                    (session/put! :identity username)
+                    (routes/navigate! :home)))
     (dissoc app :modal))
 
   ErrorHandler
