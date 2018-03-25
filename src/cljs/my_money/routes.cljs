@@ -10,15 +10,31 @@
              ["/config" :config]
              ["/upload" :upload]]))
 
+(def restricted-routes #{:config :upload})
+
+(defn not-allowed? [route]
+  (and (not (session/get :identity))
+       (restricted-routes route)))
+
+(defmulti navigate
+  (fn [key _]
+    (if (not-allowed? key)
+      :login
+      key)))
+
+(defmethod navigate :login [_ e!]
+  (e! (nc/->OpenModal :login)))
+
+(defmethod navigate :home [_ e!]
+  (e! (nc/->CloseModal)))
+
+(defmethod navigate :default [key e!]
+  (e! (nc/->OpenModal key)))
+
 (defn on-navigate
   "A function which will be called on each route change."
   [e! name params query]
-  (if (and (not (session/get :identity))
-           (#{:config :upload} name))
-    (e! (nc/->OpenModal :login))
-    (if (= name :home)
-      (e! (nc/->CloseModal))
-      (e! (nc/->OpenModal name)))))
+  (navigate name e!))
 
 (defn start! [e!]
   (r/start! router {:default     :home
