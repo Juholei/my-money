@@ -1,17 +1,16 @@
 (ns my-money.views.registration
   (:require [my-money.components.common :as c]
             [my-money.app.controller.authentication :as ac]
-            [my-money.app.controller.navigation :as nc]
             [reagent.core :as r]))
 
-(defn- buttons [e! {:keys [username password]}]
+(defn- buttons [e! {:keys [username password]} close-fn]
   [:div
    [:input.btn.btn-primary {:type "submit"
                              :form "registration"
                              :value "Register"
                              :on-click #(do (.preventDefault %)
                                             (e! (ac/->Register username password)))}]
-   [:button.btn.btn-danger {:on-click #(e! (nc/->CloseModal))}
+   [:button.btn.btn-danger {:on-click #(close-fn)}
                            "Cancel"]])
 
 (defn- fields [data]
@@ -26,10 +25,8 @@
     (fn []
       [c/modal "Register a new account"
                [fields fields-data]
-               [buttons e! @fields-data]
+               [buttons e! @fields-data close-fn]
                close-fn])))
 
-(defn registration-button [e!]
-  [:a.nav-link.active {:href "#"
-                       :on-click #(e! (nc/->OpenModal :registration))}
-   "Register"])
+(defn registration-button []
+  [:a.nav-link.active {:href "#/register"} "Register"])

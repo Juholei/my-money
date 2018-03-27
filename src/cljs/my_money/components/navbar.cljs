@@ -2,9 +2,9 @@
   (:require [reagent.core :as r]
             [reagent.session :as session]
             [my-money.app.controller.authentication :as ac]
-            [my-money.app.controller.navigation :as nc]
             [my-money.views.login :as login]
-            [my-money.views.registration :as registration]))
+            [my-money.views.registration :as registration]
+            [my-money.routes :as routes]))
 
 (defn nav-link [uri title page collapsed?]
   [:li.nav-item
@@ -22,8 +22,8 @@
         :on-click #(e! (ac/->Logout))}
        [:i.fa.fa-user " " user " | log out"]]]]
     [:ul.navbar-nav.ml-auto
-     [:li.nav-item [login/login-button e!]]
-     [:li.nav-item [registration/registration-button e!]]]))
+     [:li.nav-item [login/login-button]]
+     [:li.nav-item [registration/registration-button]]]))
 
 (defn navbar [e!]
   (let [collapsed? (r/atom true)]
@@ -39,6 +39,6 @@
          [nav-link "#/" "Home" :home collapsed?]
          (when (session/get :identity)
            [:ul.navbar-nav
-            [:button.btn.btn-outline-info.fa.fa-cog.fa-inverse {:on-click #(e! (nc/->OpenModal :config))}]
-            [:button.btn.btn-outline-info {:on-click #(e! (nc/->OpenModal :upload))} "Upload"]])]
+            [:button.btn.btn-outline-info.fa.fa-cog.fa-inverse {:on-click #(routes/navigate! :config)}]
+            [:button.btn.btn-outline-info {:on-click #(routes/navigate! :upload)} "Upload"]])]
         [user-menu e!]]])))

@@ -13,6 +13,7 @@
                  [compojure "1.6.0"]
                  [conman "0.7.4"]
                  [cprop "0.1.11"]
+                 [funcool/bide "1.6.0"]
                  [luminus-immutant "0.2.4"]
                  [luminus-migrations "0.4.3"]
                  [luminus-nrepl "0.1.4"]
@@ -35,7 +36,6 @@
                  [ring-middleware-format "0.7.2"]
                  [ring-webjars "0.2.0"]
                  [ring/ring-defaults "0.3.1"]
-                 [secretary "1.2.3"]
                  [selmer "1.11.3"]
                  [webjure/tuck "0.4.3"]]
 

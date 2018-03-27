@@ -1,12 +1,9 @@
 (ns my-money.core
   (:require [reagent.core :as r]
             [reagent.session :as session]
-            [secretary.core :as secretary :include-macros true]
-            [goog.events :as events]
-            [goog.history.EventType :as HistoryEventType]
             [my-money.ajax :refer [load-interceptors!]]
+            [my-money.routes :as routes]
             [my-money.app.controller.alerts :as alerts-controller]
-            [my-money.app.controller.navigation :as nc]
             [my-money.app.controller.config :as cc]
             [my-money.app.state :as state]
             [my-money.components.common :as c]
@@ -16,8 +13,7 @@
             [my-money.views.login :as login]
             [my-money.views.upload :as upload]
             [my-money.views.events :refer [events-page]]
-            [tuck.core :as tuck])
-  (:import goog.History))
+            [tuck.core :as tuck]))
 
 (defn modal-key->modal [key]
   (condp = key
@@ -29,7 +25,7 @@
 
 (defn modal [e! modal-key in-progress?]
   (when-let [opened-modal (modal-key->modal modal-key)]
-    [opened-modal e! #(e! (nc/->CloseModal)) in-progress?]))
+    [opened-modal e! #(routes/navigate! :home) in-progress?]))
 
 (defn alerts [e! alerts]
   (when (not-empty alerts)
@@ -39,6 +35,7 @@
        [c/alert (:string alert) #(e! (alerts-controller/->RemoveAlert alert))])]))
 
 (defn page [e! app]
+  (routes/start! e!)
   (e! (cc/->RetrieveConfig))
   (fn [e! app]
     [:div
@@ -49,30 +46,11 @@
      [events-page e! app]]))
 
 ;; -------------------------
-;; Routes
-(secretary/set-config! :prefix "#")
-
-(secretary/defroute "/" []
-  (session/put! :page :home))
-
-;; -------------------------
-;; History
-;; must be called after routes have been defined
-(defn hook-browser-navigation! []
-  (doto (History.)
-        (events/listen
-          HistoryEventType/NAVIGATE
-          (fn [event]
-              (secretary/dispatch! (.-token event))))
-        (.setEnabled true)))
-
-;; -------------------------
 ;; Initialize app
 (defn mount-components []
   (r/render (tuck/tuck state/app page) (.getElementById js/document "app")))
 
 (defn init! []
   (load-interceptors!)
-  (hook-browser-navigation!)
   (session/put! :identity js/identity)
   (mount-components))
