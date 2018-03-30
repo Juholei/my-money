@@ -6,9 +6,10 @@
             [my-money.app.controller.navigation :as nc]
             [my-money.calculations :as calc]
             [my-money.components.charts :as charts]
+            [my-money.components.recurring-expenses :as re]
             [my-money.event-filters :as filters]
-            [my-money.recurring-events :as re]
-            [my-money.components.common :as c]))
+            [my-money.components.common :as c]
+            [my-money.utils :as utils]))
 
 (def events-on-page 50)
 
@@ -52,15 +53,6 @@
    [labelled-radio-button e! active-value "expenses" "type"]
    [labelled-radio-button e! active-value "incomes" "type"]])
 
-(defn amount->pretty-string [amount]
-  (str (/ amount 100) "€"))
-
-(defn date->pretty-string [date]
-  (str (.getDate date)
-       "."
-       (inc (.getMonth date))
-       "."
-       (.getFullYear date)))
 
 (defn bank-event-table [events]
   [:div.table-responsive
@@ -73,31 +65,10 @@
     [:tbody (for [event events]
               ^{:key (:id event)}
               [:tr
-               [:td (date->pretty-string (:transaction_date event))]
-               [:td (amount->pretty-string (:amount event))]
+               [:td (utils/date->pretty-string (:transaction_date event))]
+               [:td (utils/amount->pretty-string (:amount event))]
                [:td (str (:recipient event))]])]]])
 
-(defn recurring-expense-item [expense]
-  (let [expense-state (r/atom {:data expense
-                               :expanded false})]
-    (fn [expense]
-      [:button {:class "list-group-item list-group-item-action"
-                :on-click #(swap! expense-state update :expanded not)}
-       (str (get-in @expense-state [:data :recipient])
-            " "
-            (amount->pretty-string (get-in @expense-state [:data :amount])))
-       (when (:expanded @expense-state)
-         [:div "Occurrences "
-           [:ul
-            (for [occurrence (get-in @expense-state [:data :events])]
-              ^{:key (str (:transaction_id occurrence) (:transaction_date occurrence))}
-              [:li (date->pretty-string (:transaction_date occurrence))])]])])))
-
-(defn recurring-expense-info [recurring-expenses]
-  [:div.list-group
-   (for [expense (re/sort-recurring-events recurring-expenses)]
-     ^{:key (:recipient expense)}
-     [recurring-expense-item expense])])
 
 (defn events->pages [events number-of-events-per-page]
   (partition number-of-events-per-page number-of-events-per-page nil events))
@@ -129,4 +100,4 @@
            [bank-event-table events-to-display]]
           [:div.col-md-4
            [:h1 "Recurring expenses"]
-           [recurring-expense-info recurring-expenses]]]]))))
+           [re/recurring-expense-info recurring-expenses]]]]))))
