@@ -9,7 +9,8 @@
             [my-money.app.controller.authentication-test]
             [my-money.app.controller.navigation-test]
             [my-money.app.controller.alerts-test]
-            [my-money.views.events-test]))
+            [my-money.views.events-test]
+            [my-money.utils-test]))
 
 (doo-tests 'my-money.core-test
            'my-money.calculations-test
@@ -20,4 +21,5 @@
            'my-money.app.controller.authentication-test
            'my-money.app.controller.navigation-test
            'my-money.app.controller.alerts-test
-           'my-money.views.events-test)
+           'my-money.views.events-test
+           'my-money.utils-test)
