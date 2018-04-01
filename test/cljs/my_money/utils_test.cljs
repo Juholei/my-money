@@ -12,3 +12,8 @@
   (testing "Convert 2000 to 20,00€"
     (is (= "20,00€"
            (utils/amount->pretty-string 2000)))))
+
+(deftest test-converting-date-to-pretty-string
+  (testing "Date object for May 29th 1990 is formatted as 29.5.1990"
+    (is (= "29.5.1990"
+           (utils/date->pretty-string (js/Date. 1990 4 29))))))
