@@ -73,11 +73,16 @@
 (defn events->pages [events number-of-events-per-page]
   (partition number-of-events-per-page number-of-events-per-page nil events))
 
+(def tabs [{:name "Money trend"
+            :id :trend}
+           {:name "New chart"
+            :id :new}])
+
 (defn events-page [e! app]
   (e! (ec/->RetrieveEvents))
   (e! (ec/->RetrieveRecurringExpenses))
   (fn [e! {:keys [events filters recurring-expenses starting-amount
-                  recipients event-page show-all-events?] :as app}]
+                  recipients event-page show-all-events? chart] :as app}]
     (when (session/get :identity)
       (let [filtered-events (filter (filters/combined-filter filters) events)
             paged-events (events->pages filtered-events events-on-page)
@@ -86,6 +91,7 @@
                                 (nth paged-events event-page nil))]
         [:div.container
          [month-filter e! events]
+         [c/tab-bar tabs chart #(e! (nc/->SelectChart %))]
          [charts/chart (events-for-time-period events (:month filters))
                        starting-amount events]
          [balance-info (:month filters) events recipients]

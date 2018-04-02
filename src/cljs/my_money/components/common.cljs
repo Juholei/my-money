@@ -141,3 +141,12 @@
                      :right 0}}
       disabled-content])
    [:span (when disabled? {:style {:visibility :hidden}}) enabled-content]])
+
+(defn tab-bar [tabs active-tab on-click]
+  [:ul.nav.nav-tabs
+   (for [{:keys [name id]} tabs]
+     ^{:key id}
+     [:li.nav-item
+      [:a.nav-link {:class (when (= id active-tab) "active")
+                    :href "#/"
+                    :on-click #(on-click id)} name]])])

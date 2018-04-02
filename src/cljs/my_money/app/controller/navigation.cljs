@@ -8,6 +8,7 @@
 (defrecord CloseModal [])
 (defrecord SelectEventPage [page])
 (defrecord SetShowAllEvents [show-all?])
+(defrecord SelectChart [chart])
 
 (extend-protocol tuck/Event
   OpenModal
@@ -24,4 +25,8 @@
 
   SetShowAllEvents
   (process-event [{show-all? :show-all?} app]
-    (assoc app :show-all-events? show-all?)))
+    (assoc app :show-all-events? show-all?))
+
+  SelectChart
+  (process-event [{chart :chart} app]
+    (assoc app :chart chart)))
