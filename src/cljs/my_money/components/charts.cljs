@@ -5,7 +5,7 @@
             [goog.object :as obj]
             [cljsjs.react-chartjs-2]))
 
-(def line-chart (r/adapt-react-class (obj/get js/reactChartjs2 "Line")))
+(def line-chart (r/adapt-react-class (obj/get js/ReactChartjs2 "Line")))
 
 (defn date-sum->amount [date-sum]
   (/ (:sum date-sum) 100))

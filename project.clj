@@ -9,7 +9,7 @@
                  [cljs-ajax "0.7.3"]
                  [cljsjs/react "15.6.1-2"]
                  [cljsjs/react-dom "15.6.1-2"]
-                 [cljsjs/react-chartjs-2 "2.0.5-1" :exclusions [cljsjs/react]]
+                 [cljsjs/react-chartjs-2 "2.7.0-0" :exclusions [cljsjs/react]]
                  [compojure "1.6.0"]
                  [conman "0.7.4"]
                  [cprop "0.1.11"]
