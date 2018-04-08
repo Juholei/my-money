@@ -6,6 +6,7 @@
             [cljsjs.react-chartjs-2]))
 
 (def line-chart (r/adapt-react-class (obj/get js/reactChartjs2 "Line")))
+(def pie-chart (r/adapt-react-class (obj/get js/reactChartjs2 "Pie")))
 
 (defn date-sum->amount [date-sum]
   (/ (:sum date-sum) 100))
@@ -20,19 +21,29 @@
 (defn- moneyfy-y-label [tooltip]
   (str (.-yLabel tooltip) "€"))
 
-(defn chart [events-to-show starting-amount all-events]
-  (let [collapsed? (r/atom false)]
-    (fn [events-to-show starting-amount events]
-      (let [date-sums (events->date-sums events-to-show starting-amount events)
-            chart-options {:width 400
-                           :height 100
-                           :data {:labels (map :date date-sums)
-                                  :datasets [{:data (map date-sum->amount date-sums)
-                                              :fill false}]}
-                           :options {:scales {:xAxes [{:display false}]}
-                                     :legend {:display false}}}]
+(defn line-chart-options [events-to-show starting-amount events]
+  (let [date-sums (events->date-sums events-to-show starting-amount events)]
+    {:width   400
+     :height  100
+     :data    {:labels   (map :date date-sums)
+              :datasets [{:data (map date-sum->amount date-sums)
+                          :fill false}]}
+     :options {:scales {:xAxes [{:display false}]}
+              :legend {:display false}}}))
 
-        [:div.container
-         [c/collapsing-button collapsed?]
-         [:div.row {:class (when @collapsed? "collapse")}
-          [line-chart chart-options]]]))))
+(defn pie-chart-options []
+  {:data {:labels   ["red" "green" "blue"]
+          :datasets [{:data            [300 50 100]
+                      :backgroundColor ["#FF6384"
+                                        "#36A2EB"
+                                        "#FFCE56"]}]}})
+
+(defn chart [type events-to-show starting-amount all-events]
+  (let [collapsed? (r/atom false)]
+    (fn [type events-to-show starting-amount all-events]
+      [:div.container
+       [c/collapsing-button collapsed?]
+       [:div.row {:class (when @collapsed? "collapse")}
+        (condp = type
+          :trend [line-chart (line-chart-options events-to-show starting-amount all-events)]
+          :pie   [pie-chart (pie-chart-options)])]])))

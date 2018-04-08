@@ -75,8 +75,8 @@
 
 (def tabs [{:name "Money trend"
             :id :trend}
-           {:name "New chart"
-            :id :new}])
+           {:name "Categories"
+            :id :pie}])
 
 (defn events-page [e! app]
   (e! (ec/->RetrieveEvents))
@@ -92,7 +92,8 @@
         [:div.container
          [month-filter e! events]
          [c/tab-bar tabs chart #(e! (nc/->SelectChart %))]
-         [charts/chart (events-for-time-period events (:month filters))
+         [charts/chart chart
+                       (events-for-time-period events (:month filters))
                        starting-amount events]
          [balance-info (:month filters) events recipients]
          [:div.row
