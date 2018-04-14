@@ -31,9 +31,10 @@
      :options {:scales {:xAxes [{:display false}]}
               :legend {:display false}}}))
 
-(defn pie-chart-options []
-  {:data {:labels   ["red" "green" "blue"]
-          :datasets [{:data            [300 50 100]
+(defn pie-chart-options [events]
+  {:data {:labels   (set (map :type events))
+          :datasets [{:data (for [type (set (map :type events))]
+                              (count (filter #(= type %) (map :type events))))
                       :backgroundColor ["#FF6384"
                                         "#36A2EB"
                                         "#FFCE56"]}]}})
@@ -46,4 +47,4 @@
        [:div.row {:class (when @collapsed? "collapse")}
         (condp = type
           :trend [line-chart (line-chart-options events-to-show starting-amount all-events)]
-          :pie   [pie-chart (pie-chart-options)])]])))
+          :pie   [pie-chart (pie-chart-options events-to-show)])]])))
