@@ -25,6 +25,6 @@
           data (-> (:tempfile file)
                    (slurp :encoding "ISO-8859-1")
                    (read-csv)
-                   (remove-columns-by-name ["Arvopäivä" "Laji"])
+                   (remove-columns-by-name ["Arvopäivä"])
                    (csv-vec->map))]
       (-> (response/ok (save-events user-id data))))))
