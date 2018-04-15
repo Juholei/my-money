@@ -31,13 +31,18 @@
      :options {:scales {:xAxes [{:display false}]}
               :legend {:display false}}}))
 
+(defn random-color []
+  (str "#" (.toString (rand-int 16rFFFFFF) 16)))
+
 (defn pie-chart-options [events]
-  {:data {:labels   (set (map :type events))
-          :datasets [{:data (for [type (set (map :type events))]
-                              (count (filter #(= type %) (map :type events))))
-                      :backgroundColor ["#FF6384"
-                                        "#36A2EB"
-                                        "#FFCE56"]}]}})
+  (let [event-types (set (map :type events))]
+    {:width  400
+     :height 100
+     :data   {:labels   event-types
+              :datasets [{:data (for [type event-types]
+                                  (count (filter #(= type %) (map :type events))))
+                          :backgroundColor (take (count event-types)
+                                                 (repeatedly random-color))}]}}))
 
 (defn chart [type events-to-show starting-amount all-events]
   (let [collapsed? (r/atom false)]
