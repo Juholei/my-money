@@ -14,3 +14,6 @@
        (inc (.getMonth date))
        "."
        (.getFullYear date)))
+
+(defn events->recipient-types [events]
+  (apply merge (set (map #(hash-map (:recipient %) (:type %)) (remove #(nil? (:type %)) events)))))

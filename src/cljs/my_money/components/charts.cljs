@@ -1,6 +1,7 @@
 (ns my-money.components.charts
   (:require [my-money.calculations :as calc]
             [my-money.components.common :as c]
+            [my-money.utils :as utils]
             [reagent.core :as r]
             [goog.object :as obj]
             [cljsjs.react-chartjs-2]))
@@ -34,13 +35,21 @@
 (defn random-color []
   (str "#" (.toString (rand-int 16rFFFFFF) 16)))
 
+(defn determine-types [events]
+  (let [recipients-to-types (utils/events->recipient-types events)
+        find-type (fn [event]
+                    (if-let [type (:type event)]
+                      type
+                      (get recipients-to-types (:recipient event))))]
+    (map find-type events)))
+
 (defn pie-chart-options [events]
   (let [event-types (set (map :type events))]
     {:width  400
      :height 100
      :data   {:labels   event-types
               :datasets [{:data (for [type event-types]
-                                  (count (filter #(= type %) (map :type events))))
+                                  (count (filter #(= type %) (determine-types events))))
                           :backgroundColor (take (count event-types)
                                                  (repeatedly random-color))}]}}))
 
