@@ -35,21 +35,21 @@
 (defn random-color []
   (str "#" (.toString (rand-int 16rFFFFFF) 16)))
 
-(defn determine-types [events]
-  (let [recipients-to-types (utils/events->recipient-types events)
+(defn determine-types [events all-events]
+  (let [recipients-to-types (utils/events->recipient-types all-events)
         find-type (fn [event]
                     (if-let [type (:type event)]
                       type
                       (get recipients-to-types (:recipient event))))]
     (map find-type events)))
 
-(defn pie-chart-options [events]
-  (let [event-types (set (map :type events))]
+(defn pie-chart-options [events all-events]
+  (let [event-types (set (map :type all-events))]
     {:width  400
      :height 100
      :data   {:labels   event-types
               :datasets [{:data (for [type event-types]
-                                  (count (filter #(= type %) (determine-types events))))
+                                  (count (filter #(= type %) (determine-types events all-events))))
                           :backgroundColor (take (count event-types)
                                                  (repeatedly random-color))}]}}))
 
@@ -61,4 +61,4 @@
        [:div.row {:class (when @collapsed? "collapse")}
         (condp = type
           :trend [line-chart (line-chart-options events-to-show starting-amount all-events)]
-          :pie   [pie-chart (pie-chart-options events-to-show)])]])))
+          :pie   [pie-chart (pie-chart-options events-to-show all-events)])]])))
