@@ -9,6 +9,8 @@
 (def line-chart (r/adapt-react-class (obj/get js/reactChartjs2 "Line")))
 (def pie-chart (r/adapt-react-class (obj/get js/reactChartjs2 "Pie")))
 
+(def labels {"162" "Joku kauppa varmaan"})
+
 (defn date-sum->amount [date-sum]
   (/ (:sum date-sum) 100))
 
@@ -35,6 +37,11 @@
 (defn random-color []
   (str "#" (.toString (rand-int 16rFFFFFF) 16)))
 
+(defn event-type->label [event-type]
+  (if-let [label (get labels event-type)]
+    label
+    event-type))
+
 (defn determine-types [events all-events]
   (let [recipients-to-types (utils/events->recipient-types all-events)
         find-type (fn [event]
@@ -47,7 +54,7 @@
   (let [event-types (set (map :type all-events))]
     {:width  400
      :height 100
-     :data   {:labels   event-types
+     :data   {:labels   (map event-type->label event-types)
               :datasets [{:data (for [type event-types]
                                   (count (filter #(= type %) (determine-types events all-events))))
                           :backgroundColor (take (count event-types)
