@@ -34,9 +34,6 @@
      :options {:scales {:xAxes [{:display false}]}
               :legend {:display false}}}))
 
-(defn random-color []
-  (str "#" (.toString (rand-int 16rFFFFFF) 16)))
-
 (defn event-type->label [event-type]
   (if-let [label (get labels event-type)]
     label
@@ -58,7 +55,7 @@
               :datasets [{:data (for [type event-types]
                                   (count (filter #(= type %) (determine-types events all-events))))
                           :backgroundColor (take (count event-types)
-                                                 (repeatedly random-color))}]}}))
+                                                 (repeatedly utils/random-color))}]}}))
 
 (defn chart [type events-to-show starting-amount all-events]
   (let [collapsed? (r/atom false)]

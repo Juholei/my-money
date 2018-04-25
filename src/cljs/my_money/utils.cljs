@@ -17,3 +17,6 @@
 
 (defn events->recipient-types [events]
   (apply merge (set (map #(hash-map (:recipient %) (:type %)) (remove #(nil? (:type %)) events)))))
+
+(defn random-color []
+  (str "#" (.toString (rand-int 16rFFFFFF) 16)))
