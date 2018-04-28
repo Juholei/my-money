@@ -9,6 +9,7 @@
 (defrecord SelectEventPage [page])
 (defrecord SetShowAllEvents [show-all?])
 (defrecord SelectChart [chart])
+(defrecord SelectConfigSection [section])
 
 (extend-protocol tuck/Event
   OpenModal
@@ -29,4 +30,8 @@
 
   SelectChart
   (process-event [{chart :chart} app]
-    (assoc app :chart chart)))
+    (assoc app :chart chart))
+
+  SelectConfigSection
+  (process-event [{section :section} app]
+    (assoc app :config-section section)))

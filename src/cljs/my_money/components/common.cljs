@@ -147,6 +147,8 @@
    (for [{:keys [name id]} tabs]
      ^{:key id}
      [:li.nav-item
-      [:a.nav-link {:class (when (= id active-tab) "active")
-                    :href "#/"
-                    :on-click #(on-click id)} name]])])
+      [:a.nav-link {:class    (when (= id active-tab) "active")
+                    :href     "#/"
+                    :on-click #(do (.preventDefault %)
+                                   (on-click id))}
+                   name]])])

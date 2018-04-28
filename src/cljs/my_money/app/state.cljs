@@ -12,6 +12,7 @@
                     :alerts '()
                     :event-page 0
                     :show-all-events? true
-                    :chart :trend})
+                    :chart :trend
+                    :config-section :savings})
 
 (defonce app (r/atom initial-state))

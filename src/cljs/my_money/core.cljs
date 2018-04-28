@@ -23,9 +23,9 @@
     :upload upload/upload-modal
     nil))
 
-(defn modal [e! modal-key in-progress?]
+(defn modal-view [e! modal-key in-progress? section]
   (when-let [opened-modal (modal-key->modal modal-key)]
-    [opened-modal e! #(routes/navigate! :home) in-progress?]))
+    [opened-modal e! #(routes/navigate! :home) in-progress? section]))
 
 (defn alerts [e! alerts]
   (when (not-empty alerts)
@@ -37,11 +37,11 @@
 (defn page [e! app]
   (routes/start! e!)
   (e! (cc/->RetrieveConfig))
-  (fn [e! app]
+  (fn [e! {:keys [modal in-progress config-section] :as app}]
     [:div
      [navbar/navbar e!]
      [c/progress-bar (:in-progress app)]
-     [modal e! (:modal app) (:in-progress app)]
+     [modal-view e! modal in-progress config-section]
      [alerts e! (:alerts app)]
      [events-page e! app]]))
 

@@ -2,6 +2,7 @@
   (:require [clojure.string :as string]
             [my-money.app.state :as state]
             [my-money.app.controller.config :as cc]
+            [my-money.app.controller.navigation :as nc]
             [my-money.components.common :as c]
             [reagent.core :as r]))
 
@@ -43,8 +44,11 @@
          "×"]]))])
 
 
-(defn- fields [data]
+(defn- fields [e! data section]
   [:div
+   [c/tab-bar [{:name "Savings" :id :savings} {:name "Event types" :id :types}]
+              section
+              #(e! (nc/->SelectConfigSection %))]
    [c/number-input "Starting amount (Amount of money before first event)" :starting-amount "Amount" data [false]]
    [c/search-input "Add recipients as savings" :recipient-search "Recipient" data [false]]
    [search-result-list data (into #{} (map :recipient (:events @state/app)))]
@@ -55,12 +59,12 @@
    [c/disableable-button "Save" [c/euro-symbol in-progress?] in-progress? #(e! (cc/->SaveConfig @data))]
    [:button.btn.btn-danger {:on-click #(close-fn)} "Cancel"]])
 
-(defn config-modal [e! close-fn in-progress?]
+(defn config-modal [e! close-fn in-progress? section]
   (let [fields-data (r/atom {:starting-amount (/ (:starting-amount @state/app) 100)
                              :recipient-search ""
                              :recipients (:recipients @state/app)})]
-    (fn [e! close-fn in-progress?]
+    (fn [e! close-fn in-progress? section]
       [c/modal "Configuration"
-               [fields fields-data]
+               [fields e! fields-data section]
                [buttons e! fields-data in-progress? close-fn]
                close-fn])))
