@@ -6,6 +6,8 @@
             [my-money.components.common :as c]
             [reagent.core :as r]))
 
+(def tabs [{:name "Savings" :id :savings} {:name "Event types" :id :types}])
+
 (defn search [search-term strings]
   (filter #(string/includes?
             (string/lower-case %)
@@ -44,11 +46,9 @@
          "×"]]))])
 
 
-(defn- fields [e! data section]
+(defn- fields [data tabs]
   [:div
-   [c/tab-bar [{:name "Savings" :id :savings} {:name "Event types" :id :types}]
-              section
-              #(e! (nc/->SelectConfigSection %))]
+   tabs
    [c/number-input "Starting amount (Amount of money before first event)" :starting-amount "Amount" data [false]]
    [c/search-input "Add recipients as savings" :recipient-search "Recipient" data [false]]
    [search-result-list data (into #{} (map :recipient (:events @state/app)))]
@@ -59,12 +59,24 @@
    [c/disableable-button "Save" [c/euro-symbol in-progress?] in-progress? #(e! (cc/->SaveConfig @data))]
    [:button.btn.btn-danger {:on-click #(close-fn)} "Cancel"]])
 
+(defn savings-config [e! fields-data tabs in-progress? close-fn]
+  [c/modal "Configuration"
+   [fields fields-data tabs]
+   [buttons e! fields-data in-progress? close-fn]
+   close-fn])
+
+(defn type-config [e! fields-data tabs in-progress? close-fn]
+  [c/modal "Configuration"
+   [:div tabs [:h2 "Here you can configure event type texts of your bank events"]]
+   [buttons e! fields-data in-progress? close-fn]
+   close-fn])
+
 (defn config-modal [e! close-fn in-progress? section]
   (let [fields-data (r/atom {:starting-amount (/ (:starting-amount @state/app) 100)
                              :recipient-search ""
-                             :recipients (:recipients @state/app)})]
+                             :recipients (:recipients @state/app)})
+        tab-bar (fn [section] [c/tab-bar tabs section #(e! (nc/->SelectConfigSection %))])]
     (fn [e! close-fn in-progress? section]
-      [c/modal "Configuration"
-               [fields e! fields-data section]
-               [buttons e! fields-data in-progress? close-fn]
-               close-fn])))
+      (condp = section
+        :savings [savings-config e! fields-data [tab-bar section] in-progress? close-fn]
+        :types   [type-config e! fields-data [tab-bar section] in-progress? close-fn] ))))
