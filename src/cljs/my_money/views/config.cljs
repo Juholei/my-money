@@ -4,7 +4,8 @@
             [my-money.app.controller.config :as cc]
             [my-money.app.controller.navigation :as nc]
             [my-money.components.common :as c]
-            [reagent.core :as r]))
+            [reagent.core :as r]
+            [my-money.utils :as utils]))
 
 (def tabs [{:name "Savings" :id :savings} {:name "Event types" :id :types}])
 
@@ -65,9 +66,28 @@
    [buttons e! fields-data in-progress? close-fn]
    close-fn])
 
-(defn type-config [e! fields-data tabs in-progress? close-fn]
+(defn type-config-form [tabs types]
+  (println types)
+  [:div
+   tabs
+   [:p "Here you can configure event type texts of your bank events"]
+   [:table.table.table-striped
+    [:thead
+     [:tr
+      [:th "Key"]
+      [:th "Recipient"]
+      [:th "Label"]]]
+    [:tbody
+     (for [[recipient key] types]
+       ^{:key (str recipient key)}
+       [:tr
+        [:td key]
+        [:td recipient]
+        [:td [:input {:type "text"}]]])]]])
+
+(defn type-config [e! fields-data tabs in-progress? close-fn types]
   [c/modal "Configuration"
-   [:div tabs [:h2 "Here you can configure event type texts of your bank events"]]
+   [type-config-form tabs types]
    [buttons e! fields-data in-progress? close-fn]
    close-fn])
 
@@ -79,4 +99,4 @@
     (fn [e! close-fn in-progress? section]
       (condp = section
         :savings [savings-config e! fields-data [tab-bar section] in-progress? close-fn]
-        :types   [type-config e! fields-data [tab-bar section] in-progress? close-fn] ))))
+        :types [type-config e! fields-data [tab-bar section] in-progress? close-fn (utils/events->recipient-types (:events @state/app))]))))
