@@ -67,23 +67,26 @@
    close-fn])
 
 (defn type-config-form [tabs types]
-  (println types)
-  [:div
-   tabs
-   [:p "Here you can configure event type texts of your bank events"]
-   [:table.table.table-striped
-    [:thead
-     [:tr
-      [:th "Key"]
-      [:th "Recipient"]
-      [:th "Label"]]]
-    [:tbody
-     (for [[recipient key] types]
-       ^{:key (str recipient key)}
+  (let [types-to-recipients (reduce (fn [acc [key val]] (update acc val conj key)) {} types)]
+    [:div
+     tabs
+     [:p "Here you can configure event type texts of your bank events"]
+     [:table.table.table-striped
+      [:thead
        [:tr
-        [:td key]
-        [:td recipient]
-        [:td [:input {:type "text"}]]])]]])
+        [:th "Key"]
+        [:th "Recipient"]
+        [:th "Label"]]]
+      [:tbody
+       (for [[key recipients] types-to-recipients]
+         ^{:key (str recipients key)}
+         [:tr
+          [:td key]
+          [:td
+           [:ul (for [recipient recipients]
+                  ^{:key recipient}
+                  [:li recipient])]]
+          [:td [:input {:type "text"}]]])]]]))
 
 (defn type-config [e! fields-data tabs in-progress? close-fn types]
   [c/modal "Configuration"
