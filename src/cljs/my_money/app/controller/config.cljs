@@ -8,6 +8,7 @@
 (defrecord ConfigSaved [])
 (defrecord RetrieveConfig [])
 (defrecord SetConfig [config])
+(defrecord UpdateTypeLabel [type label])
 
 (extend-protocol tuck/Event
   SaveConfig
@@ -38,4 +39,8 @@
 
   SetConfig
   (process-event [{config :config} app]
-    (merge app config)))
+    (merge app config))
+
+  UpdateTypeLabel
+  (process-event [{:keys [type label]} app]
+    (assoc-in app [:modal-data :types type] label)))

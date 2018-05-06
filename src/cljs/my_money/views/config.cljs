@@ -66,7 +66,7 @@
    [buttons e! fields-data in-progress? close-fn]
    close-fn])
 
-(defn type-config-form [tabs types]
+(defn type-config-form [e! tabs types]
   (let [types-to-recipients (reduce (fn [acc [key val]] (update acc val conj key)) {} types)]
     [:div
      tabs
@@ -86,11 +86,14 @@
            [:ul (for [recipient recipients]
                   ^{:key recipient}
                   [:li recipient])]]
-          [:td [:input {:type "text"}]]])]]]))
+          [:td [:input {:type "text"
+                        :on-change #(e! (cc/->UpdateTypeLabel key (-> %
+                                                                      .-target
+                                                                      .-value)))}]]])]]]))
 
 (defn type-config [e! fields-data tabs in-progress? close-fn types]
   [c/modal "Configuration"
-   [type-config-form tabs types]
+   [type-config-form e! tabs types]
    [buttons e! fields-data in-progress? close-fn]
    close-fn])
 
