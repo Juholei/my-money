@@ -67,6 +67,10 @@ body {
     }
 }
 
+.modal {
+ display: block;
+}
+
 .modal-dialog {
   z-index: 100;
   top: 30px;

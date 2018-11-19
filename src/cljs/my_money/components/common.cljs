@@ -6,8 +6,8 @@
                    .-body
                    .-classList
                    (.add "modal-open"))]
-    [:div.modal.show
-     [:div.modal-dialog.modal-dialog-centered
+    [:div.modal
+     [:div.modal-dialog
       [:div.modal-content
        [:div.modal-header [:span.modal-title.h5 header]
         [:button.close {:type     "button"
