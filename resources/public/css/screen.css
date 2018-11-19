@@ -69,11 +69,7 @@ body {
 
 .modal-dialog {
   z-index: 100;
-  margin: auto;
-  position: absolute;
-  top: 150px;
-  left: 0;
-  right: 0;
+  top: 30px;
 }
 
 .modal-backdrop {

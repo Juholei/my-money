@@ -1,17 +1,25 @@
 (ns my-money.components.common
-  (:require [reagent.core :as r]))
+  (:require [reagent.core :as r :refer-macros [with-let]]))
 
 (defn modal [header body footer close-fn]
-  [:div
-   [:div.modal-dialog
-    [:div.modal-content
-     [:div.modal-header [:span.modal-title.h5 header]
-                        [:button.close {:type "button"
-                                        :on-click close-fn}
-                                       "×"]]
-     [:div.modal-body body]
-     [:div.modal-footer footer]]]
-   [:div.modal-backdrop {:on-click close-fn}]])
+  (with-let [_ (-> js/document
+                   .-body
+                   .-classList
+                   (.add "modal-open"))]
+    [:div.modal.show
+     [:div.modal-dialog.modal-dialog-centered
+      [:div.modal-content
+       [:div.modal-header [:span.modal-title.h5 header]
+        [:button.close {:type     "button"
+                        :on-click close-fn}
+         "×"]]
+       [:div.modal-body body]
+       [:div.modal-footer footer]]]
+     [:div.modal-backdrop {:on-click close-fn}]]
+    (finally (-> js/document
+                 .-body
+                 .-classList
+                 (.remove "modal-open")))))
 
 (defn alert [message close-fn]
   [:div.alert.alert-success.alert-dismissible
