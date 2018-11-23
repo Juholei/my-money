@@ -65,8 +65,8 @@
    :formats
    merge
    {"application/transit+json"
-    {:decoder [(partial formats/make-transit-decoder :json)]
-     :encoder [#(formats/make-transit-encoder
+    {:decoder [(partial formats/decoder :json)]
+     :encoder [#(formats/encoder
                  :json
                  (merge
                   %
