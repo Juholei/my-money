@@ -4,12 +4,10 @@
             my-money.core))
 
 (defn start []
-  (mount/start-without #'my-money.core/http-server
-                       #'my-money.core/repl-server))
+  (mount/start-without #'my-money.core/repl-server))
 
 (defn stop []
-  (mount/stop-except #'my-money.core/http-server
-                     #'my-money.core/repl-server))
+  (mount/stop-except #'my-money.core/repl-server))
 
 (defn restart []
   (stop)
