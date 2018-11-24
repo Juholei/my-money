@@ -41,7 +41,7 @@
       [input type id placeholder fields]
       [:div.input-group
        [input type id placeholder fields]
-       [:span.input-group-addon "✱"]])]])
+       [:span.input-group-append.input-group-text "✱"]])]])
 
 (defn text-input [label id placeholder fields & [optional?]]
   (form-input :text label id placeholder fields optional?))

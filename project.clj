@@ -28,7 +28,7 @@
                  [org.clojure/tools.logging "0.4.1"]
                  [org.postgresql/postgresql "42.2.5"]
                  [org.webjars.bower/tether "1.4.4"]
-                 [org.webjars/bootstrap "4.0.0-beta"]
+                 [org.webjars/bootstrap "4.1.3"]
                  [org.webjars/font-awesome "5.5.0"]
                  [org.webjars/webjars-locator-jboss-vfs "0.1.0"]
                  [reagent "0.7.0" :exclusions [cljsjs/react]]

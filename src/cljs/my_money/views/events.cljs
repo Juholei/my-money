@@ -48,7 +48,7 @@
       [:option month])]])
 
 (defn event-type-selector [e! active-value]
-  [:div.btn-group {:data-toggle "buttons"}
+  [:div.btn-group.btn-group-toggle
    [labelled-radio-button e! active-value "all" "type"]
    [labelled-radio-button e! active-value "expenses" "type"]
    [labelled-radio-button e! active-value "incomes" "type"]])
