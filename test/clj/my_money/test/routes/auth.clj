@@ -47,14 +47,17 @@
 (deftest test-events-route
   (testing "Retrieving events is denied without login"
     (let [{:keys [body status]} ((app) events-request)]
-      (is (= 403 status)))))
+      (is (= 401 status))
+      (is (nil? body)))))
 
 (deftest test-recurring-events-route
   (testing "Retrieving recurring events is denied without login"
     (let [{:keys [body status]} ((app) recurring-expenses-request)]
-      (is (= 403 status)))))
+      (is (= 401 status))
+      (is (nil? body)))))
 
 (deftest test-upload-route
   (testing "Upload route access is denied without login"
     (let [{:keys [status body]} ((app) (request :post "/upload"))]
-      (is (= 403 status)))))
+      (is (= 401 status))
+      (is (nil? body)))))

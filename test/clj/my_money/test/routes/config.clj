@@ -9,10 +9,12 @@
 
 (deftest test-save-config-route
   (testing "Saving is not possible when not logged out"
-    (let [{:keys [status]} ((app) save-config-request)]
-      (is (= 403 status)))))
+    (let [{:keys [status body]} ((app) save-config-request)]
+      (is (= 401 status))
+      (is (nil? body)))))
 
 (deftest test-get-config-route
-  (testing "Getting config not possible when not logged out"
-    (let [{:keys [status]} ((app) get-config-request)]
-      (is (= 403 status)))))
+  (testing "Getting config not possible when logged out"
+    (let [{:keys [status body]} ((app) get-config-request)]
+      (is (= 401 status))
+      (is (nil? body)))))

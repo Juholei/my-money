@@ -6,6 +6,7 @@
             [my-money.layout :refer [*app-context* error-page]]
             [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
             [ring.middleware.webjars :refer [wrap-webjars]]
+            [ring.util.http-response :as responses]
             [muuntaja.core :as m]
             [muuntaja.format.transit :as formats]
             [muuntaja.middleware :refer [wrap-format wrap-params]]
@@ -80,9 +81,7 @@
       ((if (:websocket? request) handler wrapped) request))))
 
 (defn on-error [request response]
-  (error-page
-    {:status 403
-     :title (str "Access to " (:uri request) " is not authorized")}))
+  (responses/unauthorized))
 
 (defn wrap-identity [handler]
   (fn [request]
