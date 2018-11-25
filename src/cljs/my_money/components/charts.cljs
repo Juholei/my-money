@@ -5,7 +5,7 @@
             [goog.object :as obj]
             [cljsjs.react-chartjs-2]))
 
-(def line-chart (r/adapt-react-class (obj/get js/reactChartjs2 "Line")))
+(def line-chart (r/adapt-react-class (obj/get js/ReactChartjs2 "Line")))
 
 (defn date-sum->amount [date-sum]
   (/ (:sum date-sum) 100))
@@ -24,13 +24,14 @@
   (let [collapsed? (r/atom false)]
     (fn [events-to-show starting-amount events]
       (let [date-sums (events->date-sums events-to-show starting-amount events)
-            chart-options {:width 400
-                           :height 100
-                           :data {:labels (map :date date-sums)
-                                  :datasets [{:data (map date-sum->amount date-sums)
-                                              :fill false}]}
-                           :options {:scales {:xAxes [{:display false}]}
-                                     :legend {:display false}}}]
+            chart-options {:width   400
+                           :height  100
+                           :data    {:labels   (map :date date-sums)
+                                     :datasets [{:data (map date-sum->amount date-sums)
+                                                 :fill false}]}
+                           :options {:scales   {:xAxes [{:display false}]}
+                                     :legend   {:display false}
+                                     :tooltips {:callbacks {:label moneyfy-y-label}}}}]
 
         [:div.container
          [c/collapsing-button collapsed?]
