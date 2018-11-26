@@ -93,7 +93,11 @@
                   :plugins      [[com.jakemccrary/lein-test-refresh "0.23.0"]
                                  [lein-doo "0.1.11"]
                                  [lein-figwheel "0.5.17"]
-                                 [org.clojure/clojurescript "1.10.439"]]
+                                 [org.clojure/clojurescript "1.10.439"]
+                                 [lein-npm "0.6.2"]]
+                  :npm {:devDependencies [[karma "3.1.1"]
+                                          [karma-cljs-test "0.1.0"]
+                                          [karma-chrome-launcher "2.2.0"]]}
                   :cljsbuild
                   {:builds
                    {:app
@@ -106,10 +110,8 @@
                       :source-map true
                       :optimizations :none
                       :pretty-print true}}}}
-
-
-
-                  :doo {:build "test"}
+                  :doo {:build "test"
+                        :karma "node_modules/karma/bin/karma"}
                   :source-paths ["env/dev/clj" "test/clj"]
                   :resource-paths ["env/dev/resources"]
                   :repl-options {:init-ns user}
@@ -123,9 +125,9 @@
                      :compiler
                      {:output-to "target/test.js"
                       :main "my-money.doo-runner"
-                      :optimizations :whitespace
+                      :optimizations :none
                       :pretty-print true
-                      :process-shim false}}}}}
+                      :process-shim true}}}}}
 
 
    :profiles/dev {}
