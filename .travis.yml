@@ -4,7 +4,7 @@ sudo: required
 language: clojure
 
 jdk:
-  - oraclejdk8
+  - openjdk8
   
 before_install:
   - sudo apt-get install postgresql-9.5
@@ -13,5 +13,5 @@ before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
 
 script:
-  - lein do test, with-profile test doo phantom once
+  - lein do test, fronttests-once
   

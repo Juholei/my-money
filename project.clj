@@ -7,9 +7,7 @@
                  [buddy "2.0.0"]
                  [clj-time "0.15.1"]
                  [cljs-ajax "0.8.0"]
-                 [cljsjs/react "15.6.1-2"]
-                 [cljsjs/react-dom "15.6.1-2"]
-                 [cljsjs/react-chartjs-2 "2.0.5-1" :exclusions [cljsjs/react]]
+                 [cljsjs/react-chartjs-2 "2.7.0-0" :exclusions [cljsjs/react]]
                  [compojure "1.6.1"]
                  [conman "0.8.3"]
                  [cprop "0.1.13"]
@@ -31,8 +29,8 @@
                  [org.webjars/bootstrap "4.1.3"]
                  [org.webjars/font-awesome "5.5.0"]
                  [org.webjars/webjars-locator-jboss-vfs "0.1.0"]
-                 [reagent "0.7.0" :exclusions [cljsjs/react]]
-                 [reagent-utils "0.2.1"]
+                 [reagent "0.8.1"]
+                 [reagent-utils "0.3.1"]
                  [ring-middleware-format "0.7.2"]
                  [ring-webjars "0.2.0"]
                  [ring/ring-defaults "0.3.2"]
@@ -95,7 +93,11 @@
                   :plugins      [[com.jakemccrary/lein-test-refresh "0.23.0"]
                                  [lein-doo "0.1.11"]
                                  [lein-figwheel "0.5.17"]
-                                 [org.clojure/clojurescript "1.10.439"]]
+                                 [org.clojure/clojurescript "1.10.439"]
+                                 [lein-npm "0.6.2"]]
+                  :npm {:devDependencies [[karma "3.1.1"]
+                                          [karma-cljs-test "0.1.0"]
+                                          [karma-chrome-launcher "2.2.0"]]}
                   :cljsbuild
                   {:builds
                    {:app
@@ -108,10 +110,8 @@
                       :source-map true
                       :optimizations :none
                       :pretty-print true}}}}
-
-
-
-                  :doo {:build "test"}
+                  :doo {:build "test"
+                        :paths {:karma "./node_modules/karma/bin/karma"}}
                   :source-paths ["env/dev/clj" "test/clj"]
                   :resource-paths ["env/dev/resources"]
                   :repl-options {:init-ns user}
@@ -125,10 +125,12 @@
                      :compiler
                      {:output-to "target/test.js"
                       :main "my-money.doo-runner"
-                      :optimizations :whitespace
+                      :optimizations :none
                       :pretty-print true
-                      :process-shim false}}}}}
+                      :process-shim true}}}}}
 
 
    :profiles/dev {}
-   :profiles/test {}})
+   :profiles/test {}}
+  :aliases {"fronttests-once" ["with-profile" "test" "doo" "chrome-headless" "once"]
+            "fronttests" ["with-profile" "test" "doo" "chrome-headless"]})
