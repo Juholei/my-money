@@ -111,7 +111,7 @@
                       :optimizations :none
                       :pretty-print true}}}}
                   :doo {:build "test"
-                        :karma "./node_modules/karma/bin/karma"}
+                        :paths {:karma "./node_modules/karma/bin/karma"}}
                   :source-paths ["env/dev/clj" "test/clj"]
                   :resource-paths ["env/dev/resources"]
                   :repl-options {:init-ns user}
