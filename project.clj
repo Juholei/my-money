@@ -131,4 +131,6 @@
 
 
    :profiles/dev {}
-   :profiles/test {}})
+   :profiles/test {}}
+  :aliases {"fronttests-once" ["with-profile" "test" "doo" "chrome-headless" "once"]
+            "fronttests" ["with-profile" "test" "doo" "chrome-headless"]})

@@ -13,5 +13,5 @@ before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
 
 script:
-  - lein do test, with-profile test doo chrome-headless once
+  - lein do test, fronttests-once
   
