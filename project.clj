@@ -109,7 +109,8 @@
                       :output-dir "target/cljsbuild/public/js/out"
                       :source-map true
                       :optimizations :none
-                      :pretty-print true}}}}
+                      :pretty-print true
+                      :process-shim true}}}}
                   :doo {:build "test"
                         :paths {:karma "./node_modules/karma/bin/karma"}}
                   :source-paths ["env/dev/clj" "test/clj"]
