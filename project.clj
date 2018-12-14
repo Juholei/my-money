@@ -13,7 +13,7 @@
                  [cprop "0.1.13"]
                  [funcool/bide "1.6.0"]
                  [luminus-immutant "0.2.4"]
-                 [luminus-migrations "0.6.3"]
+                 [luminus-migrations "0.6.1"]
                  [luminus-nrepl "0.1.4"]
                  [markdown-clj "1.0.5"]
                  [metosin/ring-http-response "0.9.1"]
