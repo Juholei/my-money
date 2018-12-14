@@ -1,5 +1,6 @@
 (ns my-money.ajax
-  (:require [ajax.core :as ajax]))
+  (:require [ajax.core :as ajax]
+            [tuck.effect :as fx]))
 
 (defn local-uri? [{:keys [uri]}]
   (not (re-find #"^\w+?://" uri)))
@@ -18,3 +19,7 @@
                                :request default-headers})))
 
 
+(defmethod fx/process-effect ::get [e! {:keys [url on-success on-error]}]
+  (ajax/GET url
+            {:handler       #(e! (on-success %))
+             :error-handler #(e! (on-error))}))
