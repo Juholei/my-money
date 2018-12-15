@@ -2,7 +2,8 @@
   (:require [ajax.core :refer [POST]]
             [my-money.ajax :as ajax]
             [tuck.core :as tuck]
-            [my-money.app.controller.navigation :as nc]))
+            [my-money.app.controller.navigation :as nc]
+            [my-money.routes :as routes]))
 
 (defrecord SaveConfig [config])
 (defrecord ConfigSaved [])
@@ -25,7 +26,8 @@
   ConfigSaved
   (process-event [_ app]
     (tuck/action! (fn [e!]
-                    (e! (->RetrieveConfig))))
+                    (e! (->RetrieveConfig))
+                    (routes/navigate! :home)))
     (-> app
         (nc/set-in-progress false)
         (dissoc :modal)))
