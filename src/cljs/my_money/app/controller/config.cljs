@@ -1,6 +1,6 @@
 (ns my-money.app.controller.config
-  (:require [ajax.core :refer [GET POST]]
-            [my-money.app.state :as state]
+  (:require [ajax.core :refer [POST]]
+            [my-money.ajax :as ajax]
             [tuck.core :as tuck]
             [my-money.app.controller.navigation :as nc]))
 
@@ -32,9 +32,10 @@
 
   RetrieveConfig
   (process-event [_ app]
-    (tuck/action! (fn [e!]
-                    (GET "/get-config" {:handler #(swap! state/app merge %)})))
-    app)
+    (tuck/fx app
+             {:tuck.effect/type ::ajax/get
+              :url              "/get-config"
+              :on-success       ->SetConfig}))
 
   SetConfig
   (process-event [{config :config} app]
