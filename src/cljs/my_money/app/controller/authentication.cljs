@@ -4,6 +4,7 @@
             [my-money.app.controller.navigation :as nc]
             [my-money.app.state :refer [initial-state]]
             [ajax.core :as ajax]
+            [my-money.ajax :as my-ajax]
             [goog.crypt.base64 :as b64]
             [reagent.session :as session]
             [tuck.core :as tuck]
@@ -12,7 +13,7 @@
 (defrecord Login [credentials])
 (defrecord LoginSucceeded [credentials])
 (defrecord Logout [])
-(defrecord LogoutSucceeded [])
+(defrecord LogoutSucceeded [body])
 (defrecord Register [username password])
 (defrecord RegistrationSucceeded [username])
 (defrecord ErrorHandler [])
@@ -21,10 +22,6 @@
   (->> (str username ":" password)
        b64/encodeString
        (str "Basic ")))
-
-(defn- logout! [e!]
-  (ajax/POST "/logout"
-             {:handler #(e! (->LogoutSucceeded))}))
 
 (extend-protocol tuck/Event
   Login
@@ -49,8 +46,10 @@
 
   Logout
   (process-event [_ app]
-    (tuck/action! logout!)
-    app)
+    (tuck/fx app
+             {:tuck.effect/type ::my-ajax/post
+              :url              "/logout"
+              :on-success       ->LogoutSucceeded}))
 
   LogoutSucceeded
   (process-event [_ app]

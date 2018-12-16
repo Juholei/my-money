@@ -23,3 +23,9 @@
   (ajax/GET url
             {:handler       #(e! (on-success %))
              :error-handler #(e! (on-error))}))
+
+(defmethod fx/process-effect ::post [e! {:keys [url params on-success on-error]}]
+  (ajax/POST url
+             {:params        params
+              :handler       #(e! (on-success %))
+              :error-handler #(e! (on-error))}))
