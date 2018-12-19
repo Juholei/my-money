@@ -19,7 +19,7 @@
                  [metosin/ring-http-response "0.9.1"]
                  [metosin/muuntaja "0.6.1"]
                  [mount "0.1.15"]
-                 [org.clojure/clojure "1.9.0"]
+                 [org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.439" :scope "provided"]
                  [org.clojure/data.csv "0.1.4"]
                  [org.clojure/tools.cli "0.4.1"]
