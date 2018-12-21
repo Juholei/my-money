@@ -22,10 +22,10 @@
 (defmethod fx/process-effect ::get [e! {:keys [url on-success on-error]}]
   (ajax/GET url
             {:handler       #(e! (on-success %))
-             :error-handler #(e! (on-error))}))
+             :error-handler #(e! (on-error %))}))
 
 (defmethod fx/process-effect ::post [e! {:keys [url params on-success on-error]}]
   (ajax/POST url
              {:params        params
               :handler       #(e! (on-success %))
-              :error-handler #(e! (on-error))}))
+              :error-handler #(e! (on-error %))}))

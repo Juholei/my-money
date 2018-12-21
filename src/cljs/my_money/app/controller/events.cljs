@@ -1,5 +1,6 @@
 (ns my-money.app.controller.events
   (:require [my-money.ajax :as ajax]
+            [my-money.app.controller.common :as c]
             [my-money.app.controller.navigation :as nc]
             [tuck.core :as tuck]))
 
@@ -9,7 +10,6 @@
 (defrecord SetRecurringExpenses [expenses])
 (defrecord SelectMonth [month])
 (defrecord SelectType [type])
-(defrecord ErrorHandler [])
 
 (extend-protocol tuck/Event
   RetrieveEvents
@@ -18,7 +18,7 @@
              {:tuck.effect/type ::ajax/get
               :url              "/events"
               :on-success       ->SetEvents
-              :on-error         ->ErrorHandler}))
+              :on-error         c/->ErrorHandler}))
 
   SetEvents
   (process-event [{events :events} app]
@@ -32,7 +32,7 @@
              {:tuck.effect/type ::ajax/get
               :url              "/events/recurring/expenses"
               :on-success       ->SetRecurringExpenses
-              :on-error         ->ErrorHandler}))
+              :on-error         c/->ErrorHandler}))
 
   SetRecurringExpenses
   (process-event [{expenses :expenses} app]
@@ -44,8 +44,4 @@
 
   SelectType
   (process-event [{type :type} app]
-    (assoc-in app [:filters :type] type))
-
-  ErrorHandler
-  (process-event [_ app]
-                 (nc/set-in-progress app false)))
+    (assoc-in app [:filters :type] type)))

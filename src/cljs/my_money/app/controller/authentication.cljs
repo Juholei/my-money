@@ -1,5 +1,6 @@
 (ns my-money.app.controller.authentication
   (:require [my-money.app.controller.config :as cc]
+            [my-money.app.controller.common :as c]
             [my-money.app.controller.events :as ec]
             [my-money.app.controller.navigation :as nc]
             [my-money.app.state :refer [initial-state]]
@@ -16,7 +17,6 @@
 (defrecord LogoutSucceeded [body])
 (defrecord Register [username password])
 (defrecord RegistrationSucceeded [username])
-(defrecord ErrorHandler [])
 
 (defn- encode-auth [username password]
   (->> (str username ":" password)
@@ -29,7 +29,7 @@
     (tuck/action! (fn [e!]
                     (ajax/POST "/login" {:headers {"Authorization" (encode-auth username password)}
                                          :handler #(e! (->LoginSucceeded data))
-                                         :error-handler #(e! (->ErrorHandler))})))
+                                         :error-handler #(e! (c/->ErrorHandler %))})))
     (nc/set-in-progress app true))
 
   LoginSucceeded
@@ -49,7 +49,8 @@
     (tuck/fx app
              {:tuck.effect/type ::my-ajax/post
               :url              "/logout"
-              :on-success       ->LogoutSucceeded}))
+              :on-success       ->LogoutSucceeded
+              :on-error         c/->ErrorHandler}))
 
   LogoutSucceeded
   (process-event [_ app]
@@ -69,8 +70,4 @@
     (tuck/action! (fn [_]
                     (session/put! :identity username)
                     (routes/navigate! :home)))
-    (dissoc app :modal))
-
-  ErrorHandler
-  (process-event [_ app]
-    (nc/set-in-progress app false)))
+    (dissoc app :modal)))

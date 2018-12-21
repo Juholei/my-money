@@ -3,6 +3,7 @@
             [my-money.ajax :as ajax]
             [tuck.core :as tuck]
             [my-money.app.controller.navigation :as nc]
+            [my-money.app.controller.common :as c]
             [my-money.routes :as routes]))
 
 (defrecord SaveConfig [config])
@@ -37,7 +38,8 @@
     (tuck/fx app
              {:tuck.effect/type ::ajax/get
               :url              "/get-config"
-              :on-success       ->SetConfig}))
+              :on-success       ->SetConfig
+              :on-error         c/->ErrorHandler}))
 
   SetConfig
   (process-event [{config :config} app]
