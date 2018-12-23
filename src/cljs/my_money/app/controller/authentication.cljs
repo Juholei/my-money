@@ -16,7 +16,7 @@
 (defrecord Logout [])
 (defrecord LogoutSucceeded [body])
 (defrecord Register [username password])
-(defrecord RegistrationSucceeded [username])
+(defrecord RegistrationSucceeded [body])
 
 (defn- encode-auth [username password]
   (->> (str username ":" password)
@@ -58,16 +58,17 @@
     initial-state)
 
   Register
-  (process-event [{:keys [username] :as credentials} app]
-    (tuck/action! (fn [e!]
-                    (ajax/POST "/register"
-                               {:params (into {} credentials)
-                                :handler #(e! (->RegistrationSucceeded username))})))
-    app)
+  (process-event [credentials app]
+    (tuck/fx app
+             {:tuck.effect/type ::my-ajax/post
+              :url              "/register"
+              :on-success       ->RegistrationSucceeded
+              :on-error         c/->ErrorHandler
+              :params           (into {} credentials)}))
 
   RegistrationSucceeded
-  (process-event [{username :username} app]
+  (process-event [{body :body} app]
     (tuck/action! (fn [_]
-                    (session/put! :identity username)
+                    (session/put! :identity (:username body))
                     (routes/navigate! :home)))
     (dissoc app :modal)))

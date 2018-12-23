@@ -8,7 +8,7 @@
   (db/create-user! (-> params
                        (dissoc :pass-confirm)
                        (update :password hashers/encrypt)))
-  (-> {:result :ok}
+  (-> {:username (:username params)}
       (response/ok)
       (assoc :session (assoc session :identity (:username params)))))
 
