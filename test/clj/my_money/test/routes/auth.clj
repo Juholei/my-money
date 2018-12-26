@@ -34,7 +34,7 @@
     (with-redefs [my-money.db.core/get-user-by-username mock-get-user-by-username]
      (let [{:keys [body status] :as resp} ((app) (login-request "foo" "bar"))]
        (is (= 200 status))
-       (is (= {:result "ok"} (parse-response body))))))
+       (is (= {:username "foo"} (parse-response body))))))
 
   (testing "Unsuccessful login"
     (with-redefs [my-money.db.core/get-user-by-username mock-get-user-by-username]

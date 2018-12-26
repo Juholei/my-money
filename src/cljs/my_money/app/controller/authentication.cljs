@@ -4,15 +4,14 @@
             [my-money.app.controller.events :as ec]
             [my-money.app.controller.navigation :as nc]
             [my-money.app.state :refer [initial-state]]
-            [ajax.core :as ajax]
-            [my-money.ajax :as my-ajax]
+            [my-money.ajax :as ajax]
             [goog.crypt.base64 :as b64]
             [reagent.session :as session]
             [tuck.core :as tuck]
             [my-money.routes :as routes]))
 
 (defrecord Login [credentials])
-(defrecord LoginSucceeded [credentials])
+(defrecord LoginSucceeded [body])
 (defrecord Logout [])
 (defrecord LogoutSucceeded [body])
 (defrecord Register [username password])
@@ -25,15 +24,16 @@
 
 (extend-protocol tuck/Event
   Login
-  (process-event [{{:keys [username password] :as data} :credentials} app]
-    (tuck/action! (fn [e!]
-                    (ajax/POST "/login" {:headers {"Authorization" (encode-auth username password)}
-                                         :handler #(e! (->LoginSucceeded data))
-                                         :error-handler #(e! (c/->ErrorHandler %))})))
-    (nc/set-in-progress app true))
+  (process-event [{{:keys [username password]} :credentials} app]
+    (tuck/fx (nc/set-in-progress app true)
+             {:tuck.effect/type ::ajax/post
+              :url              "/login"
+              :on-success       ->LoginSucceeded
+              :on-error         c/->ErrorHandler
+              :headers          {"Authorization" (encode-auth username password)}}))
 
   LoginSucceeded
-  (process-event [{{:keys [username]} :credentials} app]
+  (process-event [{{username :username} :body} app]
     (tuck/action! (fn [e!]
                     (session/put! :identity username)
                     (e! (cc/->RetrieveConfig))
@@ -47,7 +47,7 @@
   Logout
   (process-event [_ app]
     (tuck/fx app
-             {:tuck.effect/type ::my-ajax/post
+             {:tuck.effect/type ::ajax/post
               :url              "/logout"
               :on-success       ->LogoutSucceeded
               :on-error         c/->ErrorHandler}))
@@ -60,7 +60,7 @@
   Register
   (process-event [credentials app]
     (tuck/fx app
-             {:tuck.effect/type ::my-ajax/post
+             {:tuck.effect/type ::ajax/post
               :url              "/register"
               :on-success       ->RegistrationSucceeded
               :on-error         c/->ErrorHandler
