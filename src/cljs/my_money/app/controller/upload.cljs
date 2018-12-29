@@ -1,6 +1,7 @@
 (ns my-money.app.controller.upload
-  (:require [ajax.core :as ajax]
+  (:require [my-money.ajax :as ajax]
             [my-money.app.controller.alerts :as ac]
+            [my-money.app.controller.common :as c]
             [my-money.app.controller.events :as ec]
             [my-money.app.controller.navigation :as nc]
             [tuck.core :as tuck]))
@@ -12,10 +13,11 @@
 (extend-protocol tuck/Event
   Upload
   (process-event [{form-data :form-data} app]
-    (tuck/action! (fn [e!]
-                   (ajax/POST "/upload" {:body form-data
-                                         :handler #(e! (->UploadFinished %))})))
-    (nc/set-in-progress app true))
+    (tuck/fx (nc/set-in-progress app true)
+             {:tuck.effect/type ::ajax/post
+              :params           form-data
+              :on-success       ->UploadFinished
+              :on-error         c/->ErrorHandler}))
 
   UploadFinished
   (process-event [{response :response} app]
