@@ -24,9 +24,10 @@
             {:handler       #(e! (on-success %))
              :error-handler #(e! (on-error %))}))
 
-(defmethod fx/process-effect ::post [e! {:keys [url headers params on-success on-error]}]
+(defmethod fx/process-effect ::post [e! {:keys [url headers params body on-success on-error]}]
   (ajax/POST url
              (cond-> {:params        params
                       :handler       #(e! (on-success %))
                       :error-handler #(e! (on-error %))}
-                     headers (assoc :headers headers))))
+                     headers (assoc :headers headers)
+                     body    (assoc :body body))))

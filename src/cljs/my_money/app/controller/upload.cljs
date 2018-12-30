@@ -15,7 +15,8 @@
   (process-event [{form-data :form-data} app]
     (tuck/fx (nc/set-in-progress app true)
              {:tuck.effect/type ::ajax/post
-              :params           form-data
+              :url              "/upload"
+              :body             form-data
               :on-success       ->UploadFinished
               :on-error         c/->ErrorHandler}))
 
