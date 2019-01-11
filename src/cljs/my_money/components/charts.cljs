@@ -18,7 +18,10 @@
     (sort-by :date < (reduce date-sum [] dates))))
 
 (defn- moneyfy-y-label [tooltip]
-  (str (.-yLabel tooltip) "€"))
+  (-> tooltip
+      js->clj
+      (get "yLabel")
+      (str "€")))
 
 (defn chart [events-to-show starting-amount all-events]
   (let [collapsed? (r/atom false)]
