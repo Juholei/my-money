@@ -22,21 +22,7 @@
                 :params           (if starting-amount-changed?
                                     config
                                     (dissoc config :starting-amount))
-                :on-error         c/->ErrorHandler})
-      #_(POST "/save-config"
-            {:params (if starting-amount-changed?
-                       config
-                       (dissoc config :starting-amount))
-             :handler #(e! (->ConfigSaved))}))
-    #_(tuck/action! (fn [e!]
-                    (let [starting-amount-changed? (not= (* (:starting-amount config) 100)
-                                                         (:starting-amount app))]
-                      (POST "/save-config"
-                            {:params (if starting-amount-changed?
-                                       config
-                                       (dissoc config :starting-amount))
-                             :handler #(e! (->ConfigSaved))}))))
-    #_(nc/set-in-progress app true))
+                :on-error         c/->ErrorHandler})))
 
   ConfigSaved
   (process-event [_ app]
