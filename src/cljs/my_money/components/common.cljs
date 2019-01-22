@@ -57,8 +57,8 @@
 
 (defn collapsing-button [collapsed?]
   [:i {:class (if @collapsed?
-                "fa fa-plus-square-o"
-                "fa fa-minus-square-o")
+                "fa fa-plus-square"
+                "fa fa-minus-square")
        :on-click #(swap! collapsed? not)}])
 
 (defn progress-bar [visible]
