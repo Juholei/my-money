@@ -54,7 +54,7 @@
   {:http-server-root "public"
    :nrepl-port 7002
    :css-dirs ["resources/public/css"]
-   :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
+   :nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
   :repl-options {:port 7000}
   :profiles
   {:uberjar {:omit-source true
@@ -85,18 +85,14 @@
                                  [ring/ring-devel "1.7.1"]
                                  [pjstadig/humane-test-output "0.9.0"]
                                  [binaryage/devtools "0.9.10"]
-                                 [com.cemerick/piggieback "0.2.2"]
+                                 [cider/piggieback "0.4.0"]
                                  [doo "0.1.11"]
                                  [figwheel-sidecar "0.5.18"]]
                   :plugins      [[com.jakemccrary/lein-test-refresh "0.23.0"]
                                  [lein-doo "0.1.11"]
                                  [lein-figwheel "0.5.18"]
                                  [org.clojure/clojurescript "1.10.439"]
-                                 [lein-npm "0.6.2"]
                                  [lein-nvd "0.6.0"]]
-                  :npm {:devDependencies [[karma "3.1.1"]
-                                          [karma-cljs-test "0.1.0"]
-                                          [karma-chrome-launcher "2.2.0"]]}
                   :cljsbuild
                   {:builds
                    {:app
@@ -127,7 +123,11 @@
                       :main "my-money.doo-runner"
                       :optimizations :none
                       :pretty-print true
-                      :process-shim true}}}}}
+                      :process-shim true
+                      :npm-deps {:karma "3.1.1"
+                                 :karma-cljs-test "0.1.0"
+                                 :karma-chrome-launcher "2.2.0"}
+                      :install-deps true}}}}}
 
 
    :profiles/dev {}
