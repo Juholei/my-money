@@ -11,6 +11,7 @@
                     :modal :login
                     :alerts '()
                     :event-page 0
-                    :show-all-events? true})
+                    :show-all-events? true
+                    :selected-events #{}})
 
 (defonce app (r/atom initial-state))

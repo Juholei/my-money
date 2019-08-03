@@ -1,6 +1,5 @@
 (ns my-money.views.events
   (:require [clojure.string :as string]
-            [reagent.core :as r]
             [reagent.session :as session]
             [my-money.app.controller.events :as ec]
             [my-money.app.controller.navigation :as nc]
@@ -53,18 +52,21 @@
    [labelled-radio-button e! active-value "expenses" "type"]
    [labelled-radio-button e! active-value "incomes" "type"]])
 
-
-(defn bank-event-table [events]
+(defn bank-event-table [e! events selected-events]
   [:div.table-responsive
    [:table.table.table-striped
     [:thead
      [:tr
+      [:th]
       [:th "Date"]
       [:th "Amount"]
       [:th "Recipient"]]]
     [:tbody (for [event events]
               ^{:key (:id event)}
               [:tr
+               [:td [:input {:type :checkbox
+                             :value (contains? selected-events event)
+                             :on-change #(e! (ec/->SelectEvent event (-> % .-target .-checked)))}]]
                [:td (utils/date->pretty-string (:transaction_date event))]
                [:td (utils/amount->pretty-string (:amount event))]
                [:td (str (:recipient event))]])]]])
@@ -73,11 +75,17 @@
 (defn events->pages [events number-of-events-per-page]
   (partition number-of-events-per-page number-of-events-per-page nil events))
 
+
+(defn selected-events-info [events]
+  [:div
+   "Sum of selected events: " (calc/balance events) "€"])
+
 (defn events-page [e! app]
   (e! (ec/->RetrieveEvents))
   (e! (ec/->RetrieveRecurringExpenses))
   (fn [e! {:keys [events filters recurring-expenses starting-amount
-                  recipients event-page show-all-events?] :as app}]
+                  recipients event-page show-all-events?
+                  selected-events] :as app}]
     (when (session/get :identity)
       (let [filtered-events (filter (filters/combined-filter filters) events)
             paged-events (events->pages filtered-events events-on-page)
@@ -87,7 +95,7 @@
         [:div.container
          [month-filter e! events]
          [charts/chart (events-for-time-period events (:month filters))
-                       starting-amount events]
+          starting-amount events]
          [balance-info (:month filters) events recipients]
          [:div.row
           [:div.col-md-8
@@ -97,7 +105,10 @@
             [c/labeled-checkbox "Show all" show-all-events? #(e! (nc/->SetShowAllEvents %))]
             (when (not show-all-events?)
               [c/paginator event-page (count paged-events) #(e! (nc/->SelectEventPage %))])]
-           [bank-event-table events-to-display]]
+           [bank-event-table e! events-to-display]]
           [:div.col-md-4
            [:h1 "Recurring expenses"]
-           [re/recurring-expense-info recurring-expenses]]]]))))
+           [re/recurring-expense-info recurring-expenses]]]
+         (when selected-events
+           [c/bottom-container
+            [selected-events-info selected-events]])]))))

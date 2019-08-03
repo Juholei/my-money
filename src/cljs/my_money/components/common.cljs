@@ -149,3 +149,11 @@
                      :right 0}}
       disabled-content])
    [:span (when disabled? {:style {:visibility :hidden}}) enabled-content]])
+
+(defn bottom-container [contents]
+  [:div {:style {:position :fixed
+                 :bottom 0
+                 :width "100%"
+                 :display :flex
+                 :justify-content :center}}
+   contents])

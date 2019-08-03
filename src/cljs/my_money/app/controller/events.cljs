@@ -10,6 +10,7 @@
 (defrecord SetRecurringExpenses [expenses])
 (defrecord SelectMonth [month])
 (defrecord SelectType [type])
+(defrecord SelectEvent [event selected])
 
 (extend-protocol tuck/Event
   RetrieveEvents
@@ -23,8 +24,8 @@
   SetEvents
   (process-event [{events :events} app]
     (-> app
-      (nc/set-in-progress false)
-      (assoc :events events)))
+        (nc/set-in-progress false)
+        (assoc :events events)))
 
   RetrieveRecurringExpenses
   (process-event [_ app]
@@ -44,4 +45,10 @@
 
   SelectType
   (process-event [{type :type} app]
-    (assoc-in app [:filters :type] type)))
+    (assoc-in app [:filters :type] type))
+
+  SelectEvent
+  (process-event [{event :event selected? :selected} app]
+                 (if selected?
+                   (update app :selected-events conj event)
+                   (update app :selected-events disj event))))
