@@ -77,7 +77,7 @@
 
 
 (defn selected-events-info [events]
-  [:div
+  [:div.alert.alert-info
    "Sum of selected events: " (calc/balance events) "€"])
 
 (defn events-page [e! app]
