@@ -109,6 +109,6 @@
           [:div.col-md-4
            [:h1 "Recurring expenses"]
            [re/recurring-expense-info recurring-expenses]]]
-         (when selected-events
+         (when (seq selected-events)
            [c/bottom-container
             [selected-events-info selected-events]])]))))
