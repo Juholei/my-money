@@ -76,9 +76,12 @@
   (partition number-of-events-per-page number-of-events-per-page nil events))
 
 
-(defn selected-events-info [events]
+(defn selected-events-info [e! events]
   [:div.alert.alert-info
-   "Sum of selected events: " (calc/balance events) "€"])
+   "Sum of selected events: " (calc/balance events) "€"
+   " "
+   [:a {:href "#" :on-click #(do (.preventDefault %) (e! (ec/->ClearSelectedEvents)))}
+    "Clear selection"]])
 
 (defn events-page [e! app]
   (e! (ec/->RetrieveEvents))
@@ -111,4 +114,4 @@
            [re/recurring-expense-info recurring-expenses]]]
          (when (seq selected-events)
            [c/bottom-container
-            [selected-events-info selected-events]])]))))
+            [selected-events-info e! selected-events]])]))))
