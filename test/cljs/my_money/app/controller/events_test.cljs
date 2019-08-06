@@ -46,3 +46,31 @@
               (tuck/process-event (ce/->SetRecurringExpenses test-expenses))
               (tuck/process-event (ce/->SelectMonth "2.2017"))
               (tuck/process-event (ce/->SelectType "all"))))))
+
+(deftest test-SelectEvent
+  (testing "Selecting single event returns state with that event in selected-events set"
+    (is (= {:selected-events #{{:id "123"}}}
+           (->> {:selected-events #{}}
+                (tuck/process-event (ce/->SelectEvent {:id "123"} true))))))
+
+  (testing "Selecting single event  and then deselecting it returns state with empty selected-events set"
+    (is (= {:selected-events #{}}
+           (->> {:selected-events #{}}
+                (tuck/process-event (ce/->SelectEvent {:id "123"} true))
+                (tuck/process-event (ce/->SelectEvent {:id "123"} false))))))
+  (testing "Selecting single event multiple times add it only once"
+    (is (= {:selected-events #{{:id "123"}}}
+           (->> {:selected-events #{}}
+                (tuck/process-event (ce/->SelectEvent {:id "123"} true))
+                (tuck/process-event (ce/->SelectEvent {:id "123"} true))))))
+  (testing "Selecting two events results in two events in the set"
+    (is (= {:selected-events #{{:id "123"} {:id "124"}}}
+           (->> {:selected-events #{}}
+                (tuck/process-event (ce/->SelectEvent {:id "123"} true))
+                (tuck/process-event (ce/->SelectEvent {:id "124"} true)))))))
+
+(deftest test-ClearSelectedEvents
+  (testing "Populated selected-events set is replaced with empty set"
+    (is (= {:selected-events #{}}
+           (->> {:selected-events #{{:id "123"} {:id "124"}}}
+                (tuck/process-event (ce/->ClearSelectedEvents)))))))

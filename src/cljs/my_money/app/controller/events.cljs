@@ -11,6 +11,7 @@
 (defrecord SelectMonth [month])
 (defrecord SelectType [type])
 (defrecord SelectEvent [event selected])
+(defrecord ClearSelectedEvents [])
 
 (extend-protocol tuck/Event
   RetrieveEvents
@@ -49,6 +50,10 @@
 
   SelectEvent
   (process-event [{event :event selected? :selected} app]
-                 (if selected?
-                   (update app :selected-events conj event)
-                   (update app :selected-events disj event))))
+    (if selected?
+      (update app :selected-events conj event)
+      (update app :selected-events disj event)))
+
+  ClearSelectedEvents
+  (process-event [_ app]
+    (assoc app :selected-events #{})))
