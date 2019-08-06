@@ -65,7 +65,7 @@
               ^{:key (:id event)}
               [:tr
                [:td [:input {:type :checkbox
-                             :value (contains? selected-events event)
+                             :checked (contains? selected-events event)
                              :on-change #(e! (ec/->SelectEvent event (-> % .-target .-checked)))}]]
                [:td (utils/date->pretty-string (:transaction_date event))]
                [:td (utils/amount->pretty-string (:amount event))]
@@ -108,7 +108,7 @@
             [c/labeled-checkbox "Show all" show-all-events? #(e! (nc/->SetShowAllEvents %))]
             (when (not show-all-events?)
               [c/paginator event-page (count paged-events) #(e! (nc/->SelectEventPage %))])]
-           [bank-event-table e! events-to-display]]
+           [bank-event-table e! events-to-display selected-events]]
           [:div.col-md-4
            [:h1 "Recurring expenses"]
            [re/recurring-expense-info recurring-expenses]]]
