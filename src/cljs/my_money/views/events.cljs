@@ -113,5 +113,5 @@
            [:h1 "Recurring expenses"]
            [re/recurring-expense-info recurring-expenses]]]
          (when (seq selected-events)
-           [c/bottom-container
+           [c/sticky-bottom-container
             [selected-events-info e! selected-events]])]))))

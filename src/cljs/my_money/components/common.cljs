@@ -150,10 +150,6 @@
       disabled-content])
    [:span (when disabled? {:style {:visibility :hidden}}) enabled-content]])
 
-(defn bottom-container [contents]
-  [:div {:style {:position :sticky
-                 :bottom 0
-                 :width "100%"
-                 :display :flex
-                 :justify-content :center}}
+(defn sticky-bottom-container [contents]
+  [:div.sticky-bottom-container
    contents])
