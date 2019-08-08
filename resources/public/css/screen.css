@@ -87,6 +87,7 @@ body {
 
 .sticky-bottom-container {
   position: sticky;
+  position: -webkit-sticky;
   bottom: 0;
   width: 100%;
   display: flex;
