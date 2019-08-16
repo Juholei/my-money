@@ -18,8 +18,8 @@
                  [metosin/ring-http-response "0.9.1"]
                  [metosin/muuntaja "0.6.3"]
                  [mount "0.1.15"]
-                 [org.clojure/clojure "1.10.0"]
-                 [org.clojure/clojurescript "1.10.516" :scope "provided"]
+                 [org.clojure/clojure "1.10.1"]
+                 [org.clojure/clojurescript "1.10.520" :scope "provided"]
                  [org.clojure/data.csv "0.1.4"]
                  [org.clojure/tools.cli "0.4.1"]
                  [org.clojure/tools.logging "0.4.1"]
@@ -44,8 +44,7 @@
   :main my-money.core
   :migratus {:store :database :db ~(get (System/getenv) "DATABASE_URL")}
 
-  :plugins [[lein-cprop "1.0.3"]
-            [migratus-lein "0.6.8"]
+  :plugins [[migratus-lein "0.6.8"]
             [lein-cljsbuild "1.1.7"]
             [lein-immutant "2.1.0"]]
   :clean-targets ^{:protect false}
@@ -92,7 +91,8 @@
                                  [lein-doo "0.1.11"]
                                  [lein-figwheel "0.5.18"]
                                  [org.clojure/clojurescript "1.10.439"]
-                                 [lein-nvd "0.6.0"]]
+                                 [lein-nvd "0.6.0"]
+                                 [lein-ancient "0.6.15"]]
                   :cljsbuild
                   {:builds
                    {:app
