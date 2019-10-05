@@ -35,7 +35,8 @@
                  [ring-webjars "0.2.0"]
                  [ring/ring-defaults "0.3.2"]
                  [selmer "1.12.13"]
-                 [webjure/tuck "20181204"]]
+                 [webjure/tuck "20181204"]
+                 [metosin/reitit "0.3.9"]]
 
   :min-lein-version "2.0.0"
 
