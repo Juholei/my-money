@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  db:
+    image: postgres:9.6-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=my_money_dev
+      - POSTGRES_PASSWORD=db_dev_env_password
+      - POSTGRES_DB=my_money_dev
