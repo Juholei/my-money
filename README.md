@@ -24,7 +24,7 @@ To start a web server for the application, run:
 ## Running tests
 
 	lein test
-	lein with-profile test doo phantom test
+	lein fronttests-once
  
 ## License
 
