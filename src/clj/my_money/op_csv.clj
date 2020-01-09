@@ -5,8 +5,9 @@
 (defn read-csv [csv-string]
   (csv/read-csv csv-string :separator \;))
 
-(defn remove-column [csv-vec column]
+(defn remove-column
   "Removes item in given column number from each vector in the vector of vectors"
+  [csv-vec column]
   (let [remove-item (fn [acc row]
                       (if (>= (count row) (inc column))
                         (conj acc
@@ -24,8 +25,9 @@
 (defn remove-columns-by-name [csv-vec column-names]
   (reduce remove-column-by-name csv-vec column-names))
 
-(defn- header->keyword [header]
+(defn- header->keyword
   "Removes whitespace from string originating from csv header and turns it into a keyword"
+  [header]
   (-> header
       (clojure.string/replace " " "") ; There's some weird space in some column name
       (clojure.string/replace #"\s+" "")
