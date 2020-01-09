@@ -1,5 +1,6 @@
 (ns my-money.op-csv
   (:require [clojure.data.csv :as csv]
+            [clojure.string :as str]
             [clj-time.format :as f]))
 
 (defn read-csv [csv-string]
@@ -29,8 +30,8 @@
   "Removes whitespace from string originating from csv header and turns it into a keyword"
   [header]
   (-> header
-      (clojure.string/replace " " "") ; There's some weird space in some column name
-      (clojure.string/replace #"\s+" "")
+      (str/replace " " "") ; There's some weird space in some column name
+      (str/replace #"\s+" "")
       (keyword)))
 
 (defn csv-vec->map [csv-vec]
