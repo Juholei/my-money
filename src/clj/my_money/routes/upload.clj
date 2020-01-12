@@ -4,7 +4,8 @@
             [my-money.op-csv :refer :all]
             [clj-time.jdbc]
             [compojure.core :refer [defroutes POST]]
-            [ring.util.http-response :as response]))
+            [ring.util.http-response :as response]
+            [clojure.java.io :as io]))
 
 (defn ->event [user-id raw-data]
   {:transaction-id (:Arkistointitunnus raw-data)
@@ -30,6 +31,28 @@
 
 (defn ->events [x]
   (map (partial ->event 1) x))
+
+(def op-first-line-hash 96410471)
+
+(def s-pankki-first-line-hash -1695375124)
+
+(defn detect-bank
+  "Takes column line as a string from a csv file and checks if it matches some known bank file"
+  [column-line]
+  (cond
+    (= s-pankki-first-line-hash (hash column-line)) :spankki
+    (= op-first-line-hash (hash column-line)) :op
+    :else :not-found))
+
+(defn detect-bank-from-file
+  "Reads the first line of the file in the given path
+  and based on it tries to detech what bank the file is from."
+  [filepath]
+  (with-open [reader (io/reader filepath)]
+    (-> reader
+        line-seq
+        first
+        detect-bank)))
 
 (defroutes upload-routes
   (POST "/upload" [file :as req]
