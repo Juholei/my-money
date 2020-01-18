@@ -59,3 +59,13 @@
         line-seq
         first
         detect-bank)))
+
+(defmulti read-bank-statement detect-bank-from-file)
+
+(defmethod read-bank-statement :op [file]
+  (-> file
+      (slurp :encoding "ISO-8859-1")
+      csv->clj))
+
+(defmethod read-bank-statement :spankki [file]
+  (println ":spankki called"))

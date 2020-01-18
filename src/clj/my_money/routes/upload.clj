@@ -18,6 +18,5 @@
   (POST "/upload" [file :as req]
     (let [user-id (:id (db/get-user-by-username {:username (:identity req)}))
           data (-> (:tempfile file)
-                   (slurp :encoding "ISO-8859-1")
-                   bank/csv->clj)]
+                   bank/read-bank-statement)]
       (response/ok (save-events user-id data)))))
