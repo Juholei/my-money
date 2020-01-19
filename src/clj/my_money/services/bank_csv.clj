@@ -68,4 +68,7 @@
       csv->clj))
 
 (defmethod read-bank-statement :spankki [file]
-  (println ":spankki called"))
+  (-> file
+      slurp
+      (str/replace "\uFEFF" "")
+      csv->clj))
