@@ -12,7 +12,7 @@
          total-rows 0]
     (if-let [event (first events)]
       (let [inserted-rows (db/create-event!
-                           (bank/->event user-id event))]
+                           (assoc event :user-id user-id))]
         (recur (rest events) (+ total-rows inserted-rows)))
       (str total-rows))))
 
