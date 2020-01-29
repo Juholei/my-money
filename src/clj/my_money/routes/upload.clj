@@ -1,21 +1,18 @@
 (ns my-money.routes.upload
   (:require [my-money.db.core :as db]
-            [my-money.op-csv :refer :all]
+            [my-money.services.bank-csv :as bank]
             [clj-time.jdbc]
             [compojure.core :refer [defroutes POST]]
-            [ring.util.http-response :as response]))
+            [ring.util.http-response :as response]
+            my-money.services.op-csv
+            my-money.services.spankki-csv))
 
 (defn- save-events [user-id events]
   (loop [events events
          total-rows 0]
     (if-let [event (first events)]
       (let [inserted-rows (db/create-event!
-                           {:transaction-id (:Arkistointitunnus event)
-                            :user-id user-id
-                            :transaction-date (date-string->date (:Kirjauspäivä event))
-                            :amount (Integer/parseInt (clojure.string/replace (:MääräEUROA event) "," ""))
-                            :recipient (:Saaja/Maksaja event)
-                            :type (:Laji event)})]
+                           (assoc event :user-id user-id))]
         (recur (rest events) (+ total-rows inserted-rows)))
       (str total-rows))))
 
@@ -23,8 +20,5 @@
   (POST "/upload" [file :as req]
     (let [user-id (:id (db/get-user-by-username {:username (:identity req)}))
           data (-> (:tempfile file)
-                   (slurp :encoding "ISO-8859-1")
-                   (read-csv)
-                   (remove-columns-by-name ["Arvopäivä" "Laji"])
-                   (csv-vec->map))]
-      (-> (response/ok (save-events user-id data))))))
+                   bank/read-bank-statement)]
+      (response/ok (save-events user-id data)))))
