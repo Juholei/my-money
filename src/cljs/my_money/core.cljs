@@ -1,5 +1,5 @@
 (ns my-money.core
-  (:require [reagent.core :as r]
+  (:require [reagent.dom :as rdom]
             [reagent.session :as session]
             [my-money.ajax :refer [load-interceptors!]]
             [my-money.routes :as routes]
@@ -48,7 +48,7 @@
 ;; -------------------------
 ;; Initialize app
 (defn mount-components []
-  (r/render (tuck/tuck state/app page) (.getElementById js/document "app")))
+  (rdom/render [tuck/tuck state/app page] (.getElementById js/document "app")))
 
 (defn init! []
   (load-interceptors!)
