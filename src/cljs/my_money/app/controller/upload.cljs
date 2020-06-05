@@ -4,6 +4,7 @@
             [my-money.app.controller.common :as c]
             [my-money.app.controller.events :as ec]
             [my-money.app.controller.navigation :as nc]
+            [my-money.routes :as routes]
             [tuck.core :as tuck]))
 
 (defrecord Upload [form-data])
@@ -24,7 +25,8 @@
   (process-event [{response :response} app]
     (tuck/action! (fn [e!]
                     (e! (ec/->RetrieveEvents))
-                    (e! (ec/->RetrieveRecurringExpenses))))
+                    (e! (ec/->RetrieveRecurringExpenses))
+                    (routes/navigate! :home)))
     (-> app
         (nc/set-in-progress false)
         (dissoc :modal)
