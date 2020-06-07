@@ -1,5 +1,5 @@
 addons:
-  postgresql: "12.3"
+  postgresql: "12"
 sudo: required
 language: clojure
 
@@ -7,7 +7,7 @@ jdk:
   - openjdk8
   
 before_install:
-  - sudo apt-get install postgresql-12.3
+  - sudo apt-get install postgresql-12
   
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
