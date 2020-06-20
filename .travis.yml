@@ -8,5 +8,5 @@ before_install:
   - docker-compose up -d
 
 script:
-  - lein do test, fronttests-once
+  - clj -A:test --reporter kaocha.report/documentation && lein fronttests-once
   
