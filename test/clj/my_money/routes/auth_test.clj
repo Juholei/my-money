@@ -1,4 +1,4 @@
-(ns my-money.test.routes.auth
+(ns my-money.routes.auth-test
   (:require [clojure.test :refer :all]
             [cheshire.core :refer [parse-string]]
             [buddy.hashers :as hashers]

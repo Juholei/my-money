@@ -1,4 +1,4 @@
-(ns my-money.test.csv
+(ns my-money.csv-test
   (:require [clojure.test :refer [deftest is testing]]
             [my-money.csv :refer :all]))
 

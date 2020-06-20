@@ -1,4 +1,4 @@
-(ns my-money.test.routes.config
+(ns my-money.routes.config-test
   (:require [clojure.test :refer :all]
             [ring.mock.request :refer :all]
             [my-money.handler :refer :all]))

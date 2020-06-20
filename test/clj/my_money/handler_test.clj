@@ -1,4 +1,4 @@
-(ns my-money.test.handler
+(ns my-money.handler-test
   (:require [clojure.test :refer :all]
             [ring.mock.request :refer :all]
             [my-money.handler :refer :all]))

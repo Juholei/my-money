@@ -30,6 +30,11 @@
                               ring/ring-mock {:mvn/version "0.4.0"}
                               ring/ring-devel {:mvn/version "1.7.1"}
                               figwheel-sidecar {:mvn/version "0.5.19"}}}
-           :test {:extra-paths ["test"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.632"}}
+           :test {:extra-paths ["test/clj" "env/dev/clj" "env/dev/resources"]
+                  ;; TODO: Check why the extra deps are needed
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.632"}
+                               ring/ring-mock {:mvn/version "0.4.0"}
+                               figwheel-sidecar {:mvn/version "0.5.19"}
+                               ring/ring-devel {:mvn/version "1.7.1"}
+                               prone {:mvn/version "2019-07-08"}}
                   :main-opts   ["-m" "kaocha.runner"]}}}
