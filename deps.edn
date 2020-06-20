@@ -42,4 +42,7 @@
                       :main-opts ["-m" "depot.outdated.main" "-a" "outdated"]}
            :prod {:extra-paths ["env/prod/clj" "env/prod/resources"]}
            :uberjar {:extra-deps {seancorfield/depstar {:mvn/version "1.0.94"}}
-                     :main-opts ["-m" "hf.depstar.uberjar" "my-money.jar" "-C" "-m" "my-money.core"]}}}
+                     :main-opts ["-m" "hf.depstar.uberjar" "my-money.jar" "-C" "-m" "my-money.core"]}
+           :vulnerabilities {:extra-deps {clj-nvd {:git/url "https://github.com/miikka/clj-nvd.git"
+                                                   :sha "e593a4a82bbd64da6036e370a61bb91612b02263"}}
+                             :main-opts ["-m" "clj-nvd.core" "check"]}}}
