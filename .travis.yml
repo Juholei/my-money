@@ -3,7 +3,12 @@ language: clojure
 
 jdk:
   - openjdk8
-  
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.cljs
+    - node_modules
+
 before_install:
   - docker-compose up -d
 
