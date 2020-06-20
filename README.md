@@ -18,7 +18,11 @@ Launch dev repl with command
 
 	clj -A:dev
 
-This start an nREPL repl you can connect to from your editor. To start the application run `(start)`. To reload after changes, use `(restart)`.
+Or with nREPL:
+
+	clj -A:dev:nrepl
+
+To start the application run `(start)`. To reload after changes, use `(restart)`.
 
 ## Running tests
 
