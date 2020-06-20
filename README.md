@@ -2,30 +2,29 @@
 
 [![Build Status](https://travis-ci.org/Juholei/my-money.svg?branch=master)](https://travis-ci.org/Juholei/my-money)
 
-One day, hopefully, this will display information about your money usage based on web bank exports (CSV from OP). Now it doesn't do that, or very much anything yet.
+This will display information about your money usage based on web bank exports (CSV from OP or S-Pankki).
 
-generated using Luminus version "2.9.11.22"
+Initially generated using Luminus version "2.9.11.22".
 
 FIXME
 
 ## Prerequisites
 
-You will need [Leiningen][1] 2.0 or above installed.
+You will need clj CLI tools installed.
 
-[1]: https://github.com/technomancy/leiningen
+## Developing
 
-## Running
+Launch dev repl with command
 
-To start a web server for the application, run:
+	clj -A:dev
 
-    lein run
-
+This start an nREPL repl you can connect to from your editor. To start the application run `(start)`. To reload after changes, use `(restart)`.
 
 ## Running tests
 
-	lein test
+	clj -A:test (use --watch for continous test runner after changes)
 	lein fronttests-once
  
 ## License
 
-Copyright © 2017 Juho Leinonen
+Copyright © 2017-2020 Juho Leinonen
