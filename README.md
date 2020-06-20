@@ -24,7 +24,10 @@ This start an nREPL repl you can connect to from your editor. To start the appli
 
 	clj -A:test (use --watch for continous test runner after changes)
 	lein fronttests-once
- 
+
+## Check if dependencies are out of date
+
+	clj -A:outdated
 ## License
 
 Copyright © 2017-2020 Juho Leinonen
