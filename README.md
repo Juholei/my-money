@@ -28,6 +28,13 @@ This start an nREPL repl you can connect to from your editor. To start the appli
 ## Check if dependencies are out of date
 
 	clj -A:outdated
+
+## Building
+
+To build an uberjar for production, use command
+
+	clj -A:uberjar:prod
+
 ## License
 
 Copyright © 2017-2020 Juho Leinonen
