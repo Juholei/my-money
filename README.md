@@ -24,6 +24,11 @@ Or with nREPL:
 
 To start the application run `(start)`. To reload after changes, use `(restart)`.
 
+
+## Running database migrations
+
+	clj -A:migrate:<dev/prod>
+
 ## Running tests
 
 	clj -A:test (use --watch for continous test runner after changes)
