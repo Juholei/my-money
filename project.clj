@@ -57,11 +57,7 @@
    :css-dirs ["resources/public/css"]
    :nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
   :repl-options {:port 7000}
-  :profiles
-  {:uberjar {:omit-source true
-             :prep-tasks ["compile" ["cljsbuild" "once" "min"]]
-             :cljsbuild
-             {:builds
+  :cljsbuild {:builds
               {:min
                {:source-paths ["src/cljc" "src/cljs" "env/prod/cljs"]
                 :compiler
@@ -71,8 +67,9 @@
                  :closure-warnings
                  {:externs-validation :off :non-standard-jsdoc :off}
                  :externs ["react/externs/react.js"]}}}}
-
-
+  :profiles
+  {:uberjar {:omit-source true
+             :prep-tasks ["compile" ["cljsbuild" "once" "min"]]
              :aot :all
              :uberjar-name "my-money.jar"
              :source-paths ["env/prod/clj"]

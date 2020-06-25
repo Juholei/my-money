@@ -1,4 +1,4 @@
-(ns my-money.test.db.core
+(ns my-money.db.core-test
   (:require [my-money.db.core :refer [*db*] :as db]
             [luminus-migrations.core :as migrations]
             [clojure.test :refer :all]
