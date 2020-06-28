@@ -16,3 +16,6 @@ npm-debug.log
 /out
 .idea/
 my-money.iml
+resources/public/js/
+.shadow-cljs/
+.cpcache

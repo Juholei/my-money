@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "chart.js": "^2.9.3",
+    "react": "16.13.0",
+    "react-chartjs-2": "^2.7.4",
+    "react-dom": "16.13.0"
+  },
+  "devDependencies": {
+    "shadow-cljs": "^2.10.13",
+    "@cljs-oss/module-deps": "^1.1.1",
+    "karma": "^3.1.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-cljs-test": "^0.1.0"
+  },
+  "scripts": {
+    "start": "shadow-cljs watch app",
+    "build": "shadow-cljs compile app"
+  }
+}
