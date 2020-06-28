@@ -54,3 +54,6 @@
   (load-interceptors!)
   (session/put! :identity js/identity)
   (mount-components))
+
+(defn ^:dev/after-load  refresh! []
+  (init!))
