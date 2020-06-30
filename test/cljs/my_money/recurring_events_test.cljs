@@ -1,6 +1,5 @@
 (ns my-money.recurring-events-test
   (:require [cljs.test :refer-macros [is are deftest testing use-fixtures]]
-            [pjstadig.humane-test-output]
             [my-money.recurring-events :as re]))
 
 (def test-data '({:amount -2468

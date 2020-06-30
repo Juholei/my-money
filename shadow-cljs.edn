@@ -1,6 +1,6 @@
 ;; shadow-cljs configuration
 {:source-paths
- ["src/cljs" "src/cljc" "env/dev/cljs"]
+ ["src/cljs" "src/cljc" "env/dev/cljs" "test/cljs"]
 
  :dependencies
  [[cljs-ajax "0.8.0"]
@@ -14,9 +14,9 @@
  {:app {:target :browser
         :output-dir "resources/public/js/"
         :modules {:main {:init-fn my-money.core/init!}}}
-  :app-test {:target :browser-test
-             :test-dir "target/test"
-             :devtools  {:http-port 8021
-                         :http-root  "target/test"}}
+  :test-watch {:target :browser-test
+         :test-dir "target/test"
+         :devtools  {:http-port 8021
+                     :http-root  "target/test"}}
   :app-test-ci {:target :karma
                 :output-to "target/test/ci.js"}}}

@@ -14,6 +14,7 @@
   },
   "scripts": {
     "start": "shadow-cljs watch app",
-    "build": "shadow-cljs compile app"
+    "build": "shadow-cljs compile app",
+    "test:watch": "shadow-cljs watch test-watch"
   }
 }
