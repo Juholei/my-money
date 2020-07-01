@@ -18,5 +18,5 @@
          :test-dir "target/test"
          :devtools  {:http-port 8021
                      :http-root  "target/test"}}
-  :app-test-ci {:target :karma
-                :output-to "target/test/ci.js"}}}
+  :test-ci {:target :karma
+            :output-to "target/test/ci.js"}}}
