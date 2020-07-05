@@ -11,7 +11,6 @@
     "karma-cljs-test": "^0.1.0",
     "shadow-cljs": "^2.10.13"
   },
-  "engines": { "node": "14.2.0"},
   "scripts": {
     "start": "shadow-cljs watch app",
     "build": "shadow-cljs compile app",
