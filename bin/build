@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-lein cljsbuild once min
+npm ci
+npm run build
 clojure -A:uberjar:prod
