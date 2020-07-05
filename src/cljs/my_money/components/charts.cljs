@@ -2,9 +2,9 @@
   (:require [my-money.calculations :as calc]
             [my-money.components.common :as c]
             [reagent.core :as r]
-            [goog.object :as obj]))
+            ["react-chartjs-2" :refer [Line]]))
 
-#_(def line-chart (r/adapt-react-class (obj/get js/ReactChartjs2 "Line")))
+(def line-chart (r/adapt-react-class Line))
 
 (defn date-sum->amount [date-sum]
   (/ (:sum date-sum) 100))
@@ -23,7 +23,7 @@
       (str "€")))
 
 (defn chart [events-to-show starting-amount all-events]
-  #_(let [collapsed? (r/atom false)]
+  (let [collapsed? (r/atom false)]
     (fn [events-to-show starting-amount events]
       (let [date-sums (events->date-sums events-to-show starting-amount events)
             chart-options {:width   400
