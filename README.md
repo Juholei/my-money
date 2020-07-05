@@ -24,6 +24,10 @@ Or with nREPL:
 
 To start the application run `(start)`. To reload after changes, use `(restart)`.
 
+For frontend, install npm dependencies with `npm install`. Then start shadow-cljs dev build with
+
+	npm start
+
 
 ## Running database migrations
 
@@ -32,7 +36,8 @@ To start the application run `(start)`. To reload after changes, use `(restart)`
 ## Running tests
 
 	clj -A:test (use --watch for continous test runner after changes)
-	lein fronttests-once
+	npm run test:watch (continuous running in browser)
+	npm test (single run using headless Chrome)
 
 ## Check if dependencies are out of date
 
@@ -40,9 +45,15 @@ To start the application run `(start)`. To reload after changes, use `(restart)`
 
 ## Building
 
+To build frontend, use command 
+
+	npm run build
+
 To build an uberjar for production, use command
 
 	clj -A:uberjar:prod
+
+Build frontend first so that it gets packaged in the uberjar.
 
 ## License
 
