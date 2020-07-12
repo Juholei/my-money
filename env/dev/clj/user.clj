@@ -1,6 +1,5 @@
 (ns user
   (:require [mount.core :as mount]
-            [my-money.figwheel :refer [start-fw stop-fw cljs]]
             my-money.core))
 
 (defn start []
