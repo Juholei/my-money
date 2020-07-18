@@ -13,8 +13,7 @@ COPY . /usr/src/app
 
 # Build the app
 RUN npm ci
-RUN npm run build
-RUN clojure -A:uberjar:prod
+RUN npm run build && clojure -A:uberjar:prod
 
 
 # Production image
