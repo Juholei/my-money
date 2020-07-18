@@ -25,4 +25,6 @@ COPY --from=builder /usr/src/app/my-money.jar /my-money/app.jar
 
 EXPOSE 3000
 
+RUN ls -lh /my-money/app.jar
+
 CMD ["java", "-jar", "/my-money/app.jar"]
