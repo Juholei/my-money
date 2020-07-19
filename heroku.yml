@@ -5,3 +5,8 @@ setup:
 build:
   docker:
     web: Dockerfile
+
+release:
+  image: web
+  command:
+    - java -cp /my-money/app.jar clojure.main -m my-money.core migrate
