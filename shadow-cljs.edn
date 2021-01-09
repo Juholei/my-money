@@ -4,7 +4,7 @@
 
  :dependencies
  [[cljs-ajax "0.8.1"]
-  [reagent "0.10.0"]
+  [reagent "1.0.0"]
   [reagent-utils "0.3.3"]
   [funcool/bide "1.6.0"]
   [webjure/tuck "20181204"]]
