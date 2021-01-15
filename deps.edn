@@ -14,7 +14,9 @@
   cprop/cprop {:mvn/version "0.1.14"}
   luminus-migrations/luminus-migrations {:mvn/version "0.6.1"}
   org.postgresql/postgresql {:mvn/version "42.2.6"}
-  buddy/buddy {:mvn/version "2.0.0"}
+  buddy/buddy-core {:mvn/version "1.9.0"}
+  buddy/buddy-auth {:mvn/version "2.2.0"}
+  buddy/buddy-hashers {:mvn/version "1.7.0"}
   org.webjars/bootstrap {:mvn/version "4.2.1"}
   org.webjars/font-awesome {:mvn/version "5.6.3"}
   org.webjars/webjars-locator-jboss-vfs {:mvn/version "0.1.0"}
