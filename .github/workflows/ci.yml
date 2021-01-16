@@ -59,4 +59,4 @@ jobs:
       - name: Run tests
         run: |
           docker-compose up -d
-          clojure -A:test
+          clojure -A:test --reporter kaocha.report/documentation
