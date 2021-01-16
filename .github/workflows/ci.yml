@@ -58,5 +58,5 @@ jobs:
           tools-deps: 1.10.1.763
       - name: Run tests
         run: |
-          docker-compose -d
+          docker-compose up -d
           clojure -A:test
