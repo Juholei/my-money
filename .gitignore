@@ -18,5 +18,8 @@ npm-debug.log
 my-money.iml
 resources/public/js/
 .shadow-cljs/
-.cpcache
+.cpcache/
+.lsp/
+.calva/
+.clj-kondo/
 report.html
