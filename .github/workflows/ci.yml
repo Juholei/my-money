@@ -40,7 +40,7 @@ jobs:
       - name: Install clojure tools-deps
         uses: DeLaGuardo/setup-clojure@master
         with:
-          tools-deps: 1.10.1.763
+          tools-deps: 1.10.1.561
       - name: Build
         run: clojure -A:uberjar:prod
 
@@ -55,7 +55,7 @@ jobs:
       - name: Install clojure tools-deps
         uses: DeLaGuardo/setup-clojure@master
         with:
-          tools-deps: 1.10.1.763
+          tools-deps: 1.10.1.561
       - name: Run tests
         run: |
           docker-compose up -d
