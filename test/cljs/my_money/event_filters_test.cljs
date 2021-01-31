@@ -24,8 +24,16 @@
                                :amount 5000}])
 
 (deftest test-months-from-events
-  (is (= #{"1.2017" "2.2017"}
+  (is (= ["2.2017" "1.2017"]
          (filters/months month-filtering-test-events))))
+
+(deftest months-ordering
+  (testing "Months are ordered descending in time"
+    (is (= ["1.2021" "12.2020" "11.2020" "5.2019"]
+           (filters/months [{:transaction_date (js/Date. 2020 10 10)}
+                            {:transaction_date (js/Date. 2021 0 1)}
+                            {:transaction_date (js/Date. 2020 11 1)}
+                            {:transaction_date (js/Date. 2019 4 1)}])))))
 
 (deftest test-only-income-events
   (let [income-filter (filters/event-type-filter "incomes")]

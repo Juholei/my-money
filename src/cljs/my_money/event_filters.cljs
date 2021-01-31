@@ -5,8 +5,13 @@
       "."
       (.getFullYear (:transaction_date event))))
 
-(defn months [events]
-  (set (sort (map event->month events))))
+(defn months
+  "Returns distincts month + year combinations from events, sorted descending"
+  [events]
+  (->> events
+       (sort #(compare (.getTime (:transaction_date %2)) (.getTime (:transaction_date %1))))
+       (map event->month)
+       distinct))
 
 (defn- event-type->filter [event-type]
   (condp = event-type
