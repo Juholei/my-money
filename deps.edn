@@ -32,13 +32,12 @@
                               ring/ring-devel {:mvn/version "1.7.1"}}
                  }
            :test {:extra-paths ["test/clj" "env/dev/clj" "env/dev/resources"]
-                  ;; TODO: Check why the extra deps are needed
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.632"}
                                ring/ring-mock {:mvn/version "0.4.0"}
                                ring/ring-devel {:mvn/version "1.7.1"}
                                prone/prone {:mvn/version "2019-07-08"}}
                   :main-opts   ["-m" "kaocha.runner"]}
-           :outdated {:extra-deps {antq/antq {:mvn/version "0.6.2"}}
+           :outdated {:extra-deps {antq/antq {:mvn/version "0.11.2"}}
                       :main-opts ["-m" "antq.core"]}
            :prod {:extra-paths ["env/prod/clj" "env/prod/resources"]}
            :uberjar {:extra-deps {seancorfield/depstar {:mvn/version "1.0.94"}}
