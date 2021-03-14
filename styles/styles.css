@@ -88,12 +88,3 @@ body {
 .btn {
   margin-left: .25rem;
 }
-
-.sticky-bottom-container {
-  position: sticky;
-  position: -webkit-sticky;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}

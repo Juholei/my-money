@@ -151,5 +151,5 @@
    [:span (when disabled? {:style {:visibility :hidden}}) enabled-content]])
 
 (defn sticky-bottom-container [contents]
-  [:div.sticky-bottom-container
+  [:div.sticky.flex.justify-center.w-full.bottom-0
    contents])
