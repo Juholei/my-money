@@ -71,20 +71,6 @@ body {
     }
 }
 
-.modal {
- display: block;
-}
-
-.modal-dialog {
-  z-index: 100;
-  top: 30px;
-}
-
-.modal-backdrop {
-  z-index: 3;
-  opacity: 0.5;
-}
-
 .btn {
   margin-left: .25rem;
 }

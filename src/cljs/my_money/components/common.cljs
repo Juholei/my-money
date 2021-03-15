@@ -6,8 +6,8 @@
                    .-body
                    .-classList
                    (.add "modal-open"))]
-    [:div.modal
-     [:div.modal-dialog
+    [:div.modal.block
+     [:div.modal-dialog.z-50.top-32
       [:div.modal-content
        [:div.modal-header [:span.modal-title.h5 header]
         [:button.close {:type     "button"
@@ -15,7 +15,7 @@
          "×"]]
        [:div.modal-body body]
        [:div.modal-footer footer]]]
-     [:div.modal-backdrop {:on-click close-fn}]]
+     [:div.modal-backdrop.z-10.opacity-50 {:on-click close-fn}]]
     (finally (-> js/document
                  .-body
                  .-classList
