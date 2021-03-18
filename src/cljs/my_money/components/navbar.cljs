@@ -17,7 +17,7 @@
   (if-let [user (session/get :identity)]
     [:ul.navbar-nav.ml-auto
      [:li.nav-item
-      [:a.btn.btn-outline-danger.btn-sm
+      [:a.btn.btn-outline-danger.btn-sm-ml-1
        {:href "#"
         :on-click #(e! (ac/->Logout))}
        [:i.fa.fa-user " " user " | log out"]]]]
@@ -39,6 +39,6 @@
          [nav-link "#/" "Home" :home collapsed?]
          (when (session/get :identity)
            [:ul.navbar-nav
-            [:button.btn.btn-outline-info.fa.fa-cog.fa-inverse {:on-click #(routes/navigate! :config)}]
-            [:button.btn.btn-outline-info {:on-click #(routes/navigate! :upload)} "Upload"]])]
+            [:button.btn.btn-outline-info.fa.fa-cog.fa-inverse.ml-1 {:on-click #(routes/navigate! :config)}]
+            [:button.btn.btn-outline-info.ml-1 {:on-click #(routes/navigate! :upload)} "Upload"]])]
         [user-menu e!]]])))

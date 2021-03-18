@@ -5,12 +5,12 @@
 
 (defn- buttons [e! data close-fn]
   [:div
-   [:input.btn.btn-primary {:type "submit"
-                            :form "login"
-                            :value "Login"
-                            :on-click #(do (.preventDefault %)
-                                           (e! (ac/->Login @data)))}]
-   [:button.btn.btn-danger {:on-click #(close-fn)} "Cancel"]])
+   [:input.btn.btn-primary.ml-1 {:type "submit"
+                                 :form "login"
+                                 :value "Login"
+                                 :on-click #(do (.preventDefault %)
+                                                (e! (ac/->Login @data)))}]
+   [:button.btn.btn-danger.ml-1 {:on-click #(close-fn)} "Cancel"]])
 
 (defn- fields [data]
   [:form {:id "login"}
