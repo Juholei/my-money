@@ -137,7 +137,7 @@
   "Button that shows different content based on whether it is enabled or disabled
    but stays the same size no matter which state it is in."
   [enabled-content disabled-content disabled? on-click-fn]
-  [:button {:class    "btn btn-primary"
+  [:button {:class    "btn btn-primary ml-1"
             :on-click #(on-click-fn)
             :disabled disabled?
             :style {:position :relative}}
