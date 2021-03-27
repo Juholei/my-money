@@ -28,7 +28,7 @@
 (defn navbar [e!]
   (let [collapsed? (r/atom true)]
     (fn [e!]
-      [:nav#navbar.navbar.navbar-expand-lg.navbar-dark.bg-dark.mb-2
+      [:nav.navbar-expand-lg.navbar-dark.mb-2.relative.flex.items-center.px-4.py-2.bg-black.bg-opacity-75
        [:a.navbar-brand {:href "#"} "my-money"]
        [:button.navbar-toggler {:type "button"
                                 :on-click #(swap! collapsed? not)}
