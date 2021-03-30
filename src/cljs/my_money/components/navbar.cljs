@@ -35,10 +35,10 @@
         [:span.navbar-toggler-icon]]
        [:div.collapse.navbar-collapse
         (when-not @collapsed? {:class "show"})
-        [:ul.navbar-nav
+        [:ul.flex.pl-0.mb-0.list-none
          [nav-link "#/" "Home" :home collapsed?]
          (when (session/get :identity)
-           [:ul.navbar-nav
+           [:<>
             [:button.btn.btn-outline-info.fa.fa-cog.fa-inverse.ml-1 {:on-click #(routes/navigate! :config)}]
             [:button.btn.btn-outline-info.ml-1 {:on-click #(routes/navigate! :upload)} "Upload"]])]
         [user-menu e!]]])))
