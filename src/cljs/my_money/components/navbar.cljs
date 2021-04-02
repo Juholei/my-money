@@ -14,16 +14,17 @@
      :on-click #(reset! collapsed? true)} title]])
 
 (defn user-menu [e!]
-  (if-let [user (session/get :identity)]
-    [:ul.navbar-nav.ml-auto
-     [:li.nav-item
-      [:a.btn.btn-outline-danger.btn-sm-ml-1
-       {:href "#"
-        :on-click #(e! (ac/->Logout))}
-       [:i.fa.fa-user " " user " | log out"]]]]
-    [:ul.navbar-nav.ml-auto
-     [:li.nav-item [login/login-button]]
-     [:li.nav-item [registration/registration-button]]]))
+  [:ul.flex.pl-0.mb-0.list-none.ml-auto
+   (if-let [user (session/get :identity)]
+     [:<>
+      [:li.nav-item
+       [:a.btn.btn-outline-danger.btn-sm-ml-1
+        {:href "#"
+         :on-click #(e! (ac/->Logout))}
+        [:i.fa.fa-user " " user " | log out"]]]]
+     [:<>
+      [:li.nav-item [login/login-button]]
+      [:li.nav-item [registration/registration-button]]])])
 
 (defn navbar [e!]
   (let [collapsed? (r/atom true)]
