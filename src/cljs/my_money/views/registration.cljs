@@ -5,13 +5,13 @@
 
 (defn- buttons [e! {:keys [username password]} close-fn]
   [:div
-   [:input.btn.btn-primary {:type "submit"
-                             :form "registration"
-                             :value "Register"
-                             :on-click #(do (.preventDefault %)
-                                            (e! (ac/->Register username password)))}]
-   [:button.btn.btn-danger {:on-click #(close-fn)}
-                           "Cancel"]])
+   [:input.btn.btn-primary.ml-1 {:type "submit"
+                                 :form "registration"
+                                 :value "Register"
+                                 :on-click #(do (.preventDefault %)
+                                                (e! (ac/->Register username password)))}]
+   [:button.btn.btn-danger.ml-1 {:on-click #(close-fn)}
+    "Cancel"]])
 
 (defn- fields [data]
   [:form {:id "registration"}

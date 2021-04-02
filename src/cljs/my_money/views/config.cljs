@@ -38,7 +38,7 @@
      (for [recipient (:recipients @data)]
        ^{:key (str "active_" recipient)}
        [:li.list-group-item recipient
-        [:button.btn.close
+        [:button.btn.close.ml-1
          {:on-click #(swap! data update :recipients disj recipient)}
          "×"]]))])
 
@@ -53,7 +53,7 @@
 (defn- buttons [e! data in-progress? close-fn]
   [:div
    [c/disableable-button "Save" [c/euro-symbol in-progress?] in-progress? #(e! (cc/->SaveConfig @data))]
-   [:button.btn.btn-danger {:on-click #(close-fn)} "Cancel"]])
+   [:button.btn.btn-danger.ml-1 {:on-click #(close-fn)} "Cancel"]])
 
 (defn config-modal [e! close-fn in-progress?]
   (let [fields-data (r/atom {:starting-amount (/ (:starting-amount @state/app) 100)
