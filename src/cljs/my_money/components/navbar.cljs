@@ -27,19 +27,18 @@
       [:li.nav-item [registration/registration-button]]])])
 
 (defn navbar [e!]
-  (let [collapsed? (r/atom true)]
-    (fn [e!]
-      [:nav.navbar-expand-lg.navbar-dark.mb-2.relative.flex.items-center.px-4.py-2.bg-black.bg-opacity-75
-       [:a.text-white.inline-block.whitespace-nowrap.text-lg.mr-4 {:href "#"} "my-money"]
-       [:button.navbar-toggler {:type "button"
-                                :on-click #(swap! collapsed? not)}
-        [:span.navbar-toggler-icon]]
-       [:div.collapse.navbar-collapse
-        (when-not @collapsed? {:class "show"})
-        [:ul.flex.pl-0.mb-0.list-none
-         [nav-link "#/" "Home" :home collapsed?]
-         (when (session/get :identity)
-           [:<>
-            [:button.btn.btn-outline-info.fa.fa-cog.fa-inverse.ml-1 {:on-click #(routes/navigate! :config)}]
-            [:button.btn.btn-outline-info.ml-1 {:on-click #(routes/navigate! :upload)} "Upload"]])]
-        [user-menu e!]]])))
+  (r/with-let [collapsed? (r/atom true)]
+    [:nav.navbar-expand-lg.navbar-dark.mb-2.relative.flex.items-center.px-4.py-2.bg-black.bg-opacity-75
+     [:a.text-white.inline-block.whitespace-nowrap.text-lg.mr-4 {:href "#"} "my-money"]
+     [:button.navbar-toggler {:type "button"
+                              :on-click #(swap! collapsed? not)}
+      [:span.navbar-toggler-icon]]
+     [:div.collapse.navbar-collapse
+      (when-not @collapsed? {:class "show"})
+      [:ul.flex.pl-0.mb-0.list-none
+       [nav-link "#/" "Home" :home collapsed?]
+       (when (session/get :identity)
+         [:<>
+          [:button.btn.btn-outline-info.fa.fa-cog.fa-inverse.ml-1 {:on-click #(routes/navigate! :config)}]
+          [:button.btn.btn-outline-info.ml-1 {:on-click #(routes/navigate! :upload)} "Upload"]])]
+      [user-menu e!]]]))
