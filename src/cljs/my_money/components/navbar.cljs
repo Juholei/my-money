@@ -6,6 +6,10 @@
             [my-money.views.registration :as registration]
             [my-money.routes :as routes]))
 
+(defn nav-item [child]
+  [:li.nav-item
+   child])
+
 (defn user-menu [e!]
   [:ul.flex.pl-0.mb-0.list-none.ml-auto
    (if-let [user (session/get :identity)]
@@ -16,8 +20,8 @@
          :on-click #(e! (ac/->Logout))}
         [:i.fa.fa-user " " user " | log out"]]]]
      [:<>
-      [:li.nav-item [login/login-button]]
-      [:li.nav-item [registration/registration-button]]])])
+      [nav-item [login/login-button]]
+      [nav-item [registration/registration-button]]])])
 
 (defn navbar [e!]
   (r/with-let [collapsed? (r/atom true)]
