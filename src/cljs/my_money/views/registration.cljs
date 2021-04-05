@@ -21,9 +21,8 @@
    [c/password-input "Confirm your password" :pass-confirm "Type your password again" data]])
 
 (defn registration-form [e! close-fn]
-  (let [fields-data (r/atom {})]
-    (fn []
-      [c/modal "Register a new account"
-               [fields fields-data]
-               [buttons e! @fields-data close-fn]
-               close-fn])))
+  (r/with-let [fields-data (r/atom {})]
+    [c/modal "Register a new account"
+     [fields fields-data]
+     [buttons e! @fields-data close-fn]
+     close-fn]))

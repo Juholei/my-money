@@ -18,6 +18,5 @@
    [c/password-input "Password" :password "Enter your password" data false]])
 
 (defn login-form [e! close-fn]
-  (let [data (r/atom {})]
-    (fn []
-      [c/modal "Login" [fields data] [buttons e! data close-fn] close-fn])))
+  (r/with-let [data (r/atom {})]
+    [c/modal "Login" [fields data] [buttons e! data close-fn] close-fn]))
