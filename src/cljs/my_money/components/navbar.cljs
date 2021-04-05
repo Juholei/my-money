@@ -6,13 +6,6 @@
             [my-money.views.registration :as registration]
             [my-money.routes :as routes]))
 
-(defn nav-link [uri title page collapsed?]
-  [:li.nav-item
-   {:class (when (= page (session/get :page)) "active")}
-   [:a.nav-link
-    {:href uri
-     :on-click #(reset! collapsed? true)} title]])
-
 (defn user-menu [e!]
   [:ul.flex.pl-0.mb-0.list-none.ml-auto
    (if-let [user (session/get :identity)]
@@ -36,7 +29,6 @@
      [:div.collapse.navbar-collapse
       (when-not @collapsed? {:class "show"})
       [:ul.flex.pl-0.mb-0.list-none
-       [nav-link "#/" "Home" :home collapsed?]
        (when (session/get :identity)
          [:<>
           [:button.btn.btn-outline-info.fa.fa-cog.fa-inverse.ml-1 {:on-click #(routes/navigate! :config)}]
