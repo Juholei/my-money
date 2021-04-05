@@ -2,26 +2,33 @@
   (:require [reagent.core :as r]
             [reagent.session :as session]
             [my-money.app.controller.authentication :as ac]
-            [my-money.views.login :as login]
-            [my-money.views.registration :as registration]
             [my-money.routes :as routes]))
 
+(defn registration-button []
+  [:a.block.py-2.px-4 {:href "#/register"} "Register"])
+
+(defn login-button []
+  [:a.block.py-2.px-4 {:href "#/login"} "Login"])
+
+(defn logout-button [e! user]
+  [:a.btn.btn-outline-danger.btn-sm-ml-1
+   {:href "#"
+    :on-click #(e! (ac/->Logout))}
+   [:i.fa.fa-user " " user " | log out"]])
+
 (defn nav-item [child]
-  [:li.nav-item
+  [:li
    child])
 
 (defn user-menu [e!]
   [:ul.flex.pl-0.mb-0.list-none.ml-auto
    (if-let [user (session/get :identity)]
      [:<>
-      [:li.nav-item
-       [:a.btn.btn-outline-danger.btn-sm-ml-1
-        {:href "#"
-         :on-click #(e! (ac/->Logout))}
-        [:i.fa.fa-user " " user " | log out"]]]]
+      [nav-item
+       [logout-button e! user]]]
      [:<>
-      [nav-item [login/login-button]]
-      [nav-item [registration/registration-button]]])])
+      [nav-item [login-button]]
+      [nav-item [registration-button]]])])
 
 (defn navbar [e!]
   (r/with-let [collapsed? (r/atom true)]

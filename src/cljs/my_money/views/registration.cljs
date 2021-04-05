@@ -27,6 +27,3 @@
                [fields fields-data]
                [buttons e! @fields-data close-fn]
                close-fn])))
-
-(defn registration-button []
-  [:a.nav-link.active {:href "#/register"} "Register"])

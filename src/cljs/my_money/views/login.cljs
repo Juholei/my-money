@@ -21,6 +21,3 @@
   (let [data (r/atom {})]
     (fn []
       [c/modal "Login" [fields data] [buttons e! data close-fn] close-fn])))
-
-(defn login-button []
- [:a.nav-link.active {:href "#/login"} "Login"])
