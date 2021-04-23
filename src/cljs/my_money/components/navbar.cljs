@@ -11,8 +11,10 @@
   [:a.block.py-2.px-4 {:href "#/login"} "Login"])
 
 (defn logout-button [e! user]
-  [:a.btn.btn-outline-danger.btn-sm-ml-1
-   {:href "#"
+  [:a.btn-outline-danger.btn-sm-ml-1
+   ; TODO .btn transitions need to be replaced
+   {:class ["inline-block" "font-normal" "text-center" "align-middle" "select-none" "bg-transparent" "border-2" "border-solid" "text-base" "py-1.5" "px-3" "rounded"]
+    :href "#"
     :on-click #(e! (ac/->Logout))}
    [:i.fa.fa-user " " user " | log out"]])
 
