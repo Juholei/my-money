@@ -7,7 +7,15 @@ module.exports = {
     corePlugins: {
       preflight: false,
     },
-    theme: {},
+    theme: {
+      extend: {
+        colors: {
+          'red': {
+            'danger': '#dc3545'
+          }
+        }
+      }
+    },
     variants: {},
     plugins: [],
   }
