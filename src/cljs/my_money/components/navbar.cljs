@@ -26,7 +26,7 @@
                            "hover:text-white"])
 
 (defn logout-button [e! user]
-  [:a.btn-sm-ml-1
+  [:a
    ; TODO .btn transitions need to be replaced
    {:class logout-button-styles
     :href "#"
