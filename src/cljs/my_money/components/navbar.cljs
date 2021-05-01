@@ -47,6 +47,14 @@
       [nav-item [login-button]]
       [nav-item [registration-button]]])])
 
+(def button-styles ["btn" "btn-outline-info" "ml-1"])
+
+
+;; TODO: MOVE ELSEWHERE, CREATE A GENERAL BUTTON COMPONENT
+(defn button [props child]
+  (let [props-with-default-styles (update props :class concat button-styles)]
+    [:button props-with-default-styles child]))
+
 (defn navbar [e!]
   (r/with-let [collapsed? (r/atom true)]
     [:nav.mb-2.relative.flex.md:flex-row.md:flex-nowrap.md:justify-start.items-center.px-4.py-2.bg-black.bg-opacity-75
@@ -60,6 +68,9 @@
       [:ul.flex.pl-0.mb-0.list-none
        (when (session/get :identity)
          [:<>
-          [:button.btn.btn-outline-info.fa.fa-cog.fa-inverse.ml-1 {:on-click #(routes/navigate! :config)}]
-          [:button.btn.btn-outline-info.ml-1 {:on-click #(routes/navigate! :upload)} "Upload"]])]
+          [button {:class ["fa" "fa-cog" "fa-inverse"]
+                   :on-click #(routes/navigate! :config)}]
+          [button {:on-click #(routes/navigate! :upload)}
+           "Upload"]])]
       [user-menu e!]]]))
+
