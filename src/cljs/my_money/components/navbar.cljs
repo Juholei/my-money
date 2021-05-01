@@ -1,6 +1,7 @@
 (ns my-money.components.navbar
   (:require [reagent.core :as r]
             [reagent.session :as session]
+            [my-money.components.button :refer [button]]
             [my-money.app.controller.authentication :as ac]
             [my-money.routes :as routes]))
 
@@ -26,7 +27,7 @@
                            "hover:text-white"])
 
 (defn logout-button [e! user]
-  [:a
+  [button
    ; TODO .btn transitions need to be replaced
    {:class logout-button-styles
     :href "#"
@@ -47,13 +48,6 @@
       [nav-item [login-button]]
       [nav-item [registration-button]]])])
 
-(def button-styles ["btn" "btn-outline-info" "ml-1"])
-
-
-;; TODO: MOVE ELSEWHERE, CREATE A GENERAL BUTTON COMPONENT
-(defn button [props child]
-  (let [props-with-default-styles (update props :class concat button-styles)]
-    [:button props-with-default-styles child]))
 
 (defn navbar [e!]
   (r/with-let [collapsed? (r/atom true)]
