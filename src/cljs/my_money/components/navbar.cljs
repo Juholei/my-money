@@ -24,7 +24,8 @@
                            "rounded"
                            "border-red-danger"
                            "text-red-danger"
-                           "hover:text-white"])
+                           "hover:text-white"
+                           "hover:border-white"])
 
 (defn logout-button [e! user]
   [button
@@ -74,9 +75,10 @@
       [:ul.flex.pl-0.mb-0.list-none
        (when (session/get :identity)
          [:<>
-          [button {:class ["fa" "fa-cog" "fa-inverse"]
+          [button {:class ["fa" "fa-cog" "fa-inverse" "border-button-info" "text-button-info"]
                    :on-click #(routes/navigate! :config)}]
-          [button {:on-click #(routes/navigate! :upload)}
+          [button {:class ["border-button-info" "text-button-info"]
+                   :on-click #(routes/navigate! :upload)}
            "Upload"]])]
       [user-menu e!]]]))
 

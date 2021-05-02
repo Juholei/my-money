@@ -12,6 +12,9 @@ module.exports = {
         colors: {
           'red': {
             'danger': '#dc3545'
+          },
+          'button': {
+            'info': '#17a2b8'
           }
         }
       }
