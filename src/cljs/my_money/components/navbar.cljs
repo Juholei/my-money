@@ -11,17 +11,15 @@
 (defn login-button []
   [:a.block.py-2.px-4 {:href "#/login"} "Login"])
 
-(def logout-button-styles ["inline-block"
-                           "font-normal"
+(def logout-button-styles ["font-normal"
                            "text-center"
                            "align-middle"
                            "select-none"
-                           "bg-transparent"
-                           "border-2" "border-solid"
+                           "border-2"
+                           "border-solid"
                            "text-base"
                            "py-1.5"
                            "px-3"
-                           "rounded"
                            "border-red-danger"
                            "text-red-danger"
                            "hover:text-white"
@@ -30,7 +28,8 @@
 (defn logout-button [e! user]
   [button
    ; TODO .btn transitions need to be replaced
-   {:class logout-button-styles
+   {:type :outline
+    :class logout-button-styles
     :href "#"
     :on-click #(e! (ac/->Logout))}
    [:i.fa.fa-user " " user " | log out"]])
@@ -75,9 +74,11 @@
       [:ul.flex.pl-0.mb-0.list-none
        (when (session/get :identity)
          [:<>
-          [button {:class ["fa" "fa-cog" "fa-inverse" "border-button-info" "text-button-info"]
+          [button {:type :outline
+                   :class ["fa" "fa-cog" "fa-inverse" "border-button-info" "text-button-info"]
                    :on-click #(routes/navigate! :config)}]
-          [button {:class ["border-button-info" "text-button-info"]
+          [button {:type :outline
+                   :class ["border-button-info" "text-button-info"]
                    :on-click #(routes/navigate! :upload)}
            "Upload"]])]
       [user-menu e!]]]))
