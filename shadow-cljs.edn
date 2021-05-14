@@ -6,7 +6,7 @@
  [[cljs-ajax "0.8.1"]
   [reagent "1.0.0"]
   [reagent-utils "0.3.3"]
-  [funcool/bide "1.6.0"]
+  [funcool/bide "1.7.0"]
   [webjure/tuck "20181204"]]
 
  :nrepl {:port 7002}
