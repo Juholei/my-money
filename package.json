@@ -11,7 +11,7 @@
     "karma": "^6.1.1",
     "karma-chrome-launcher": "^3.1.0",
     "karma-cljs-test": "^0.1.0",
-    "postcss": "^8.2.9",
+    "postcss": "^8.2.15",
     "postcss-cli": "^8.3.1",
     "shadow-cljs": "^2.13.0",
     "tailwindcss": "^2.1.1"
