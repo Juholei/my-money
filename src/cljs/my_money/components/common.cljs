@@ -1,5 +1,6 @@
 (ns my-money.components.common
-  (:require [reagent.core :as r :refer-macros [with-let]]))
+  (:require [reagent.core :as r :refer-macros [with-let]]
+            [my-money.components.button :refer [button]]))
 
 (defn modal [header body footer close-fn]
   (with-let [_ (-> js/document
@@ -137,18 +138,19 @@
   "Button that shows different content based on whether it is enabled or disabled
    but stays the same size no matter which state it is in."
   [enabled-content disabled-content disabled? on-click-fn]
-  [:button {:class    "btn btn-primary ml-1"
-            :on-click #(on-click-fn)
-            :disabled disabled?
-            :style {:position :relative}}
-   (when disabled?
-     [:span {:style {:position :absolute
-                     :margin-left :auto
-                     :margin-right :auto
-                     :left 0
-                     :right 0}}
-      disabled-content])
-   [:span (when disabled? {:style {:visibility :hidden}}) enabled-content]])
+  [button {:type :primary
+           :on-click #(on-click-fn)
+           :disabled disabled?
+           :style {:position :relative}}
+   [:<>
+    (when disabled?
+      [:span {:style {:position :absolute
+                      :margin-left :auto
+                      :margin-right :auto
+                      :left 0
+                      :right 0}}
+       disabled-content])
+    [:span (when disabled? {:style {:visibility :hidden}}) enabled-content]]])
 
 (defn sticky-bottom-container [contents]
   [:div.sticky.flex.justify-center.w-full.bottom-0

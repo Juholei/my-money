@@ -14,7 +14,9 @@ module.exports = {
             'danger': '#dc3545'
           },
           'button': {
-            'info': '#17a2b8'
+            'info': '#17a2b8',
+            'primary': '#007bff',
+            'primary-hover': '#0069d9'
           }
         }
       }

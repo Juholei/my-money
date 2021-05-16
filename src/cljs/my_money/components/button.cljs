@@ -12,9 +12,17 @@
 
 (def button-outline-styles ["bg-transparent"])
 
-(def button-type-specific-styles {:outline button-outline-styles})
+(def button-primary-styles ["text-white"
+                            "bg-button-primary"
+                            "border-transparent"
+                            "hover:bg-button-primary-hover"])
+
+(def button-type-specific-styles {:primary button-primary-styles
+                                  :outline button-outline-styles})
 
 (defn button [{:keys [type] :as props} child]
   (let [button-styles (concat button-base-styles (get button-type-specific-styles type))
-        props-with-default-styles (update props :class concat button-styles)]
+        props-with-default-styles (-> props
+                                      (update :class concat button-styles)
+                                      (dissoc :type))]
     [:button props-with-default-styles child]))
