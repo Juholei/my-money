@@ -1,6 +1,5 @@
 (ns my-money.views.login
   (:require [my-money.components.common :as c]
-            [my-money.components.button :refer [button]]
             [my-money.app.controller.authentication :as ac]
             [reagent.core :as r]))
 
@@ -11,9 +10,7 @@
                                  :value "Login"
                                  :on-click #(do (.preventDefault %)
                                                 (e! (ac/->Login @data)))}]
-   [button {:type :danger
-            :on-click #(close-fn)}
-    "Cancel"]])
+ [:button.btn.btn-danger.ml-1 {:on-click #(close-fn)} "Cancel"]])
 
 (defn- fields [data]
   [:form {:id "login"}
