@@ -1,15 +1,15 @@
 (ns my-money.views.login
   (:require [my-money.components.common :as c]
+            [my-money.components.button :refer [button]]
             [my-money.app.controller.authentication :as ac]
             [reagent.core :as r]))
 
 (defn- buttons [e! data close-fn]
   [:div
-   [:input.btn.btn-primary.ml-1 {:type "submit"
-                                 :form "login"
-                                 :value "Login"
-                                 :on-click #(do (.preventDefault %)
-                                                (e! (ac/->Login @data)))}]
+   [button {:type :primary
+            :form "login"
+            :on-click  (r/partial e! (ac/->Login @data))}
+    "Login"]
  [:button.btn.btn-danger.ml-1 {:on-click #(close-fn)} "Cancel"]])
 
 (defn- fields [data]

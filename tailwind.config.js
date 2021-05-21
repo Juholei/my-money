@@ -16,7 +16,8 @@ module.exports = {
           'button': {
             'info': '#17a2b8',
             'primary': '#007bff',
-            'primary-hover': '#0069d9'
+            'primary-hover': '#0069d9',
+            'primary-active': '#0062cc'
           }
         }
       }

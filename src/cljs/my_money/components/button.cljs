@@ -15,7 +15,8 @@
 (def button-primary-styles ["text-white"
                             "bg-button-primary"
                             "border-transparent"
-                            "hover:bg-button-primary-hover"])
+                            "hover:bg-button-primary-hover"
+                            "active:bg-button-primary-hover"])
 
 (def button-type-specific-styles {:primary button-primary-styles
                                   :outline button-outline-styles})
