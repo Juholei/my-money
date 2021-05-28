@@ -10,7 +10,9 @@
             :form "login"
             :on-click  (r/partial e! (ac/->Login @data))}
     "Login"]
- [:button.btn.btn-danger.ml-1 {:on-click #(close-fn)} "Cancel"]])
+ [button {:type :danger
+          :on-click close-fn}
+  "Cancel"]])
 
 (defn- fields [data]
   [:form {:id "login"}
