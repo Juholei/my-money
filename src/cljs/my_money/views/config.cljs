@@ -59,11 +59,10 @@
     "Cancel"]])
 
 (defn config-modal [e! close-fn in-progress?]
-  (let [fields-data (r/atom {:starting-amount (/ (:starting-amount @state/app) 100)
-                             :recipient-search ""
-                             :recipients (:recipients @state/app)})]
-    (fn [e! close-fn in-progress?]
-      [c/modal "Configuration"
-               [fields fields-data]
-               [buttons e! fields-data in-progress? close-fn]
-               close-fn])))
+  (r/with-let [fields-data (r/atom {:starting-amount (/ (:starting-amount @state/app) 100)
+                                    :recipient-search ""
+                                    :recipients (:recipients @state/app)})]
+    [c/modal "Configuration"
+     [fields fields-data]
+     [buttons e! fields-data in-progress? close-fn]
+     close-fn]))
