@@ -1,6 +1,7 @@
 (ns my-money.views.config
   (:require [clojure.string :as string]
             [my-money.app.state :as state]
+            [my-money.components.button :refer [button]]
             [my-money.app.controller.config :as cc]
             [my-money.components.common :as c]
             [reagent.core :as r]))
@@ -53,7 +54,9 @@
 (defn- buttons [e! data in-progress? close-fn]
   [:div
    [c/disableable-button "Save" [c/euro-symbol in-progress?] in-progress? #(e! (cc/->SaveConfig @data))]
-   [:button.btn.btn-danger.ml-1 {:on-click #(close-fn)} "Cancel"]])
+   [button {:type :danger
+            :on-click close-fn}
+    "Cancel"]])
 
 (defn config-modal [e! close-fn in-progress?]
   (let [fields-data (r/atom {:starting-amount (/ (:starting-amount @state/app) 100)
