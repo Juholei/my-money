@@ -2,6 +2,25 @@
   (:require [reagent.core :as r :refer-macros [with-let]]
             [my-money.components.button :refer [button]]))
 
+(def close-button-styles ["bg-transparent"
+                          "border-0"
+                          "appearance-none"
+                          "cursor-pointer"
+                          "text-xl"
+                          "font-bold"
+                          "opacity-50"
+                          "hover:opacity-75"
+                       ;    TODO: restore these when removing bootstrap
+                       ;   "py-4"
+                       ;   "my-4"
+                       ;   "mr-4"
+                       ;   "ml-auto"
+                          ])
+(defn close-button [{:keys [on-click]}]
+  [:button {:class close-button-styles
+            :on-click on-click}
+   "×"])
+
 (defn modal [header body footer close-fn]
   (with-let [_ (-> js/document
                    .-body
@@ -11,9 +30,7 @@
      [:div.modal-dialog.z-50.top-32
       [:div.modal-content
        [:div.modal-header [:span.modal-title.h5 header]
-        [:button.close {:type     "button"
-                        :on-click close-fn}
-         "×"]]
+        [close-button {:on-click close-fn}]]
        [:div.modal-body body]
        [:div.modal-footer footer]]]
      [:div.modal-backdrop.z-10.opacity-50 {:on-click close-fn}]]
