@@ -6,6 +6,7 @@
             [my-money.calculations :as calc]
             [my-money.components.charts :as charts]
             [my-money.components.recurring-expenses :as re]
+            [my-money.components.tab-bar :refer [tab-bar]]
             [my-money.event-filters :as filters]
             [my-money.components.common :as c]
             [my-money.utils :as utils]))
@@ -47,10 +48,7 @@
       [:option month])]])
 
 (defn event-type-selector [e! active-value]
-  [:div.btn-group.btn-group-toggle
-   [labelled-radio-button e! active-value "all" "type"]
-   [labelled-radio-button e! active-value "expenses" "type"]
-   [labelled-radio-button e! active-value "incomes" "type"]])
+  [tab-bar e! active-value])
 
 (defn bank-event-table [e! events selected-events]
   [:div.table-responsive
