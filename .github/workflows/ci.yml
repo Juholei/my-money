@@ -36,6 +36,7 @@ jobs:
       - name: Prepare java
         uses: actions/setup-java@v2
         with:
+          distribution: 'adopt'
           java-version: 11
       - name: Install clojure tools-deps
         uses: DeLaGuardo/setup-clojure@master
@@ -51,6 +52,7 @@ jobs:
       - name: Prepare java
         uses: actions/setup-java@v2
         with:
+          distribution: 'adopt'
           java-version: 11
       - name: Install clojure tools-deps
         uses: DeLaGuardo/setup-clojure@master
