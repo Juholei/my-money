@@ -1,9 +1,9 @@
 # Build image
 
-FROM clojure:openjdk-8-tools-deps as builder
+FROM clojure:openjdk-11-tools-deps as builder
 
 # Install node.js
-RUN curl -sL https://deb.nodesource.com/setup_14.x | sh && apt-get install -y nodejs
+RUN curl -sL https://deb.nodesource.com/setup_16.x | sh && apt-get install -y nodejs
 # set working directory
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
@@ -17,7 +17,7 @@ RUN npm run build && clojure -Spom && clojure -A:uberjar:prod
 
 
 # Production image
-FROM java:8-alpine
+FROM --platform=linux/amd64 adoptopenjdk/openjdk11:jre-11.0.11_9-alpine
 
 # copy artifact build from the 'build environment'
 COPY --from=builder /usr/src/app/my-money.jar /my-money/app.jar
