@@ -16,7 +16,7 @@
                             "bg-button-primary"
                             "border-transparent"
                             "hover:bg-button-primary-hover"
-                            "active:bg-button-primary-hover"])
+                            "active:bg-button-primary-active"])
 
 (def button-danger-styles ["text-white"
                            "bg-button-danger"

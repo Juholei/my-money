@@ -2,11 +2,13 @@
   (:require [clojure.string :as string]
             [my-money.app.controller.events :as ec]))
 
+(def active-tab-classes ["bg-button-primary-active" "text-white"])
+
 (defn tab [e! active-value value type]
   [:label.btn.btn-primary
    {:role "tab"
-    :class [(when (= value active-value)
-              "active")]}
+    :class (when (= value active-value)
+             active-tab-classes)}
    (string/capitalize value)
    [:input {:type "radio"
             :value value
