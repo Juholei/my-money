@@ -7,14 +7,14 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.3.1",
-    "cssnano": "^5.0.4",
+    "cssnano": "^5.0.7",
     "karma": "^6.3.4",
     "karma-chrome-launcher": "^3.1.0",
     "karma-cljs-test": "^0.1.0",
-    "postcss": "^8.3.0",
+    "postcss": "^8.3.6",
     "postcss-cli": "^8.3.1",
     "shadow-cljs": "^2.14.6",
-    "tailwindcss": "^2.1.2"
+    "tailwindcss": "^2.2.7"
   },
   "scripts": {
     "start": "npm run build:app:dev & npm run build:styles:dev",
