@@ -25,6 +25,11 @@ module.exports = {
         }
       }
     },
-    variants: {},
+    variants: {
+      extend:
+      {
+        borderRadius: ['first', 'last']
+      }
+    },
     plugins: [],
   }
