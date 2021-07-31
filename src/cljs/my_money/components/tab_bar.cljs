@@ -1,6 +1,6 @@
 (ns my-money.components.tab-bar
   (:require [clojure.string :as string]
-            [my-money.app.controller.events :as ec]))
+            [reagent.core :as r]))
 
 (def tab-styles ["cursor-pointer"
                  "border-solid"
@@ -20,7 +20,7 @@
 
 (def active-tab-classes ["bg-button-primary-active" "text-white"])
 
-(defn tab [e! active-value value type]
+(defn tab [active-value value type on-select]
   [:button
    {:role "tab"
     :aria-selected (= value active-value)
@@ -29,12 +29,12 @@
                    active-tab-classes))
     :id value
     :name type
-    :on-click #(e! (ec/->SelectType value))}
+    :on-click (r/partial on-select value)}
    (string/capitalize value)])
 
-(defn tab-bar [e! active-value]
+(defn tab-bar [active-value on-select]
   ;; TODO: Make this generic
   [:div {:role "tablist"}
-   [tab e! active-value "all" "type"]
-   [tab e! active-value "expenses" "type"]
-   [tab e! active-value "incomes" "type"]])
+   [tab active-value "all" "type" on-select]
+   [tab active-value "expenses" "type" on-select]
+   [tab active-value "incomes" "type" on-select]])

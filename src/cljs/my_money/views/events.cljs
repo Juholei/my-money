@@ -1,5 +1,6 @@
 (ns my-money.views.events
   (:require [clojure.string :as string]
+            [reagent.core :as r]
             [reagent.session :as session]
             [my-money.app.controller.events :as ec]
             [my-money.app.controller.navigation :as nc]
@@ -48,7 +49,8 @@
       [:option month])]])
 
 (defn event-type-selector [e! active-value]
-  [tab-bar e! active-value])
+  (r/with-let [select-type! #(e! (ec/->SelectType %))]
+    [tab-bar active-value select-type!]))
 
 (defn bank-event-table [e! events selected-events]
   [:div.table-responsive
