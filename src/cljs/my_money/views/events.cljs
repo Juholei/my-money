@@ -7,7 +7,7 @@
             [my-money.calculations :as calc]
             [my-money.components.charts :as charts]
             [my-money.components.recurring-expenses :as re]
-            [my-money.components.tab-bar :refer [tab-bar]]
+            [my-money.components.tab-bar :refer [tab-bar tab-panel]]
             [my-money.event-filters :as filters]
             [my-money.components.common :as c]
             [my-money.utils :as utils]))
@@ -108,7 +108,8 @@
             [c/labeled-checkbox "Show all" show-all-events? #(e! (nc/->SetShowAllEvents %))]
             (when (not show-all-events?)
               [c/paginator event-page (count paged-events) #(e! (nc/->SelectEventPage %))])]
-           [bank-event-table e! events-to-display selected-events]]
+           [tab-panel {:id (:type filters)}
+            [bank-event-table e! events-to-display selected-events]]]
           [:div.col-md-4
            [:h1 "Recurring expenses"]
            [re/recurring-expense-info recurring-expenses]]]
