@@ -23,12 +23,12 @@
 (defn tab [active-value value type on-select]
   [:button
    {:role "tab"
+    :id (str "tab-" value)
     :aria-controls value
     :aria-selected (= value active-value)
     :class (into tab-styles
                  (when (= value active-value)
                    active-tab-classes))
-    :id value
     :name type
     :on-click (r/partial on-select value)}
    (string/capitalize value)])
@@ -41,5 +41,7 @@
    [tab active-value "incomes" "type" on-select]])
 
 (defn tab-panel [props content]
-  [:div {:role "tabpanel" :id (:id props)}
+  [:div {:role "tabpanel"
+         :id (:id props)
+         :aria-labelledby (str "tab-" (:id props))}
    content])
