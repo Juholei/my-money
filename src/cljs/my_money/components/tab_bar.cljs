@@ -43,5 +43,6 @@
 (defn tab-panel [props content]
   [:div {:role "tabpanel"
          :id (:id props)
+         :tabindex="0"
          :aria-labelledby (str "tab-" (:id props))}
    content])
