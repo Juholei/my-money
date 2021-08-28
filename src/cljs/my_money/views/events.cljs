@@ -1,6 +1,5 @@
 (ns my-money.views.events
-  (:require [clojure.string :as string]
-            [reagent.core :as r]
+  (:require [reagent.core :as r]
             [reagent.session :as session]
             [my-money.app.controller.events :as ec]
             [my-money.app.controller.navigation :as nc]
@@ -28,17 +27,6 @@
                                         (.toFixed 2)) "€")]
      [:h1.col-md-3 (str "Income " (calc/income filtered-events) "€")]
      [:h1.col-md-3 (str "Savings " (calc/savings filtered-events savings-recipients) "€")]]))
-
-(defn labelled-radio-button [e! active-value value type]
-  [:label.btn.btn-primary
-   (when (= value active-value)
-     {:class "active"})
-   (string/capitalize value)
-   [:input {:type "radio"
-            :value value
-            :id value
-            :name type
-            :on-click #(e! (ec/->SelectType value))}]])
 
 (defn month-filter [e! events]
   [:form

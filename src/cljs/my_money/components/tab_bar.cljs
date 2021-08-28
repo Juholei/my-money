@@ -34,7 +34,6 @@
    (string/capitalize value)])
 
 (defn tab-bar [active-value on-select]
-  ;; TODO: Make this generic
   [:div {:role "tablist"}
    [tab active-value "all" "type" on-select]
    [tab active-value "expenses" "type" on-select]
