@@ -28,8 +28,7 @@
  :aliases {:dev {:extra-paths ["env/dev/clj" "test/clj" "env/dev/resources"]
                  :extra-deps {prone/prone {:mvn/version "2019-07-08"}
                               ring/ring-mock {:mvn/version "0.4.0"}
-                              ring/ring-devel {:mvn/version "1.7.1"}}
-                 }
+                              ring/ring-devel {:mvn/version "1.7.1"}}}
            :test {:extra-paths ["test/clj" "env/dev/clj" "env/dev/resources"]
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.632"}
                                ring/ring-mock {:mvn/version "0.4.0"}
@@ -44,4 +43,6 @@
            :vulnerabilities {:extra-deps {clj-nvd/clj-nvd {:git/url "https://github.com/miikka/clj-nvd.git"
                                                            :sha "f2ec98699e057a379baf170cb49cf7ad76874a70"}}
                              :main-opts ["-m" "clj-nvd.core" "check"]}
+           :lint {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2021.08.06"}}
+                  :main-opts ["-m" "clj-kondo.main" " --lint" "src"]}
            :migrate {:main-opts ["-m" "my-money.core" "migrate"]}}}
