@@ -33,7 +33,7 @@
 
 (defn on-navigate
   "A function which will be called on each route change."
-  [e! name params query]
+  [e! name]
   (navigate name e!))
 
 (defn start! [e!]

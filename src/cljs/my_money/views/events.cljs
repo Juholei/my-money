@@ -71,12 +71,12 @@
    [:a {:href "#" :on-click #(do (.preventDefault %) (e! (ec/->ClearSelectedEvents)))}
     "Clear selection"]])
 
-(defn events-page [e! app]
+(defn events-page [e! _]
   (e! (ec/->RetrieveEvents))
   (e! (ec/->RetrieveRecurringExpenses))
   (fn [e! {:keys [events filters recurring-expenses starting-amount
                   recipients event-page show-all-events?
-                  selected-events] :as app}]
+                  selected-events]}]
     (when (session/get :identity)
       (let [filtered-events (filter (filters/combined-filter filters) events)
             paged-events (events->pages filtered-events events-on-page)
