@@ -1,13 +1,14 @@
 (ns my-money.routes.config
   (:require [my-money.db.core :as db]
             [compojure.core :refer [defroutes GET POST]]
-            [ring.util.http-response :as response]))
+            [ring.util.http-response :as response]
+            [clojure.string :as string]))
 
 (defn amount-string->cent-integer [amount]
   (if (number? amount)
     (* 100 amount)
-    (if (clojure.string/includes? amount ".")
-      (Integer/parseInt (clojure.string/replace amount "." ""))
+    (if (string/includes? amount ".")
+      (Integer/parseInt (string/replace amount "." ""))
       (* 100 (Integer/parseInt amount)))))
 
 (defn to-db-array [db v]

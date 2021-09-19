@@ -34,7 +34,7 @@
        ^{:key (:timestamp alert)}
        [c/alert (:string alert) #(e! (alerts-controller/->RemoveAlert alert))])]))
 
-(defn page [e! app]
+(defn page [e! _]
   (routes/start! e!)
   (e! (cc/->RetrieveConfig))
   (fn [e! app]

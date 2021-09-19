@@ -1,7 +1,7 @@
 (ns my-money.routes.auth
   (:require [my-money.db.core :as db]
             [buddy.hashers :as hashers]
-            [compojure.core :refer [defroutes GET POST]]
+            [compojure.core :refer [defroutes POST]]
             [ring.util.http-response :as response]))
 
 (defn register! [{:keys [session params]}]
