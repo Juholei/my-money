@@ -35,10 +35,11 @@
 (defn savings-recipient-list [data]
   [:div
    [:h6 "Savings recipients"]
-   (into [:ul.list-group]
+   (into [:ul.list-group.]
      (for [recipient (:recipients @data)]
        ^{:key (str "active_" recipient)}
-       [:li.list-group-item recipient
+       [:li.block.relative.py-3.px-5.-mb-px.bg-white.border-solid.border.border-black.first:rounded
+        recipient
         [:button.btn.close.ml-1
          {:on-click #(swap! data update :recipients disj recipient)}
          "×"]]))])
