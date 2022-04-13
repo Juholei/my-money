@@ -1,6 +1,6 @@
 # Build image
 
-FROM clojure:openjdk-11-tools-deps as builder
+FROM clojure:openjdk-11-tools-deps-1.11.1.1105-buster as builder
 
 # Install node.js
 RUN curl -sL https://deb.nodesource.com/setup_16.x | sh && apt-get install -y nodejs
