@@ -6,6 +6,7 @@
             [my-money.routes.upload :refer [upload-routes]]
             [my-money.routes.events :refer [events-routes]]
             [my-money.routes.config :refer [config-routes]]
+            [my-money.routes.public :refer [public-api]]
             [compojure.route :as route]
             [my-money.env :refer [defaults]]
             [mount.core :as mount]
@@ -33,6 +34,8 @@
     (-> #'config-routes
         (wrap-routes middleware/wrap-csrf)
         (wrap-routes middleware/wrap-restricted)
+        (wrap-routes middleware/wrap-formats))
+    (-> #'public-api
         (wrap-routes middleware/wrap-formats))
     (route/not-found
       (:body
