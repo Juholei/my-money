@@ -61,3 +61,8 @@ SET recipients = :recipients
 -- :doc retrieve array of savings recipients for the the user-id
 SELECT recipients FROM savings
 WHERE user_id = :user-id
+
+--:name get-users-newest-event-date :? :1
+SELECT created FROM events
+WHERE user_id = (SELECT id FROM users WHERE username = :username)
+ORDER BY created DESC LIMIT 1;
