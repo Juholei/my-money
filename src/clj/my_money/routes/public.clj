@@ -12,5 +12,5 @@
         (if (= (get headers "authorization") (-> config/env :secret))
           (response/ok {:lastUpdated (->> (db/get-users-newest-event-date {:username user})
                                            :created
-                                           (tf/unparse (:basic-date-time tf/formatters)))})
+                                           (tf/unparse (:date-time tf/formatters)))})
           (response/forbidden))))))
