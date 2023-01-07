@@ -24,4 +24,4 @@ COPY --from=builder /usr/src/app/my-money.jar /my-money/app.jar
 
 EXPOSE 3000
 
-CMD ["java", "-jar", "/my-money/app.jar"]
+CMD ["java", "-Xmx256m", "-jar", "/my-money/app.jar"]
