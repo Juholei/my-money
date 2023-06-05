@@ -41,7 +41,7 @@
            :uberjar {:extra-deps {seancorfield/depstar {:mvn/version "1.0.94"}}
                      :main-opts ["-m" "hf.depstar.uberjar" "my-money.jar" "-C" "-m" "my-money.core"]}
            :vulnerabilities {:extra-deps {clj-nvd/clj-nvd {:git/url "https://github.com/miikka/clj-nvd.git"
-                                                           :sha "f2ec98699e057a379baf170cb49cf7ad76874a70"}}
+                                                           :sha "a6fd635e2f9bc61e786d7182fa68f1e19598e325"}}
                              :main-opts ["-m" "clj-nvd.core" "check"]}
            :lint {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2021.08.06"}}
                   :main-opts ["-m" "clj-kondo.main" "--lint" "src"]}
