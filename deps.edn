@@ -23,7 +23,7 @@
   ring-webjars/ring-webjars {:mvn/version "0.2.0"}
   luminus-nrepl/luminus-nrepl {:mvn/version "0.1.6"}
   luminus-immutant/luminus-immutant {:mvn/version "0.2.5"}
-  ring-middleware-format/ring-middleware-format {:mvn/version "0.7.4"}}
+  ring-middleware-format/ring-middleware-format {:mvn/version "0.7.5"}}
  :paths ["src/clj" "src/cljc" "resources" "target/cljsbuild"]
  :aliases {:dev {:extra-paths ["env/dev/clj" "test/clj" "env/dev/resources"]
                  :extra-deps {prone/prone {:mvn/version "2019-07-08"}
