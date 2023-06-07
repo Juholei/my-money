@@ -11,7 +11,7 @@
   clj-time/clj-time {:mvn/version "0.15.2"}
   compojure/compojure {:mvn/version "1.6.1"}
   ring/ring-defaults {:mvn/version "0.3.2"}
-  cprop/cprop {:mvn/version "0.1.14"}
+  cprop/cprop {:mvn/version "0.1.19"}
   luminus-migrations/luminus-migrations {:mvn/version "0.6.1"}
   org.postgresql/postgresql {:mvn/version "42.2.6"}
   buddy/buddy-core {:mvn/version "1.9.0"}
