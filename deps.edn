@@ -14,7 +14,7 @@
   cprop/cprop {:mvn/version "0.1.19"}
   luminus-migrations/luminus-migrations {:mvn/version "0.6.1"}
   org.postgresql/postgresql {:mvn/version "42.2.6"}
-  buddy/buddy-core {:mvn/version "1.9.0"}
+  buddy/buddy-core {:mvn/version "1.11.423"}
   buddy/buddy-auth {:mvn/version "2.2.0"}
   buddy/buddy-hashers {:mvn/version "1.7.0"}
   org.webjars/bootstrap {:mvn/version "4.2.1"}
