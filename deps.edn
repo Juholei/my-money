@@ -16,7 +16,7 @@
   org.postgresql/postgresql {:mvn/version "42.2.6"}
   buddy/buddy-core {:mvn/version "1.9.0"}
   buddy/buddy-auth {:mvn/version "2.2.0"}
-  buddy/buddy-hashers {:mvn/version "1.7.0"}
+  buddy/buddy-hashers {:mvn/version "1.8.158"}
   org.webjars/bootstrap {:mvn/version "4.2.1"}
   org.webjars/font-awesome {:mvn/version "5.6.3"}
   org.clojure/data.csv {:mvn/version "0.1.4"}
