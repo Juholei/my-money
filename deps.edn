@@ -1,7 +1,7 @@
 {:deps
  {selmer/selmer {:mvn/version "1.12.13"}
   org.clojure/clojure {:mvn/version "1.10.1"}
-  mount/mount {:mvn/version "0.1.16"}
+  mount/mount {:mvn/version "0.1.17"}
   org.clojure/tools.logging {:mvn/version "0.5.0"}
   metosin/ring-http-response {:mvn/version "0.9.1"}
   conman/conman {:mvn/version "0.8.3"}
