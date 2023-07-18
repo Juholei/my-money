@@ -30,7 +30,7 @@
                               ring/ring-mock {:mvn/version "0.4.0"}
                               ring/ring-devel {:mvn/version "1.7.1"}}}
            :test {:extra-paths ["test/clj" "env/dev/clj" "env/dev/resources"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.632"}
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.85.1342"}
                                ring/ring-mock {:mvn/version "0.4.0"}
                                ring/ring-devel {:mvn/version "1.7.1"}
                                prone/prone {:mvn/version "2019-07-08"}}
