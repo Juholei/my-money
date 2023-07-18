@@ -1,6 +1,6 @@
 # my-money
 
-[![Build Status](https://travis-ci.org/Juholei/my-money.svg?branch=master)](https://travis-ci.org/Juholei/my-money)
+[![my-money CI](https://github.com/Juholei/my-money/actions/workflows/ci.yml/badge.svg)](https://github.com/Juholei/my-money/actions/workflows/ci.yml)
 
 This will display information about your money usage based on web bank exports (CSV from OP or S-Pankki).
 
