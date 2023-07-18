@@ -3,7 +3,7 @@
   org.clojure/clojure {:mvn/version "1.10.1"}
   mount/mount {:mvn/version "0.1.17"}
   org.clojure/tools.logging {:mvn/version "0.5.0"}
-  metosin/ring-http-response {:mvn/version "0.9.1"}
+  metosin/ring-http-response {:mvn/version "0.9.3"}
   conman/conman {:mvn/version "0.8.3"}
   metosin/muuntaja {:mvn/version "0.6.4"}
   org.clojure/tools.cli {:mvn/version "0.4.2"}
