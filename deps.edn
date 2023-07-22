@@ -28,11 +28,11 @@
  :aliases {:dev {:extra-paths ["env/dev/clj" "test/clj" "env/dev/resources"]
                  :extra-deps {prone/prone {:mvn/version "2019-07-08"}
                               ring/ring-mock {:mvn/version "0.4.0"}
-                              ring/ring-devel {:mvn/version "1.7.1"}}}
+                              ring/ring-devel {:mvn/version "1.10.0"}}}
            :test {:extra-paths ["test/clj" "env/dev/clj" "env/dev/resources"]
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.85.1342"}
                                ring/ring-mock {:mvn/version "0.4.0"}
-                               ring/ring-devel {:mvn/version "1.7.1"}
+                               ring/ring-devel {:mvn/version "1.10.0"}
                                prone/prone {:mvn/version "2019-07-08"}}
                   :main-opts   ["-m" "kaocha.runner"]}
            :outdated {:extra-deps {antq/antq {:mvn/version "0.16.3"}}
