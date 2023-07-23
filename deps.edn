@@ -38,7 +38,7 @@
            :outdated {:extra-deps {antq/antq {:mvn/version "0.16.3"}}
                       :main-opts ["-m" "antq.core"]}
            :prod {:extra-paths ["env/prod/clj" "env/prod/resources"]}
-           :uberjar {:extra-deps {seancorfield/depstar {:mvn/version "1.0.94"}}
+           :uberjar {:extra-deps {seancorfield/depstar {:mvn/version "1.1.136"}}
                      :main-opts ["-m" "hf.depstar.uberjar" "my-money.jar" "-C" "-m" "my-money.core"]}
            :vulnerabilities {:extra-deps {clj-nvd/clj-nvd {:git/url "https://github.com/miikka/clj-nvd.git"
                                                            :sha "a6fd635e2f9bc61e786d7182fa68f1e19598e325"}}
