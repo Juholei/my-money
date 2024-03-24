@@ -13,7 +13,7 @@
   ring/ring-defaults {:mvn/version "0.4.0"}
   cprop/cprop {:mvn/version "0.1.19"}
   luminus-migrations/luminus-migrations {:mvn/version "0.6.1"}
-  org.postgresql/postgresql {:mvn/version "42.7.1"}
+  org.postgresql/postgresql {:mvn/version "42.7.3"}
   buddy/buddy-core {:mvn/version "1.11.423"}
   buddy/buddy-auth {:mvn/version "3.0.323"}
   buddy/buddy-hashers {:mvn/version "2.0.167"}
