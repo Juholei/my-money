@@ -64,7 +64,7 @@ jobs:
           tools-deps: 1.10.1.561
       - name: Run tests
         run: |
-          docker-compose up -d
+          docker compose up -d
           clojure -A:test --reporter kaocha.report/documentation
 
   deploy:
