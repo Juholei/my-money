@@ -18,7 +18,7 @@
   buddy/buddy-auth {:mvn/version "3.0.323"}
   buddy/buddy-hashers {:mvn/version "2.0.167"}
   org.webjars/bootstrap {:mvn/version "4.2.1"}
-  org.webjars/font-awesome {:mvn/version "5.6.3"}
+  org.webjars/font-awesome {:mvn/version "6.7.2"}
   org.clojure/data.csv {:mvn/version "1.1.0"}
   ring-webjars/ring-webjars {:mvn/version "0.2.0"}
   luminus-nrepl/luminus-nrepl {:mvn/version "0.1.7"}
