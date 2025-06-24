@@ -54,5 +54,10 @@
       (migrations/migrate args (select-keys env [:database-url]))
       (System/exit 0))
     :else
-    (start-app args)))
+    (do
+      (println "lol")
+      (mount/start #'my-money.config/env)
+      (migrations/migrate ["migrate"] (select-keys env [:database-url]))
+      (mount/stop #'my-money.config/env)
+      (start-app args))))
   
