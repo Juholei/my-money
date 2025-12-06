@@ -1,10 +1,11 @@
 # Build image
 
-FROM clojure:openjdk-11-tools-deps-1.11.1.1105-buster as builder
+FROM clojure:temurin-11-tools-deps-1.12.3.1577-trixie-slim as builder
 
 # Install node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - &&\
-apt-get install -y nodejs
+RUN apt-get update && apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - &&\
+    apt-get install -y nodejs
 # set working directory
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
