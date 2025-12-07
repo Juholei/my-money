@@ -40,8 +40,8 @@ jobs:
       - name: Prepare java
         uses: actions/setup-java@v5
         with:
-          distribution: 'adopt'
-          java-version: 11
+          java-version-file: .java-version
+          distribution: temurin
       - name: Install clojure tools-deps
         uses: DeLaGuardo/setup-clojure@master
         with:
@@ -56,8 +56,8 @@ jobs:
       - name: Prepare java
         uses: actions/setup-java@v5
         with:
-          distribution: 'adopt'
-          java-version: 11
+          java-version-file: .java-version
+          distribution: temurin
       - name: Install clojure tools-deps
         uses: DeLaGuardo/setup-clojure@master
         with:
