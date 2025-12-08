@@ -1,10 +1,10 @@
 # Build image
 
-FROM clojure:temurin-11-tools-deps-1.12.3.1577-trixie-slim@sha256:b21661fb322528242b0ef604e8892367ef675d856a8e665c670face7941ba571 AS builder
+FROM clojure:temurin-21-tools-deps-trixie-slim@sha256:3bf54d1967ef44d8b1c081f003b2d13ceb1fddc9403fddb308207843d8933b36 AS builder
 
 # Install node.js
 RUN apt-get update && apt-get install -y curl && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - &&\
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - &&\
     apt-get install -y nodejs
 # set working directory
 RUN mkdir -p /usr/src/app
