@@ -4,7 +4,7 @@ FROM clojure:temurin-21-tools-deps-trixie-slim@sha256:8e58d1e3d9fd39d4bc6d3f86fa
 
 # Install node.js
 RUN apt-get update && apt-get install -y curl && \
-    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - &&\
+    curl -fsSL https://deb.nodesource.com/setup_24.x | bash - &&\
     apt-get install -y nodejs
 # set working directory
 RUN mkdir -p /usr/src/app
