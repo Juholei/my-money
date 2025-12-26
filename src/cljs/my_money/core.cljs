@@ -1,5 +1,5 @@
 (ns my-money.core
-  (:require [reagent.dom :as rdom]
+  (:require [reagent.dom.client :as rdomc]
             [reagent.session :as session]
             [my-money.ajax :refer [load-interceptors!]]
             [my-money.routes :as routes]
@@ -47,8 +47,11 @@
 
 ;; -------------------------
 ;; Initialize app
+
+(defonce root (rdomc/create-root (.getElementById js/document "app")))
+
 (defn mount-components []
-  (rdom/render [tuck/tuck state/app page] (.getElementById js/document "app")))
+  (rdomc/render root [tuck/tuck state/app page]))
 
 (defn init! []
   (load-interceptors!)
