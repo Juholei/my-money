@@ -1,15 +1,15 @@
 {
   "dependencies": {
     "chart.js": "^2.9.4",
-    "react": "^17.0.2",
+    "react": "^19.0.0",
     "react-chartjs-2": "^2.11.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.3.4",
     "cssnano": "^6.0.0",
-    "karma": "^6.3.4",
-    "karma-chrome-launcher": "^3.1.0",
+    "karma": "^6.4.4",
+    "karma-chrome-launcher": "^3.2.0",
     "karma-cljs-test": "^0.1.0",
     "postcss": "^8.3.6",
     "postcss-cli": "^11.0.0",
