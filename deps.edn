@@ -10,7 +10,7 @@
   bouncer/bouncer {:mvn/version "1.0.1"}
   clj-time/clj-time {:mvn/version "0.15.2"}
   compojure/compojure {:mvn/version "1.7.2"}
-  ring/ring-defaults {:mvn/version "0.4.0"}
+  ring/ring-defaults {:mvn/version "0.7.0"}
   cprop/cprop {:mvn/version "0.1.21"}
   luminus-migrations/luminus-migrations {:mvn/version "0.6.1"}
   org.postgresql/postgresql {:mvn/version "42.7.8"}
