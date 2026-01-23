@@ -4,7 +4,7 @@
   mount/mount {:mvn/version "0.1.23"}
   org.clojure/tools.logging {:mvn/version "1.3.1"}
   metosin/ring-http-response {:mvn/version "0.9.5"}
-  conman/conman {:mvn/version "0.8.3"}
+  conman/conman {:mvn/version "0.9.6"}
   metosin/muuntaja {:mvn/version "0.6.11"}
   org.clojure/tools.cli {:mvn/version "1.3.250"}
   bouncer/bouncer {:mvn/version "1.0.1"}
