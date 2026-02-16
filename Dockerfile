@@ -19,7 +19,7 @@ RUN npm run build && clojure -Spom && clojure -A:uberjar:prod
 
 
 # Production image
-FROM eclipse-temurin:25.0.1_8-jre-alpine-3.22@sha256:9c65fe190cb22ba92f50b8d29a749d0f1cfb2437e09fe5fbf9ff927c45fc6e99
+FROM eclipse-temurin:25.0.2_10-jre-alpine-3.22@sha256:2bf0db425c0f387e91530a223e18525de5f76b468335b00c78099f4055121efd
 
 # copy artifact build from the 'build environment'
 COPY --from=builder /usr/src/app/my-money.jar /my-money/app.jar
