@@ -61,7 +61,7 @@ jobs:
         with:
           tools-deps: 1.12.4.1602
       - name: Build
-        run: clojure -A:uberjar:prod
+        run: clojure -T:build uber
 
   backend-tests:
     runs-on: ubuntu-latest

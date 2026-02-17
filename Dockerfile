@@ -15,7 +15,7 @@ COPY . /usr/src/app
 
 # Build the app
 RUN npm ci
-RUN npm run build && clojure -Spom && clojure -A:uberjar:prod
+RUN npm run build && clojure -T:build uber
 
 
 # Production image
