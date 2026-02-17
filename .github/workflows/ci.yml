@@ -59,7 +59,7 @@ jobs:
       - name: Install clojure tools-deps
         uses: DeLaGuardo/setup-clojure@master
         with:
-          tools-deps: 1.10.1.561
+          tools-deps: 1.12.4.1602
       - name: Build
         run: clojure -A:uberjar:prod
 
