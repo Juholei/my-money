@@ -51,7 +51,7 @@ To build frontend, use command
 
 To build an uberjar for production, use command
 
-	clj -A:uberjar:prod
+	clj -T:build uber
 
 Build frontend first so that it gets packaged in the uberjar.
 
