@@ -12,7 +12,7 @@
   compojure/compojure {:mvn/version "1.7.2"}
   ring/ring-defaults {:mvn/version "0.7.0"}
   cprop/cprop {:mvn/version "0.1.21"}
-  luminus-migrations/luminus-migrations {:mvn/version "0.6.1"}
+  luminus-migrations/luminus-migrations {:mvn/version "0.7.5"}
   org.postgresql/postgresql {:mvn/version "42.7.10"}
   buddy/buddy-core {:mvn/version "1.12.0-430"}
   buddy/buddy-auth {:mvn/version "3.0.323"}
