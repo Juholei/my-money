@@ -1,6 +1,6 @@
 # Build image
 
-FROM clojure:temurin-25-tools-deps-trixie-slim@sha256:fd829a37c6833872889e603ecf5c555a8d7133729253e0ed53d6669edeb3cc09 AS builder
+FROM clojure:temurin-25-tools-deps-trixie-slim@sha256:a643abb7d9e6b1a1beca72259400f38e39c4e4b8584548540469c3e393ee140a AS builder
 
 # Install node.js
 RUN apt-get update && apt-get install -y curl && \
